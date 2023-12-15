@@ -2,7 +2,10 @@
   (:require [aero.core :as aero]
             [clojure.java.io :as io]
             [taoensso.timbre :as log]
-            [integrant.core :as ig]))
+            [integrant.core :as ig]
+            [foyobm.services.db]
+            [foyobm.services.http]
+            [foyobm.services.router]))
 
 (defmethod aero/reader 'ig/ref
   [_ _ value]

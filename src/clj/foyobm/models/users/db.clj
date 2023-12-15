@@ -15,6 +15,16 @@
     (q/db-query-one! db {:insert-into :users
                          :values [user]})))
 
+(defn find-user-by-email [db email]
+  (q/db-query-one! db {:select [:id :email :password :status :fail_count]
+                       :from [:users]
+                       :where [:= :email email]}))
+
+(defn find-user-by-id [db id]
+  (let [user (q/db-query-one! db {:select [:*]
+                                  :from [:users]
+                                  :where [:= :id id]})]
+    (dissoc user :password)))
 
 (comment
 
@@ -29,6 +39,7 @@
   (create-user db user1)
 
   (get-all db)
-
+  (find-user-by-email db "37505218@qq.com")
+  (find-user-by-id db 1)
   (halt)
   )

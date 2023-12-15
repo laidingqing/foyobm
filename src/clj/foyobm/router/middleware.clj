@@ -3,7 +3,7 @@
             [ring.middleware.cors :refer [wrap-cors]]
             [reitit.ring.middleware.parameters :as parameters]
             [reitit.ring.middleware.muuntaja :as muuntaja]
-            [fitokr.router.exception :as exception]
+            [foyobm.router.exception :as exception]
             [ring.util.request :as request]))
 
 

@@ -1,4 +1,5 @@
-(ns foyobm.api.core)
+(ns foyobm.api.core
+  (:require [foyobm.api.users :refer [user-routes]]))
 
 
 (def health-route
@@ -9,4 +10,5 @@
 
 (def routes
   [["/api"
-    health-route]])
+    health-route
+    user-routes]])
