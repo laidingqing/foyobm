@@ -51,8 +51,23 @@
                        :values [department]}))
 
 
+(defn- build-where [{:keys [parent company_id]}]
+  (let [parent-clause [:= :parent parent]
+        company-clause [:= :company_id company_id]]
+    (when parent
+      (cond-> [:and]
+        company_id (conj company-clause)
+        parent (conj parent-clause))))
+  
+  )
 
-
+(defn find-dept-list-by-company
+  [db query-params]
+  (let [query {:select [:id :name :position :parent :code :manage_id]
+               :from [:departments]}
+        where-clause (build-where query-params)]
+    (q/db-query! db (cond-> query
+                      where-clause (assoc :where where-clause)))))
 
 (comment
 
@@ -79,5 +94,7 @@
 
   (get-dept-members db 1 1)
   (get-members-by-company-and-dept db 1 2)
+  (find-company-by-name db "婵科技股份有限公司")
+  (find-dept-list-by-company db {:parent 0 :company_id 1})
   ()
   )

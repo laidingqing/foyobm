@@ -1,9 +1,11 @@
 (ns foyobm.utils.query
   (:require [next.jdbc :as jdbc]
             [next.jdbc.result-set :as rs]
-            [honey.sql :as sql]))
+            [honey.sql :as sql]
+            [taoensso.timbre :as log]))
 
 (defn db-query! [db query]
+  (log/info (sql/format query))
   (jdbc/execute! db
                  (sql/format query)
                  {:return-keys true
