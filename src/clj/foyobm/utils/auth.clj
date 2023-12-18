@@ -1,7 +1,12 @@
 (ns foyobm.utils.auth
-  (:require [buddy.hashers :refer [check]]
+  (:require [buddy.auth.backends :as backends]
+            [buddy.hashers :refer [check]]
             [buddy.sign.jwt :as jwt]))
 
+(defn jwt-backend
+  [secret]
+  (backends/jws {:secret secret
+                 :token-name "Bearer"}))
 
 (defn user->response
   [user secret]

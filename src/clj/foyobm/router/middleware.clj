@@ -1,32 +1,11 @@
 (ns foyobm.router.middleware
-  (:require [reitit.ring.coercion :as coercion]
-            [ring.middleware.cors :refer [wrap-cors]]
-            [reitit.ring.middleware.parameters :as parameters]
-            [reitit.ring.middleware.muuntaja :as muuntaja]
+  (:require [buddy.auth :refer [authenticated?]]
+            [foyobm.models.users.db :as user.db]
             [foyobm.router.exception :as exception]
-            [ring.util.request :as request]))
+            [taoensso.timbre :as log])
+  (:import [java.util UUID]))
 
 
-(defmulti authorized? :authorities)
-(defmethod authorized? :default [_ _]
-  true)
-
-(defmethod authorized? ["ADMIN" "USER"] [request roles]
-  ;; (let [user-roles (get-in request [:session :user :roles])]
-  ;;   (some #(contains? user-roles %) roles))
-  true)
-
-(defn authorize-middleware
-  "
-   check authorize
-  "
-  [authorities]
-  (fn [handler]
-    (fn [request]
-      (if (authorized? authorities request)
-        (handler request)
-        {:status 403
-         :body "Access denied"}))))
 
 (def wrap-env
   {:name ::env
@@ -36,15 +15,19 @@
        (fn [request]
          (handler (assoc request :env env)))))})
 
-(def global-middleware
-  [parameters/parameters-middleware
-   muuntaja/format-middleware
-   [wrap-cors :access-control-allow-origin [#"http://localhost:3000"]
-    :access-control-allow-methods [:get :post :put :delete]]
-   muuntaja/format-negotiate-middleware
-   muuntaja/format-response-middleware
-   muuntaja/format-request-middleware
-   exception/exception-middleware
-   coercion/coerce-request-middleware
-   coercion/coerce-response-middleware
-   wrap-env])
+
+(def wrap-authorization
+  {:name ::authorization
+   :wrap
+   (fn [handler]
+     (fn [{:keys [env] :as request}]
+       (if (authenticated? request)
+         (let [{:keys [db]} env
+               user-id (get-in request [:identity :id])
+               user (user.db/find-user-by-id db user-id)]
+           (if user
+             (handler (assoc request
+                             :user-id user-id
+                             :user user))
+             (exception/response 401 "Malformed token" request)))
+         (exception/response 401 "Unauthorized" request))))})

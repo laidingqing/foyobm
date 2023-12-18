@@ -6,6 +6,19 @@
             [ring.util.response :as rr]
             [taoensso.timbre :as log]))
 
+
+(defn check-identity
+  [{:keys [env identity]}]
+  (let [{:keys [email]} identity
+        {:keys [db]} env
+        user (user.db/find-user-by-email db email)]
+    (if user
+      (rr/response user)
+      (rr/response {:error "Malformed token"}))))
+
+
+
+
 (defn handle-login [{:keys [env parameters]}]
   (let [{:keys [db jwt-secret]} env
         {:keys [email password]} (:body parameters)]

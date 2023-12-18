@@ -18,6 +18,7 @@
   ([status message request]
    (response status message request nil))
   ([status message request exception]
+   (log/error exception)
    {:status status
     :body (merge
            {:success false

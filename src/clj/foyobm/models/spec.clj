@@ -12,3 +12,7 @@
 
 (s/def ::register-user (s/keys :req-un [::email ::password ::user_name]))
 (s/def ::login-user (s/keys :req-un [::email ::password]))
+
+;; company sepc
+
+(s/def ::create-company (s/keys :req-un [::name ::abbr ::user_id]))
