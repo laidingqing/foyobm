@@ -16,6 +16,7 @@
 ;; company sepc
 
 (s/def ::create-company (s/keys :req-un [::name ::abbr]))
+(s/def ::create-department (s/keys :req-un [::name ::parent ::company_id]))
 
 (comment
   (print (s/valid? ::create-company {:name "婵科技股份有限公司" :abbr "婵科技"}))

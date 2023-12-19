@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS companies(
     member_count bigint not null default 0,
     dept_count bigint not null default 0,
     create_by bigint not null,
+    status bigint not null default 0,
     created timestamp without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated timestamp without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP
 );

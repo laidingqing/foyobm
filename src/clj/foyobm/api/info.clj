@@ -1,5 +1,5 @@
 (ns foyobm.api.info
-  (:require [foyobm.models.company.handler :refer [handle-create-company handle-query-departments handle-create-departments]]
+  (:require [foyobm.models.information.handler :refer [handle-create-company handle-query-departments handle-create-departments]]
             [foyobm.router.middleware :refer [wrap-authorization]]
             [foyobm.models.spec :as spec]))
 
@@ -16,7 +16,7 @@
      ["/departments"
       ["" {:post {:summary "create a department info in company"
                   :middleware [wrap-authorization]
-                  :parameters {:path {:id int?}}
+                  :parameters {:path {:id int?} :body ::spec/create-department}
                   :handler handle-create-departments}
            :get {:summary "query department list with company"
                  :middleware [wrap-authorization]

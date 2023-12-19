@@ -5,11 +5,18 @@
 ## Features
 
 
+### Users
+
+* 用户可以使用邮箱和密码登录系统.
+
+
+
 ## RestAPI
 
 ### Users
 
-- [ ] /api/users/login 
+- [x] /api/users/login 
+- [x] /api/users/signup
+- [x] /api/users/me
 
-
-## 
+## information

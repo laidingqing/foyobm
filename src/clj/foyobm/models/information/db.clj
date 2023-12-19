@@ -1,4 +1,4 @@
-(ns foyobm.models.company.db
+(ns foyobm.models.information.db
   (:require [foyobm.utils.query :as q]))
 
 
@@ -20,6 +20,15 @@
                        :from [:companies]
                        :where [:= :name name]}))
 
+
+;; company_admins
+
+(defn create-company-admin
+  [db admins]
+  (q/db-query-one! db {:insert-into :company_admins
+                       :values [admins]}))
+
+
 ;; dept_members
 
 (defn create-dept-member 
@@ -40,10 +49,24 @@
                    :where [:and [:= :dept_id dept_id] [:= :company_id company_id]]}))
 ;; departments
 
+(defn get-department-hierarchy 
+  "query department and children list."
+  [db parent-id]
+  (let [root-departments (q/db-query! db {:select [:*]
+                                          :from [:departments]
+                                          :where [:= :parent parent-id]})
+        child-departments (for [dept root-departments] (assoc dept :children (get-department-hierarchy db (:id dept))))]
+    child-departments))
+
 (defn get-departments [db company_id]
   (q/db-query! db {:select [:*]
                    :from [:departments]
                    :where [:= :company_id company_id]}))
+
+(defn find-dept-by-parent [db company_id parent]
+  (q/db-query-one! db {:select [:*]
+                   :from [:departments]
+                   :where [:and [:= :company_id company_id] [:= :parent parent]]}))
 
 (defn create-department "create department info"
   [db department]
@@ -58,12 +81,11 @@
       (cond-> [:and]
         company_id (conj company-clause)
         parent (conj parent-clause))))
-  
   )
 
 (defn find-dept-list-by-company
   [db query-params]
-  (let [query {:select [:id :name :position :parent :code :manage_id]
+  (let [query {:select [:id :name :position :parent :code :manage_id :company_id]
                :from [:departments]}
         where-clause (build-where query-params)]
     (q/db-query! db (cond-> query

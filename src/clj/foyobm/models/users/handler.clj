@@ -19,7 +19,7 @@
 
 
 
-(defn handle-login [{:keys [env parameters]}]
+(defn handle-user-login [{:keys [env parameters]}]
   (let [{:keys [db jwt-secret]} env
         {:keys [email password]} (:body parameters)]
     (if (s/valid? ::spec/login-user {:email email :password password})
@@ -32,3 +32,18 @@
           (rr/response res)
           (rr/response {:error "Invalid credentials"})))
       (rr/response {:error "User login error"}))))
+
+
+
+(defn handle-create-user
+  [{:keys [env parameters]}]
+  (let [{:keys [db]} env
+        data (:body parameters)]
+    (if (s/valid? ::spec/register-user data)
+      (let [user (user.db/find-user-by-email db (:email data))
+            res (when-not user (user.db/create-user db data))]
+        (if user
+          (rr/response {:error "user-existed"})
+          (rr/response {:id (:id res)})))
+      (rr/response {:error "registe-user error."})))
+  )
