@@ -1,0 +1,46 @@
+{
+    "name": "foyobm",
+    "version": "1.0.0",
+    "author": "laidingqing",
+    "description": "This is a clojure web applications. It is based on: reitit, psql, reagent, shadow-cljs, re-frame",
+    "main": "resources/main.js",
+    "directories": {
+        "test": "test"
+    },
+    "scripts": {
+        "watch:cljs": "shadow-cljs watch main renderer",
+        "watch:css": "tailwindcss -i ./resources/css/index.css -o ./resources/public/css/index.css --watch",
+        "dev": "npm-run-all -p watch:cljs watch:css",
+        "start": "npm run dev",
+        "build": "shadow-cljs release main renderer",
+        "clean": "rm -rf resources/public/js/* && rm -rf target"
+    },
+    "keywords": [],
+    "license": "ISC",
+    "dependencies": {
+        "@headlessui/react": "^1.7.15",
+        "@heroicons/react": "^2.0.18",
+        "@js-joda/core": "3.2.0",
+        "@js-joda/locale_en-us": "3.1.1",
+        "@js-joda/timezone": "2.5.0",
+        "autoprefixer": "^10.4.13",
+        "dayjs": "^1.11.7"
+    },
+    "devDependencies": {
+        "@tailwindcss/forms": "^0.5.3",
+        "create-react-class": "^15.7.0",
+        "cross-env": "^7.0.3",
+        "cssnano": "^5.1.14",
+        "highlight.js": "^10.6.0",
+        "marked": "^5.1.0",
+        "npm-run-all": "^4.1.5",
+        "postcss": "^8.4.21",
+        "postcss-cli": "^10.1.0",
+        "prettier": "^2.8.3",
+        "prettier-plugin-tailwindcss": "^0.2.2",
+        "react": "^17.0.2",
+        "react-dom": "^17.0.2",
+        "shadow-cljs": "^2.20.20",
+        "tailwindcss": "^3.2.4"
+    }
+}

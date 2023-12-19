@@ -125,13 +125,13 @@
   (find-company-by-name db "婵科技股份有限公司")
   (find-dept-list-by-company db {:parent 0 :company_id 1})
 
-  
+
   (def data {:name "dd" :parent 3 :company_id 4})
   (def parent (find-dept-by-parent db 4 3))
   (def count (count-dept-by-parent db (:id parent)))
-  
+
   (assoc data :company_id 4 :code (str (:position parent) "." (inc (:count  count))) :position (inc (:position parent)))
 
-
+  (get-department-hierarchy db 0)
   ()
   )

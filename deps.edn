@@ -28,4 +28,14 @@
  :aliases {:server {:main-opts ["-m" "foyobm.core"]}
            :build {:ns-default build
                    :deps {io.github.clojure/tools.build {:git/tag "v0.9.4" :git/sha "76b78fe"}}}
-           :migrate {:main-opts ["-m" "foyobm.migrations.core"]}}}
+           :migrate {:main-opts ["-m" "foyobm.migrations.core"]}
+           :frontend {:extra-deps
+                      {reagent/reagent {:mvn/version "1.2.0"}
+                       thheller/shadow-cljs {:mvn/version "2.20.6"}
+                       org.clojure/clojurescript {:mvn/version "1.11.60"}
+                       funcool/promesa {:mvn/version "10.0.594"}
+                       re-frame/re-frame {:mvn/version "1.3.0"}
+                       net.ofnir/antizer {:mvn/version "3.26.17-1"}
+                       day8.re-frame/re-frame-10x {:mvn/version "1.5.0"}
+                       day8.re-frame/http-fx {:mvn/version "0.2.4"}
+                       secretary/secretary {:mvn/version "1.2.3"}}}}}

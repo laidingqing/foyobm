@@ -11,6 +11,14 @@
 
 
 
+
+## Usage
+
+* modify config.edn
+* clj -M:migrate migrate
+* clj -M:server
+
+
 ## RestAPI
 
 ### Users

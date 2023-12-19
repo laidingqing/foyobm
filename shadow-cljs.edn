@@ -1,0 +1,9 @@
+{:deps {:aliases [:frontend]}
+ :dev-http {3000 ["resources/public/" "../resources/public/"]}
+ :builds {:renderer {:target :browser
+                     :modules {:main {:init-fn foyobm.render.core/init}}
+                     :devtools {:after-load foyobm.render.core/reload
+                                :preloads [day8.re-frame-10x.preload]}
+                     :output-dir "resources/public/js/"
+                     :asset-path "js"
+                     :closure-defines {"re_frame.trace.trace_enabled_QMARK_" true}}}}
