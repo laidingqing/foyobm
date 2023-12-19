@@ -19,4 +19,7 @@
 - [x] /api/users/signup
 - [x] /api/users/me
 
-## information
+## Information
+
+- [x] /api/info/companies
+- [x] /api/info/companies/:id/deparements
