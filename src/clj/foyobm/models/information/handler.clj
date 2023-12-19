@@ -6,7 +6,7 @@
             [ring.util.response :as rr]
             [taoensso.timbre :as log]))
 
-(def default-dept {:position 0 :parent 0 :code "0"})
+(def default-dept {:position 0 :parent 0})
 
 (defn handle-create-company 
   "创建企业信息"
@@ -22,16 +22,16 @@
         (if company
           (rr/response {:error "company-existed."})
           (jdbc/with-transaction [tx db]
-            (let [company-id (:id db-company)
+            (let [db-company (company.db/create-company tx db-company)
+                  company-id (:id db-company)
                   company-name (:name db-company)
-                  db-company (company.db/create-company tx db-company)
-                  db-dept (assoc default-dept :company_id company-id :name company-name :manage_id user-id)
+                  db-dept (assoc default-dept :company_id company-id :name company-name :manage_id user-id :code (str (:id db-company)))
                   _ (company.db/create-company-admin tx {:company_id company-id :user_id user-id})
                   res (company.db/create-department tx db-dept)]
               (if res
                 (rr/response {:id (:id db-company)})
                 (rr/response {:error "insert-company error"}))))))
-      (rr/response {:error "create-company form error"}))))
+      (rr/response {:error "create-company-form error"}))))
 
 
 (defn handle-query-departments
@@ -47,12 +47,14 @@
 
 (defn handle-create-departments
   "create department info with manager."
-  [{:keys [env parameters user-id]}]
+  [{:keys [env parameters]}]
   (let [{:keys [db]} env
         data (:body parameters)
-        id (get-in parameters [:path :id])
+        ;; id (get-in parameters [:path :id])
+        id (:company_id data)
         parent (company.db/find-dept-by-parent db (:company_id data) (:parent data))
-        dept (assoc data :company_id id :code "0.1" :position 1)
+        dept_count (company.db/count-dept-by-parent db (:id parent))
+        dept (assoc data :company_id id :code (str (:code parent) "." (inc (:count dept_count))) :position (inc (:position parent)))
         res (company.db/create-department db dept)]
     (if res
       (rr/response res)

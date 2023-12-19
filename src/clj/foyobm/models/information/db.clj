@@ -66,7 +66,13 @@
 (defn find-dept-by-parent [db company_id parent]
   (q/db-query-one! db {:select [:*]
                    :from [:departments]
-                   :where [:and [:= :company_id company_id] [:= :parent parent]]}))
+                   :where [:and [:= :company_id company_id] [:= :id parent]]}))
+
+(defn count-dept-by-parent [db parent]
+  (q/db-query-one! db {:select [[[:raw "count(*)"] :count]]
+                       :from :departments
+                       :where [:= :parent parent]})
+  )
 
 (defn create-department "create department info"
   [db department]
@@ -118,5 +124,14 @@
   (get-members-by-company-and-dept db 1 2)
   (find-company-by-name db "婵科技股份有限公司")
   (find-dept-list-by-company db {:parent 0 :company_id 1})
+
+  
+  (def data {:name "dd" :parent 3 :company_id 4})
+  (def parent (find-dept-by-parent db 4 3))
+  (def count (count-dept-by-parent db (:id parent)))
+  
+  (assoc data :company_id 4 :code (str (:position parent) "." (inc (:count  count))) :position (inc (:position parent)))
+
+
   ()
   )
