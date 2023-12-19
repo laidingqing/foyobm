@@ -1,5 +1,18 @@
-(ns foyobm.render.pages.layout)
+(ns foyobm.render.pages.layout
+  (:require [foyobm.render.components.header :refer [header-view]]
+            [foyobm.db.ui :as ui]
+            [foyobm.db.auth :as auth]
+            [foyobm.render.pages.views :as views]
+            [re-frame.core :as rf]))
 
 
 (defn layout []
-  [:p "Hello, Foyo BM"])
+  (let [active-page @(rf/subscribe [::ui/active-page])
+        login? @(rf/subscribe [::auth/account])
+        page-component (views/pages active-page)]
+    [:div
+     [header-view]
+     [:div {:class "mx-auto"}
+      [page-component]]]
+    )
+  )
