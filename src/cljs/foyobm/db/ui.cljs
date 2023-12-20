@@ -14,7 +14,7 @@
    (let [set-page (assoc db ::active-page page)]
      (case page
        :home {:db set-page}
-       (:login :register) {:db set-page}))))
+       (:login :register :admin) {:db set-page}))))
 
 
 (rf/reg-sub

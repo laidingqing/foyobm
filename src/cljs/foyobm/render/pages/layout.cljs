@@ -13,7 +13,7 @@
         page-component (views/pages active-page)]
     [:div
      [header-view]
-     [:div {:class "mx-auto"}
+     [:div {:class "mx-auto px-4"}
       [page-component]]
      [dialog]]
     )
