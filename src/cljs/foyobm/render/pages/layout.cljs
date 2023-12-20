@@ -3,6 +3,7 @@
             [foyobm.db.ui :as ui]
             [foyobm.db.auth :as auth]
             [foyobm.render.pages.views :as views]
+            [foyobm.render.components.dialogs :refer [dialog]]
             [re-frame.core :as rf]))
 
 
@@ -13,6 +14,7 @@
     [:div
      [header-view]
      [:div {:class "mx-auto"}
-      [page-component]]]
+      [page-component]]
+     [dialog]]
     )
   )

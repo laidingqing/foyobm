@@ -21,3 +21,20 @@
  ::active-page
  (fn [db _]
    (::active-page db))) 
+
+
+(rf/reg-event-db
+ ::close-dialog
+ (fn [db] (assoc-in db [::dialog :open?] false)))
+
+(rf/reg-event-db
+ ::set-dialog
+ (fn [db [_ type error-message]]
+   (assoc db ::dialog {:open? true
+                       :type type
+                       :error-message error-message})))
+
+(rf/reg-sub
+ ::dialog
+ (fn [db]
+   (get db ::dialog)))

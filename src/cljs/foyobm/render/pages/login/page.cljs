@@ -7,8 +7,8 @@
 
 
 (defn login-form []
-  (let [form-state (r/atom {:email ""
-                            :password ""})
+  (let [form-state (r/atom {:email "37505218@qq.com"
+                            :password "a123456"})
         on-change (fn [k] #(swap! form-state assoc k (-> % .-target .-value)))]
     (fn []
       [:div {:class "p-10 bg-white rounded-xl drop-shadow-lg sm:w-1/2 xl:w-1/4 w-min-1/2"}
@@ -31,8 +31,7 @@
                      :value (:password @form-state)
                      :on-change (on-change :password)}]
         [:button {:class (str button-class " bg-indigo-500 text-white hover:bg-indigo-600")
-                  :type "submit"
-                  :on-click #(rf/dispatch [::auth/register @form-state])}
+                  :type "submit"}
          "登录"]]])))
 
 
