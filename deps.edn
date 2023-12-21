@@ -25,9 +25,17 @@
         ring/ring-jetty-adapter {:mvn/version "1.9.3"}
         ring-cors/ring-cors {:mvn/version "0.1.13"}
         ring/ring {:mvn/version "1.9.5"}}
- :aliases {:server {:main-opts ["-m" "foyobm.core"]}
-           :build {:ns-default build
-                   :deps {io.github.clojure/tools.build {:git/tag "v0.9.4" :git/sha "76b78fe"}}}
+ :aliases {:dev    {:extra-paths ["dev"]
+                    :extra-deps  {integrant/repl {:mvn/version "0.3.2"}}}
+           :server {:main-opts ["-m" "foyobm.core"]}
+        ;;    :uberjar {:main-opts ["-m" "cambada.uberjar"
+        ;;                          "--app-group-id" "com.foyo"
+        ;;                          "--app-artifact-id" "foyobm"
+        ;;                          "--app-version" "1.0.0"]
+        ;;              :extra-paths ["src/clj"]
+        ;;              :extra-deps {luchiniatwork/cambada {:mvn/version "1.0.2"}}}
+           :uberjar {:deps {io.github.clojure/tools.build {:git/tag "v0.8.4" :git/sha "8c3cd69"}}
+                     :ns-default build}
            :migrate {:main-opts ["-m" "foyobm.migrations.core"]}
            :frontend {:extra-deps
                       {reagent/reagent {:mvn/version "1.2.0"}

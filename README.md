@@ -2,6 +2,7 @@
 
 应用积分制、OKR、阿米巴等管理方法实现的企业数据化管理系统
 
+
 ## Features
 
 
@@ -13,6 +14,13 @@
 
 
 ## Usage
+
+
+### Requirement
+
+* clojure cli >1.11
+
+### Run & Package
 
 * modify config.edn
 * clj -M:migrate migrate
