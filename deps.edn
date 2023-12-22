@@ -20,7 +20,6 @@
         hikari-cp/hikari-cp {:mvn/version "3.0.1"}
         migratus/migratus {:mvn/version "1.5.1"}
         ;; api & routing
-        tick/tick {:mvn/version "0.6.2"}
         metosin/reitit {:mvn/version "0.5.18"}
         ring/ring-jetty-adapter {:mvn/version "1.9.3"}
         ring-cors/ring-cors {:mvn/version "0.1.13"}
@@ -28,14 +27,9 @@
  :aliases {:dev    {:extra-paths ["dev"]
                     :extra-deps  {integrant/repl {:mvn/version "0.3.2"}}}
            :server {:main-opts ["-m" "foyobm.core"]}
-        ;;    :uberjar {:main-opts ["-m" "cambada.uberjar"
-        ;;                          "--app-group-id" "com.foyo"
-        ;;                          "--app-artifact-id" "foyobm"
-        ;;                          "--app-version" "1.0.0"]
-        ;;              :extra-paths ["src/clj"]
-        ;;              :extra-deps {luchiniatwork/cambada {:mvn/version "1.0.2"}}}
-           :uberjar {:deps {io.github.clojure/tools.build {:git/tag "v0.8.4" :git/sha "8c3cd69"}}
-                     :ns-default build}
+           :uberjar {:extra-deps {seancorfield/depstar {:mvn/version "1.1.128"}}
+                     :main-opts ["-m" "hf.depstar.uberjar" "target/foyobm.jar"
+                                 "-C" "-m" "foyobm.core"]}
            :migrate {:main-opts ["-m" "foyobm.migrations.core"]}
            :frontend {:extra-deps
                       {reagent/reagent {:mvn/version "1.2.0"}

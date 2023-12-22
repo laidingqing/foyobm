@@ -114,3 +114,5 @@ out/
 .clj-kondo/
 
 infra/terraform.tfvars
+
+build
