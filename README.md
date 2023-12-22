@@ -25,6 +25,7 @@
 * modify config.edn
 * clj -M:migrate migrate
 * clj -M:server
+* clj -M:uberjar or clj -T:build jar
 
 
 ## RestAPI
