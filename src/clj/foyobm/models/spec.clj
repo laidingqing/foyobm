@@ -18,6 +18,12 @@
 (s/def ::create-company (s/keys :req-un [::name ::abbr]))
 (s/def ::create-department (s/keys :req-un [::name ::parent ::company_id]))
 
+
+;; webhook
+(s/def ::issue map?)
+(s/def ::worklog map?)
+(s/def ::webhook (s/keys :req-un [(s/nilable ::issue) (s/nilable ::worklog)]))
+
 (comment
   (print (s/valid? ::create-company {:name "婵科技股份有限公司" :abbr "婵科技"}))
   )

@@ -42,6 +42,10 @@
             {io.github.clojure/tools.build {:git/tag "v0.9.4"
                                             :git/sha "76b78fe20355c3570ce5477bc80c39c79e097af2"}}
             :ns-default build}
+           :native-image {:extra-deps {luchiniatwork/cambada {:mvn/version "1.0.5"}}
+                          :main-opts ["-m" "cambada.native-image"
+                                      "-m" "main"
+                                      "--graalvm-opt -report-unsupported-elements-at-runtime"]}
            :migrate {:main-opts ["-m" "foyobm.migrations.core"]}
            :frontend {:extra-deps
                       {reagent/reagent {:mvn/version "1.2.0"}
