@@ -4,16 +4,33 @@
 
 (defmulti handle-project-logic (fn [app data] app))
 
-(defn extract-necessary-fields
-  "提取必要数据与字段，获取故障类型数据（非block,即无关联作为缺陷），状态为完成(非故事类型)，编号，类型，工时，关联任务，状态"
-  [data]
-  (let [{:keys [issue]} data
+(defn extract-necessary-jira-fields
+  "提取必要数据与字段
+   1. 获取故障类型数据（非block,即无关联作为缺陷），状态为完成(非故事,缺陷类型)
+   2. 必要字段：编号，类型，工时，关联任务，状态
+  "
+  [issue-data]
+  (let [{:keys [issue]} issue-data
         {:keys [key fields]} issue
-        {:keys [issuetype assignee worklog issuelinks status]} fields]
-    {:issue_key key :issue_type (:name issuetype) :issue_assignee (:displayName assignee)}))
+        {:keys [issuetype assignee status priority]} fields
+        assign-name (-> assignee :displayName)
+        status-name (-> status :name)
+        priority-name (-> priority :name)
+        activity (cond
+                   (and (= status-name "完成") (some #{issuetype} #{"任务" "子任务" "优化"}))
+                   (-> (log/info "记录研发任务活动数据")
+                       {:issue-key key :issue-type issuetype :issue-assignee assign-name :name (format "完成任务[%s]累加积分" key) :priority-name priority-name})
+
+                   (and (= status-name "完成") (= issuetype "故障"))
+                   (-> (log/info "记录缺陷")
+                       {:issue-key key :issue-type issuetype :issue-assignee assign-name :name (format "产生缺陷[%s]扣减积分" key) :priority-name priority-name})
+
+                   :else nil)]
+    (when activity
+      (log/info activity))))
 
 (defmethod handle-project-logic "jira" [app data]
-  (log/info (str "ingest " app  " data: " (extract-necessary-fields data)))
+  (log/info (str "ingest " app  " data: " (extract-necessary-jira-fields data)))
   (rr/response {:message "Jira logic processed"}))
 
 (defmethod handle-project-logic "ding" [app data]
@@ -32,6 +49,7 @@
   (let [{:keys [_]} env
         data (:body parameters)
         app (get-in parameters [:path :app])]
+    (log/info "request data: " data)
     (handle-project-logic app data)
     (if true
       (rr/response {:message "Ok"})

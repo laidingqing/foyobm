@@ -5,7 +5,12 @@
                         :username #or [#env POSTGRES_USER "foyo_bm"]
                         :password #or [#env POSTGRES_PASSWORD "foyo_bm"]}
                  :http-port #or [#env PORT 8080]
-                 :jwt-secret #or [#env JWT_SECRET "foyobm-secret-jwt-string"]}
+                 :jwt-secret #or [#env JWT_SECRET "foyobm-secret-jwt-string"]
+                 :project-config {:names {:jira {:datalog "webhook"
+                                                 :props ({:uri "接受hook的地址" :defaults "/api/webhooks/jira"})
+                                                 :event-keys ({:name :bug :title "产生缺陷"}
+                                                              {:name :rework :title "返工次数"}
+                                                              {:name :finish :title "完成任务"})}}}}
  :postgres/db {:config #ig/ref :system/config}
  :reitit/routes {:db #ig/ref :postgres/db
                  :config #ig/ref :system/config}

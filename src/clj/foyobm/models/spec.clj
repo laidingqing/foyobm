@@ -24,6 +24,10 @@
 (s/def ::worklog map?)
 (s/def ::webhook (s/keys :req-un [(s/nilable ::issue) (s/nilable ::worklog)]))
 
+
+;; project
+(s/def ::create-project (s/keys :req-un [::name ::datalog ::description]))
+
 (comment
   (print (s/valid? ::create-company {:name "婵科技股份有限公司" :abbr "婵科技"}))
   )

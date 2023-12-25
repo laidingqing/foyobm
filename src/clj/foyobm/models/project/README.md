@@ -28,3 +28,22 @@
 ```clojure
 ;; 积分规则配置
 ```
+
+```clojure
+;; 积分类型
+{
+    :basis      "固定积分"
+    :regular    "规则积分"
+    :reporting  "申报积分"
+}
+```
+
+## JIRA积分规则设置
+
+* 产生缺陷 -> {:name "缺陷" :title "产生缺陷" :threshold 0 :score -2}
+* 返工次数 -> {:name "返工" :title "多次返工" :threshold 2 :score -1}
+* 延期完成
+* 完成任务
+* 提前完成
+* 工时登记
+* 
