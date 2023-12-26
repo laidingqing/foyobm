@@ -40,10 +40,9 @@
 
 ## JIRA积分规则设置
 
-* 产生缺陷 -> {:name "缺陷" :title "产生缺陷" :threshold 0 :score -2}
-* 返工次数 -> {:name "返工" :title "多次返工" :threshold 2 :score -1}
+* 产生缺陷 -> {:name "缺陷" :title "产生缺陷" :rules ({:priority "一般错误" :field "customfield_10300" :score -2} {:priority "错误" :score -2})}
+* 返工次数 -> {:name "返工" :title "多次返工" :rules ({:threshold 2 :score -1})}
 * 延期完成
-* 完成任务
+* 完成任务 -> {:name "完成任务" :title "完成任务" :rules ({:field "priority" :threshold "Medium" :score 10} {:threshold "Low" :score 5} {:threshold "Lowest" :score 1})} 
 * 提前完成
 * 工时登记
-* 

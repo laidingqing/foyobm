@@ -18,13 +18,6 @@
                      {:return-keys true
                       :builder-fn rs/as-unqualified-maps}))
 
-(defn db-query-batch! [db query]
-  (jdbc/execute-batch! db
-                       (sql/format query)
-                       {:return-keys true
-                        :builder-fn rs/as-unqualified-maps}))
-
-
 (defn- make-query
   [f db sql-map]
   (f db

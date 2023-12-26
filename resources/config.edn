@@ -8,7 +8,7 @@
                  :jwt-secret #or [#env JWT_SECRET "foyobm-secret-jwt-string"]
                  :project-config {:names {:jira {:datalog "webhook"
                                                  :props ({:uri "接受hook的地址" :defaults "/api/webhooks/jira"})
-                                                 :event-keys ({:name :bug :title "产生缺陷"}
+                                                 :event-rule-keys ({:name :bug :title "产生缺陷"}
                                                               {:name :rework :title "返工次数"}
                                                               {:name :finish :title "完成任务"})}}}}
  :postgres/db {:config #ig/ref :system/config}
