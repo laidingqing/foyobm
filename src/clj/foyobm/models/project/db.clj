@@ -1,6 +1,7 @@
 (ns foyobm.models.project.db
   (:require [foyobm.utils.query :as q]
-            [taoensso.timbre :as log]))
+            [taoensso.timbre :as log]
+            [clojure.string :as str]))
 
 
 ;; project
@@ -9,6 +10,18 @@
 (defn get-all-projects [db]
   (q/db-query! db {:select [:*]
                    :from [:projects]}))
+
+
+(defn get-project-by-name [db name]
+  (let [find-project-sql {:select [:*]
+                          :from [:projects]
+                          :where [:= :name (str/lower-case name)]}
+        find-settings-sql {:select [:*]
+                           :from [:project_settings]}
+        project (q/db-query-one! db find-project-sql)
+        settings (when project (q/db-query! db (assoc find-settings-sql :where [:= :project_id (-> project :id)])))]
+    (when project
+      (assoc project :settings settings))))
 
 (defn create-project 
   [db projects]
@@ -46,6 +59,8 @@
   (def project-setting-1 {:project_id 1 :datalog "webhook" :name "uri" :value "/api/webhooks/jira"})
   (create-project-setting db project-setting-1)
   (get-settings-by-project db 1)
+
+  (get-project-by-name db "jira")
   )
 
 

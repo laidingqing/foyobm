@@ -13,6 +13,7 @@
                   :debug true}))
 
 (defn db-query-one! [db query]
+  (log/info (sql/format query))
   (jdbc/execute-one! db
                      (sql/format query)
                      {:return-keys true
