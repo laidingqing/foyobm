@@ -34,6 +34,12 @@
   (q/db-query-one! db {:insert-into :activities
                        :values [activity]}))
 
+(defn batch-create-activities
+  [db activities]
+  (log/info activities)
+  (q/db-query-one! db {:insert-into :activities
+                       :values activities}))
+
 (comment
   (require '[foyobm.services.config :refer [read-config]]
            '[integrant.core :as ig]

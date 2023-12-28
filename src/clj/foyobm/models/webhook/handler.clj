@@ -3,16 +3,28 @@
             [taoensso.timbre :as log]
             [foyobm.models.project.db :as project.db]
             [foyobm.models.rule.db :as rule.db]
-            [foyobm.models.webhook.core :refer [extract-necessary-jira-fields]]))
+            [foyobm.models.activity.db :as activity.db]
+            [foyobm.models.webhook.core :refer [extract-necessary-jira-fields]]
+            [foyobm.models.users.db :as user.db]))
 
 (defmulti handle-project-logic (fn [app data db] app))
 
 
 
 (defmethod handle-project-logic "jira" [app data db]
+  (log/info (format "ingest %s webhook" app))
   (let [jira (project.db/get-project-by-name db "jira")
-        rules (when jira (rule.db/find-rules-with-props db {:has-many true} {:project_id (-> jira :id)}))]
-    (log/info (str "ingest " app  " data: " (extract-necessary-jira-fields data rules)))
+        project-id (-> jira :id)
+        rules (when jira (rule.db/find-rules-with-props db {:has-many true} {:project_id project-id}))
+        activities (extract-necessary-jira-fields data rules)
+        activities (map (fn [activity] (let [assignee (-> activity :assignee)
+                                             user-id (-> (user.db/find-user-by-name db assignee) :id)
+                                             new-activity (-> activity 
+                                                              (assoc :user_id user-id :project_id project-id)
+                                                              (dissoc :assignee))]
+                                         new-activity)) activities)]
+    (log/info activities)
+    (activity.db/batch-create-activities db activities)
     (rr/response {:message "Jira logic processed" :rules rules})))
 
 (defmethod handle-project-logic "ding" [app data]

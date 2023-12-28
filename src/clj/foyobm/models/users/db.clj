@@ -22,6 +22,11 @@
                        :from [:users]
                        :where [:= :email email]}))
 
+(defn find-user-by-name [db name]
+  (q/db-query-one! db {:select [:id]
+                       :from [:users]
+                       :where [:= :user_name name]}))
+
 (defn find-user-by-id [db id]
   ;; (log/info "find-user-by-id:" id)
   (let [user (q/db-query-one! db {:select [:*]
