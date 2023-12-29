@@ -36,7 +36,6 @@
 
 (defn batch-create-activities
   [db activities]
-  (log/info activities)
   (q/db-query-one! db {:insert-into :activities
                        :values activities}))
 

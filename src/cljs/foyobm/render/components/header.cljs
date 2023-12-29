@@ -29,8 +29,8 @@
          [:div {:class "hidden md:flex items-center space-x-1"}
           [:a {:href "#" :on-click #(rf/dispatch [::ui/set-active-page {:page :home}]) :class "py-4 px-2 text-white border-b-4 border-green-500 font-semibold"} "首页"]
           [:a {:href "#" :class "py-4 px-2 text-white font-semibold hover:text-green-500 transition duration-300"} "工作台"]
-          [:a {:href "#" :on-click #(rf/dispatch [::ui/set-active-page {:page :admin}]) :class "py-4 px-2 text-white font-semibold hover:text-green-500 transition duration-300"} "系统管理"]
-          [:a {:href "#" :class "py-4 px-2 text-white font-semibold hover:text-green-500 transition duration-300"} "用户设置"]]]
+          [:a {:href "#" :on-click #(rf/dispatch [::ui/set-active-page {:page :admin-manage}]) :class "py-4 px-2 text-white font-semibold hover:text-green-500 transition duration-300"} "系统管理"]
+          [:a {:href "#" :on-click #(rf/dispatch [::ui/set-active-page {:page :user-manage}]) :class "py-4 px-2 text-white font-semibold hover:text-green-500 transition duration-300"} "企业管理"]]]
         (if account
            (authed-right-nav)
            (no-auth-right-nav))

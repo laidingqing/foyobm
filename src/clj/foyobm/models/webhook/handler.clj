@@ -13,19 +13,24 @@
 
 (defmethod handle-project-logic "jira" [app data db]
   (log/info (format "ingest %s webhook" app))
-  (let [jira (project.db/get-project-by-name db "jira")
-        project-id (-> jira :id)
-        rules (when jira (rule.db/find-rules-with-props db {:has-many true} {:project_id project-id}))
-        activities (extract-necessary-jira-fields data rules)
-        activities (map (fn [activity] (let [assignee (-> activity :assignee)
-                                             user-id (-> (user.db/find-user-by-name db assignee) :id)
-                                             new-activity (-> activity 
-                                                              (assoc :user_id user-id :project_id project-id)
-                                                              (dissoc :assignee))]
-                                         new-activity)) activities)]
-    (log/info activities)
-    (activity.db/batch-create-activities db activities)
-    (rr/response {:message "Jira logic processed" :rules rules})))
+  (let [{:keys [issue]} data
+        {:keys [fields]} issue
+        {:keys [status]} fields
+        status-name (-> status :name)]
+    (if (not= status-name "完成")
+      (rr/response {:message "not processed"})
+      (let [jira (project.db/get-project-by-name db "jira")
+            project-id (-> jira :id)
+            rules (when jira (rule.db/find-rules-with-props db {:has-many true} {:project_id project-id}))
+            activities (extract-necessary-jira-fields data rules)
+            activities (map (fn [activity] (let [assignee (-> activity :assignee)
+                                                 user-id (-> (user.db/find-user-by-name db assignee) :id)
+                                                 new-activity (-> activity
+                                                                  (assoc :user_id user-id :project_id project-id)
+                                                                  (dissoc :assignee))]
+                                             new-activity)) activities)]
+        (when activities (activity.db/batch-create-activities db activities))
+        (rr/response {:message "Jira logic processed" :rules rules})))))
 
 (defmethod handle-project-logic "ding" [app data]
   (log/info "Processing Ding logic for ID:" app data)
