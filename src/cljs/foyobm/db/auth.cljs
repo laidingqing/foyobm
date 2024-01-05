@@ -3,13 +3,25 @@
             [foyobm.db.ui :as ui]))
 
 (def initial-state
-  {::auth {}})
+  {::auth {}
+   ::signin-state :signed-out})
 
+;; subs
 
 (rf/reg-sub
  ::account
  (fn [db]
    (get-in db [::auth :account])))
+
+
+(rf/reg-sub
+ ::signin-state
+ (fn [db _]
+   (get-in db [::signin-state])))
+
+
+
+;; fx
 
 (rf/reg-event-fx
  ::login
@@ -21,6 +33,13 @@
                             :on-success [::auth-success]
                             :on-failure [:http-failure]}]]]}))
 
+
+(rf/reg-event-fx
+ ::logout
+ (fn [{:keys [db]}]
+   {:db (assoc-in db [::signin-state] :signed-out)
+    :fx [[:set-local-storage [:account/token (:token nil)]]]}))
+
 (rf/reg-event-fx
  ::register
  (fn [_ [_ data]]
@@ -29,7 +48,9 @@
 (rf/reg-event-fx
  ::auth-success
  (fn [{:keys [db]} [_ data]]
-   {:db (assoc-in db [::auth :account] data)
+   {:db (-> db
+            (assoc-in [::auth :account] data)
+            (assoc-in [::signin-state] :signed-in))
     :fx [[:dispatch [::ui/close-dialog]]
          [:set-local-storage [:account/token (:token data)]]
          [:dispatch [::ui/set-active-page {:page :home}]]]}))

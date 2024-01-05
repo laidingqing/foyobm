@@ -67,9 +67,16 @@
                                                          :icon
                                                          r/create-element)))
 
+;; Form
+
+(def form (antd-wrapper antd/Form))
+(def form-item (antd-wrapper antd/Form.Item))
+
 ;; Input
 
 (def input (antd-wrapper antd/Input))
+(def input-password (antd-wrapper antd/Input.Password))
+
 (def text-area (antd-wrapper antd/Input.TextArea))
 (def select (antd-wrapper antd/Select))
 ;; option must be called like a function, don't use it as hiccup
@@ -154,3 +161,4 @@
 
 (def modal (antd-wrapper antd/Modal
                          #(medley/update-existing % :footer r/as-element)))
+(def alter (antd-wrapper antd/Alter))

@@ -5,40 +5,7 @@
   {::dialog {:open? false
              :type :loading
              :error-message ""}
-   ::active-page :home
-   ::active-user-page :main})
-
-
-(rf/reg-event-fx
- ::set-active-page
- (fn [{:keys [db]} [_ {:keys [page]}]]
-   (let [set-page (assoc db ::active-page page)]
-     (case page
-       :home {:db set-page}
-       (:login :register :admin-manage :user-manage) {:db set-page}))))
-
-
-(rf/reg-sub
- ::active-page
- (fn [db _]
-   (::active-page db))) 
-
-
-;; user ui module
-(rf/reg-event-fx
- ::set-active-use-page
- (fn [{:keys [db]} [_ {:keys [page]}]]
-   (let [set-page (assoc db ::active-user-page page)]
-     (case page
-       :main {:db set-page}
-       :user-manage {:db set-page}))))
-
-
-(rf/reg-sub
- ::active-user-page
- (fn [db _]
-   (::active-user-page db))) 
-
+   ::active-page :home})
 
 
 (rf/reg-event-db
@@ -52,7 +19,25 @@
                        :type type
                        :error-message error-message})))
 
+
 (rf/reg-sub
  ::dialog
  (fn [db]
    (get db ::dialog)))
+
+
+(rf/reg-event-fx     
+ ::set-active-page 
+ (fn [{:keys [db]} [_ {:keys [page]}]]
+   (let [set-page (assoc db ::active-page page)]
+     (case page
+       :home {:db set-page}
+       (:login :register) {:db set-page}))))
+
+
+;; subs
+
+(rf/reg-sub
+ ::active-page        
+ (fn [db ]
+   (get-in db [::active-page])))

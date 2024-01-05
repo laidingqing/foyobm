@@ -22,18 +22,20 @@
 (defn- side-menu []
   (fn []
     (let [items (menu-items)]
-      [antd/menu {:mode "vertical" :inlineCollapsed false :items items}])))
+      [antd/menu {:style {:borderRight 0} :mode "vertical" :items items}])))
 
 
 (defn- side-header []
   (fn []
-    [:div {:style {:margin "16px"}} (antd/text "#FoyoBM")]))
+    [:div {:style {:margin "16px"}} 
+     (antd/title {:level 4} "#FoyoBM")
+     [:i {:style {:display "block"}} "助力企业管理、快乐工作"]]))
 
 
 
 (defn- side-user-info []
   (fn []
-    [antd/menu {:mode "inline" :items [{:key "1" :label "支持" :icon (r/as-element [:> ReadOutlined])}
+    [antd/menu {:style {:borderRight 0} :mode "inline" :items [{:key "1" :label "支持" :icon (r/as-element [:> ReadOutlined])}
                                        {:key "2" :label "个人信息" :icon (r/as-element [:> SafetyOutlined])}]}]
     )
   
