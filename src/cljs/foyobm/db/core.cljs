@@ -1,6 +1,7 @@
 (ns foyobm.db.core
   (:require [foyobm.db.auth :as auth]
             [foyobm.db.ui :as ui]
+            [foyobm.db.router :as router]
             [re-frame.core :as rf]
             [ajax.core :as ajax]
             [day8.re-frame.http-fx]))
@@ -9,6 +10,7 @@
 
 (def app-db
   (merge {}
+         router/initial-state
          ui/initial-state
          auth/initial-state))
 
@@ -36,7 +38,7 @@
  (fn [db [_ {:keys [response]}]]
    (assoc db ::ui/dialog {:open? true
                           :type :error
-                          :error-message (:message response)})))
+                          :message (:message response)})))
 
 
 (rf/reg-fx

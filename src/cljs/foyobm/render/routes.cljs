@@ -1,19 +1,27 @@
 (ns foyobm.render.routes
   (:require [reagent.dom]
             [re-frame.core :as rf]
-            [bidi.bidi :as bidi]
-            [pushy.core :as pushy]
-            [foyobm.db.ui :as ui]))
-
-(def routes ["/" {""           :home
-                  "login"      :login
-                  "register"   :register}])
+            [reitit.frontend :as reitit]
+            [foyobm.render.pages.home.page :refer [home-page]]
+            [foyobm.render.pages.auth.login :refer [login-page]]
+            [foyobm.render.pages.auth.register :refer [register-page]]))
 
 
-(def history
-  (let [dispatch #(rf/dispatch [::ui/set-active-page {:page (:handler %)}])
-        match #(bidi/match-route routes %)]
-    (pushy/pushy dispatch match)))
+(def routes
+  ["/"
+   ["" {:name ::home
+        :view home-page
+        :controllers
+        []}]
+   ["login" {:name ::login
+             :view login-page
+             :controllers
+             []}]
+   ["register" {:name ::register
+                :view register-page
+                :controllers
+                []}]])
 
-(defn init! []
-  (pushy/start! history))
+
+(def routing
+  (reitit/router routes))

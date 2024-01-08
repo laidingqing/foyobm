@@ -7,6 +7,7 @@
 (def dialog-types
   {:loading {:title "数据加载中"
              :description "..."}
+   :info {:title "提示" :description ""}
    :error {:title "错误"
            :description "发生错误了. 请重试或联系服务人员."}
    :auth {:title "认证"
@@ -21,18 +22,13 @@
       (antd/spin)
       [:<>])))
 
-
-(defn error-dialog []
-  (let [{:keys [error-message]} @(rf/subscribe [::ui/dialog])]
-    (fn [] [:p {:class "mt-4"} error-message])))
-
-
 (defn dialog-view []
-  (let [{:keys [open? type]} @(rf/subscribe [::ui/dialog])]
-    (antd/modal {:open open?}
-                (case type
-                  :error [error-dialog]
-                  []))))
+  (let [{:keys [open? type message]} @(rf/subscribe [::ui/dialog])
+        title (-> dialog-types type :title)
+        description (-> dialog-types type :description)
+        message (or message description)]
+    (antd/modal {:open open? :title title :footer nil :onCancel #(rf/dispatch [::ui/close-dialog])}
+                [:p {:class "mt-4"} message])))
 
 (defn dialog []
   (let [{:keys [type]} @(rf/subscribe [::ui/dialog])]

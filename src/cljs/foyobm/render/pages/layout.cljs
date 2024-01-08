@@ -1,25 +1,23 @@
 (ns foyobm.render.pages.layout
-  (:require [foyobm.db.ui :as ui]
-            [foyobm.db.auth :as auth]
-            [foyobm.render.pages.views :as views]
+  (:require [foyobm.db.auth :as auth]
+            [foyobm.db.router :as router]
             [re-frame.core :as rf]
             [foyobm.render.pages.container.views :refer [authenticated-page-container generic-page-container]]))
 
 
 
 (defn authenticated-page []
-  (let [page-key @(rf/subscribe [::ui/active-page])
-        page-component (views/page-view page-key)]
+  (let [current-route @(rf/subscribe [::router/current-route])]
     [authenticated-page-container
-     [page-component]]))
+     (when current-route
+       [(-> current-route :data :view)])]))
 
 
 (defn no-authenticated-page []
-  (let [page-key @(rf/subscribe [::ui/active-page])]
+  (let [current-route @(rf/subscribe [::router/current-route])]
     [generic-page-container
-     (case page-key
-       :login [(views/page-view :login)]
-       [:div "Page not found"])])
+     (when current-route
+       [(-> current-route :data :view)])])
   )
 
 

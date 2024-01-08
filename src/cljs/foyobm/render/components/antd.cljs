@@ -32,11 +32,16 @@
        (into [:> component (attr-fn attributes)]
              children)))))
 
+
+
+
 ;; Typography
 
 (def title (antd-wrapper antd/Typography.Title))
 
 (def text (antd-wrapper antd/Typography.Text))
+
+(def link (antd-wrapper antd/Typography.Link))
 
 ;; Layout
 

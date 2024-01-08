@@ -2,8 +2,5 @@
 
 
 
-(defn page []
-  [:div "HOME"])
-
 (defn home-page [_] 
   [:div "HOME PAGE"])
