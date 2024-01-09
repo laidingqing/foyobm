@@ -1,6 +1,7 @@
 (ns foyobm.db.auth
   (:require [re-frame.core :as rf]
-            [foyobm.db.ui :as ui]))
+            [foyobm.db.ui :as ui]
+            [foyobm.db.router :as router]))
 
 (def initial-state
   {::auth {}
@@ -53,4 +54,4 @@
             (assoc-in [::signin-state] :signed-in))
     :fx [[:dispatch [::ui/close-dialog]]
          [:set-local-storage [:account/token (:token data)]]
-         [:dispatch [::ui/set-active-page {:page :home}]]]}))
+         [:dispatch [::router/push-state :foyobm.render.routes/dashboard]]]}))

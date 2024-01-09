@@ -1,8 +1,7 @@
 (ns foyobm.models.users.db
   (:require [foyobm.utils.query :as q]
             [integrant.core :as ig]
-            [buddy.hashers :refer [encrypt]]
-            [taoensso.timbre :as log]))
+            [buddy.hashers :refer [encrypt]]))
 
 (defn get-all [db]
   (q/db-query! db {:select [:*]
@@ -17,10 +16,10 @@
                          :values [user]})))
 
 (defn find-user-by-email [db email]
-  (log/info "email" email)
-  (q/db-query-one! db {:select [:id :email :password :status :fail_count]
-                       :from [:users]
-                       :where [:= :email email]}))
+  (let [user (q/db-query-one! db {:select [:id :email :password :status :fail_count]
+                                  :from [:users]
+                                  :where [:= :email email]})]
+    (dissoc user :password)))
 
 (defn find-user-by-name [db name]
   (q/db-query-one! db {:select [:id]

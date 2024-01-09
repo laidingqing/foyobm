@@ -49,8 +49,7 @@
 (def col (antd-wrapper antd/Col))
 
 (def layout (antd-wrapper antd/Layout))
-(def layout-header (antd-wrapper antd/Layout.Header
-                                 #(assoc % :style {:background-color "white"})))
+(def layout-header (antd-wrapper antd/Layout.Header))
 (def layout-content (antd-wrapper antd/Layout.Content))
 
 (def layout-sider (antd-wrapper antd/Layout.Sider
@@ -71,6 +70,7 @@
                                 #(medley/update-existing %
                                                          :icon
                                                          r/create-element)))
+(def bread-crumb (antd-wrapper antd/Breadcrumb))
 
 ;; Form
 
@@ -166,4 +166,5 @@
 
 (def modal (antd-wrapper antd/Modal
                          #(medley/update-existing % :footer r/as-element)))
-(def alter (antd-wrapper antd/Alter))
+
+(def alert (antd-wrapper antd/Alert))

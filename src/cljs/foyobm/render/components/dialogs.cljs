@@ -19,7 +19,7 @@
 (defn spin-view []
   (let [{:keys [open?]} @(rf/subscribe [::ui/dialog])]
     (if open?
-      (antd/spin)
+      (antd/spin {:fullscreen true})
       [:<>])))
 
 (defn dialog-view []

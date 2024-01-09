@@ -2,18 +2,21 @@
   (:require [clojure.spec.alpha :as s]
             [foyobm.utils.auth :as auth]
             [foyobm.models.users.db :as user.db]
+            [foyobm.models.basis.db :as basis.db]
             [foyobm.models.spec :as spec]
             [ring.util.response :as rr]
             [taoensso.timbre :as log]))
 
 
-(defn check-identity
+(defn get-current-info
   [{:keys [env identity]}]
   (let [{:keys [email]} identity
         {:keys [db]} env
-        user (user.db/find-user-by-email db email)]
-    (if user
-      (rr/response user)
+        user (user.db/find-user-by-email db email)
+        current-info (when user (-> user
+                               (assoc :company (basis.db/find-company-by-user db (:id user)))))]
+    (if current-info
+      (rr/response current-info)
       (rr/response {:error "Malformed token"}))))
 
 

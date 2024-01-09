@@ -2,6 +2,7 @@
   (:require [reagent.core :as r]
             [re-frame.core :as rf]
             [foyobm.db.auth :as auth]
+            [foyobm.db.ui :as ui]
             [foyobm.db.router :as router]
             [foyobm.render.components.antd :as antd]))
 
@@ -9,7 +10,6 @@
 
 
 (defn login-form []
-  ;; not rendered..
   (let [form-state (r/atom {:email ""
                             :password ""})
         on-change (fn [k] #(swap! form-state assoc k (-> % .-target .-value)))]
@@ -26,7 +26,7 @@
                                                        :on-change (on-change :password)}])
                  (antd/form-item
                   [antd/button {:htmlType "submit" :size "large" :type "primary" :style {:width "100%"}} "登录"])
-                  ;; [antd/button {:htmlType "button" :onClick #(rf/dispatch [::ui/set-dialog :error "errrrrrrr...."])} "dialog"])
+                  ;; [antd/button {:htmlType "button" :onClick #(rf/dispatch [::ui/set-dialog :loading])} "dialog"])
                  (antd/form-item
                   [:p "还没有账号? " (antd/link {:href "#" :onClick #(rf/dispatch [::router/push-state :foyobm.render.routes/register])} "去注册一个")]))))
   )
