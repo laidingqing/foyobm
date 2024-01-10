@@ -16,10 +16,9 @@
                          :values [user]})))
 
 (defn find-user-by-email [db email]
-  (let [user (q/db-query-one! db {:select [:id :email :password :status :fail_count]
-                                  :from [:users]
-                                  :where [:= :email email]})]
-    (dissoc user :password)))
+  (q/db-query-one! db {:select [:id :email :password :status :fail_count]
+                       :from [:users]
+                       :where [:= :email email]}))
 
 (defn find-user-by-name [db name]
   (q/db-query-one! db {:select [:id]

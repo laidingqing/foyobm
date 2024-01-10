@@ -37,13 +37,13 @@
 
 
 ;; {:company_id 1 :user_id 1 :dept_id 1}
-
+;; 仅查询当前企业的一级子项，不含顶级项
 (defn handle-query-departments
-  [{:keys [env parameters]}]
-  (log/info parameters)
+  [{:keys [env parameters]}] 
   (let [{:keys [db]} env
         id (get-in parameters [:path :id])
-        depts (company.db/find-dept-list-by-company db {:company_id id :parent 0})]
+
+        depts (company.db/find-dept-list-by-company db {:company_id id :position 1})]
     (if depts
       (rr/response depts)
       (rr/response {:error "query departments error."}))))
@@ -63,3 +63,14 @@
     (if res
       (rr/response res)
       (rr/response {:error "create-department error."}))))
+
+
+(defn handle-list-members-with-company
+  [{:keys [env parameters]}]
+  (let [{:keys [db]} env
+        company-id (get-in parameters [:path :id])
+        members (company.db/find-member-by-company db company-id)]
+    (if members
+      (rr/response members)
+      (rr/response {:error "list-members error."})))
+  )

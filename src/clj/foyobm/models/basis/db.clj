@@ -80,13 +80,13 @@
                        :values [department]}))
 
 
-(defn- build-where [{:keys [parent company_id]}]
-  (let [parent-clause [:= :parent parent]
+(defn- build-where [{:keys [position company_id]}]
+  (let [position-clause [:= :position position]
         company-clause [:= :company_id company_id]]
-    (when parent
+    (when position
       (cond-> [:and]
         company_id (conj company-clause)
-        parent (conj parent-clause))))
+        position (conj position-clause))))
   )
 
 (defn find-dept-list-by-company
@@ -104,6 +104,14 @@
                        :from [[:dept_members :d]]
                        :where [:= :user_id user-id]
                        :join [[:companies :c] [:= :c.id :d.company_id]]}))
+
+
+(defn find-member-by-company
+  [db company-id]
+  (q/db-query! db {:select [:d.* :c.user_name :c.email :c.status]
+                       :from [[:dept_members :d]]
+                       :where [:= :company_id company-id]
+                       :join [[:users :c] [:= :c.id :d.user_id]]}))
 
 (comment
 

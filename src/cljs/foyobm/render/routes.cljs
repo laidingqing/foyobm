@@ -8,7 +8,9 @@
             [foyobm.render.pages.auth.register :refer [register-page]]
             [foyobm.render.pages.dashboard.page :refer [dash-page]]
             [foyobm.render.pages.basis.company :refer [company-edit-page]]
-            [foyobm.render.pages.basis.users :refer [user-list-page]]))
+            [foyobm.render.pages.basis.users :refer [user-list-page]]
+            [foyobm.render.pages.basis.new-user :refer [new-user-page]]
+            [foyobm.render.pages.basis.groups :refer [groups-page]]))
 
 
 (def routes
@@ -33,12 +35,21 @@
     ["company-edit" {:name ::company-edit
                      :view company-edit-page
                      :controllers
-                     [{:start (fn []
-                                (rf/dispatch [::basis/fetch-current]))}]}]
+                     []}]
     ["user-list" {:name ::user-list
                   :view user-list-page
                   :controllers
-                  []}]]
+                  [{:start (fn []
+                               (rf/dispatch [::basis/fetch-members]))}]}]
+    ["new-user" {:name ::new-user
+                 :view new-user-page
+                 :controllers
+                 []}]
+    ["group-list" {:name ::group-list
+                   :view groups-page
+                   :controllers
+                   [{:start (fn []
+                              (rf/dispatch [::basis/fetch-groups]))}]}]]
 
    ])
 

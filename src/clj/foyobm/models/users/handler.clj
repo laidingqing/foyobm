@@ -14,7 +14,8 @@
         {:keys [db]} env
         user (user.db/find-user-by-email db email)
         current-info (when user (-> user
-                               (assoc :company (basis.db/find-company-by-user db (:id user)))))]
+                                    (dissoc :password)
+                                    (assoc :company (basis.db/find-company-by-user db (:id user)))))]
     (if current-info
       (rr/response current-info)
       (rr/response {:error "Malformed token"}))))

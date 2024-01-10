@@ -11,7 +11,7 @@
   [{:key "1" :label "首页" :icon (r/as-element [:> HomeOutlined]) :title "首页"}
    {:key "2" :icon (r/as-element [:> AppstoreOutlined]) :label "企业管理"  :title "企业管理" :children [{:key "2.1" :label "我的企业" :onClick #(rf/dispatch [::router/push-state :foyobm.render.routes/company-edit])}
                                                                                                 {:key "2.2" :label "用户信息管理" :onClick #(rf/dispatch [::router/push-state :foyobm.render.routes/user-list])}
-                                                                                                {:key "2.3" :label "分组管理"}
+                                                                                                {:key "2.3" :label "分组管理" :onClick #(rf/dispatch [::router/push-state :foyobm.render.routes/group-list])}
                                                                                                 {:key "2.4" :label "权限管理"}]}
    {:key "3" :icon (r/as-element [:> DashboardOutlined]) :label "积分制" :children [
                                                                                 {:key "3.1" :label "我的积分"}
@@ -27,33 +27,9 @@
       [antd/menu {:style {:borderRight 0} :mode "vertical" :items items}])))
 
 
-
-
-
-
-(defn- side-user-info []
-  (fn []
-    [antd/menu {:style {:borderRight 0} :mode "inline" :items [{:key "1" :label "支持" :icon (r/as-element [:> ReadOutlined])}
-                                       {:key "2" :label "个人信息" :icon (r/as-element [:> SafetyOutlined])}]}]
-    )
-  
-  )
-
-(defn- side-footer []
-  (fn []
-    [:div {:style {:position "absolute" :bottom 0 :margin-bottom "10px"}}
-     [side-user-info]
-     (antd/divider)
-     [:div {:style {:display "flex" :row-gap "8px" :column-gap "8px" :align-items "center" :padding "0 5px"}}
-      [:div (antd/avatar {:icon (r/as-element [:> UserOutlined]) :style {:backgroundColor "#87d068"}})]
-      [:div {:style {:flex-grow 1 :flex-basis "0%" :min-width "0px"}}
-       [:p "赖文清"]
-       [:span "laidingqing@me.com"]]]]))
-
 (defn page-sider []
   [antd/layout-sider
    [:div {:style {:display "flex" :flex-direction "column"}}
     [:div {:style {:flex-grow 1 :overflow-y "auto"}} [side-menu]]
-    (antd/divider)
-    [side-footer]]
+    (antd/divider)]
    ])
