@@ -178,6 +178,14 @@
   flex-grow:1;
 }
 
+.basis-1\/4{
+  flex-basis:25%;
+}
+
+.basis-1{
+  flex-basis:0.25rem;
+}
+
 .border-collapse{
   border-collapse:collapse;
 }
@@ -188,6 +196,10 @@
 
 .resize{
   resize:both;
+}
+
+.flex-row{
+  flex-direction:row;
 }
 
 .flex-col{

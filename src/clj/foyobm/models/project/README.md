@@ -4,7 +4,7 @@
 ;; 项目设置
 {
     :name "JIRA/WeCom/Ding"
-    :datalog "webhook/timer/"
+    :datalog "webhook/timer/const/"
     :settings {:cron_exp "* * 1 * * * "
                :x_ingest_event ""
                :key ""

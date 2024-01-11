@@ -13,7 +13,7 @@
 
 (defmethod ig/init-key :system/config
   [_ config]
-  (log/info "system starting with config" config)
+  ;; (log/info "system starting with config" config)
   config)
 
 (defn read-config

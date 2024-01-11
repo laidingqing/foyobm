@@ -23,7 +23,7 @@
       api/routes
       {:data {:env {:db db
                     :jwt-secret (:jwt-secret config)
-                    :project-config (:project-config config)}
+                    :applications-config (:applications-config config)}
               :coercion coercion
               :muuntaja m/instance
               :middleware [parameters/parameters-middleware

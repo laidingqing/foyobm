@@ -17,7 +17,7 @@
                                                                                 {:key "3.1" :label "我的积分"}
                                                                                 {:key "3.2" :label "申报积分"}
                                                                                  {:key "3.3" :label "排行榜"}]}
-   {:key "4" :icon (r/as-element [:> SettingOutlined]) :label "系统设置" :children [{:key "4.1" :label "积分项目设置"}
+   {:key "4" :icon (r/as-element [:> SettingOutlined]) :label "系统设置" :children [{:key "4.1" :label "积分项目设置" :onClick #(rf/dispatch [::router/push-state :foyobm.render.routes/project-list])}
                                                                                 {:key "4.2" :label "积分规则设置"}]} ])
 
 

@@ -3,6 +3,7 @@
             [re-frame.core :as rf]
             [reitit.frontend :as reitit]
             [foyobm.db.basis :as basis]
+            [foyobm.db.settings :as settings]
             [foyobm.render.pages.home.page :refer [home-page]]
             [foyobm.render.pages.auth.login :refer [login-page]]
             [foyobm.render.pages.auth.register :refer [register-page]]
@@ -10,7 +11,8 @@
             [foyobm.render.pages.basis.company :refer [company-edit-page]]
             [foyobm.render.pages.basis.users :refer [user-list-page]]
             [foyobm.render.pages.basis.new-user :refer [new-user-page]]
-            [foyobm.render.pages.basis.groups :refer [groups-page]]))
+            [foyobm.render.pages.basis.groups :refer [groups-page]]
+            [foyobm.render.pages.settings.project :refer [project-list-page]]))
 
 
 (def routes
@@ -40,7 +42,7 @@
                   :view user-list-page
                   :controllers
                   [{:start (fn []
-                               (rf/dispatch [::basis/fetch-members]))}]}]
+                             (rf/dispatch [::basis/fetch-members]))}]}]
     ["new-user" {:name ::new-user
                  :view new-user-page
                  :controllers
@@ -50,9 +52,12 @@
                    :controllers
                    [{:start (fn []
                               (rf/dispatch [::basis/fetch-groups]))}]}]]
-
-   ])
-
+   ["settings/"
+    ["project-list" {:name ::project-list
+                     :view project-list-page
+                     :controllers
+                     [{:start (fn []
+                                (rf/dispatch [::settings/fetch-default-apps]))}]}]]])
 
 (def routing
   (reitit/router routes))

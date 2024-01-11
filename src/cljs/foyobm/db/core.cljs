@@ -3,6 +3,7 @@
             [foyobm.db.ui :as ui]
             [foyobm.db.router :as router]
             [foyobm.db.basis :as basis]
+            [foyobm.db.settings :as settings]
             [re-frame.core :as rf]
             [ajax.core :as ajax]
             [day8.re-frame.http-fx]))
@@ -14,7 +15,8 @@
          router/initial-state
          ui/initial-state
          auth/initial-state
-         basis/initial-state))
+         basis/initial-state
+         settings/initial-state))
 
 (rf/reg-event-db
  ::initialize-db

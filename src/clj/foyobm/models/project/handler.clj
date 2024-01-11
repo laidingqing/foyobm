@@ -10,6 +10,22 @@
   
   )
 
+
+(defn handle-list-projects 
+  [{:keys [env _]}]
+  (let [{:keys [db]} env
+        projects (project.db/get-all-projects db)]
+    (if projects
+      (rr/response projects)
+      (rr/response {:error "project-error"}))
+    )
+  )
+
+(defn handle-list-applications
+  [{:keys [env _]}]
+  (let [{:keys [_ applications-config]} env]
+    (rr/response applications-config)))
+
 (defn handle-create-project
   [{:keys [env parameters]}]
   (let [{:keys [db project-config]} env

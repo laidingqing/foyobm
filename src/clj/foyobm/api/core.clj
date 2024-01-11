@@ -1,7 +1,8 @@
 (ns foyobm.api.core
   (:require [foyobm.api.users :refer [user-routes]]
             [foyobm.api.basis :refer [basis-route]]
-            [foyobm.api.webhook :refer [webhook-routes]]))
+            [foyobm.api.webhook :refer [webhook-routes]]
+            [foyobm.api.project :refer [project-route]]))
 
 
 (def health-route
@@ -15,4 +16,5 @@
     health-route
     user-routes
     basis-route
+    project-route
     webhook-routes]])
