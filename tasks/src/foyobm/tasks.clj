@@ -1,4 +1,4 @@
-(ns foyobm.tasks
+(ns jidash.tasks
   (:require [babashka.curl :as curl]
             [babashka.fs :as fs]
             [babashka.process :as process]

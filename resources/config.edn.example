@@ -5,7 +5,7 @@
                         :username #or [#env POSTGRES_USER "foyo_bm"]
                         :password #or [#env POSTGRES_PASSWORD "foyo_bm"]}
                  :http-port #or [#env PORT 8080]
-                 :jwt-secret #or [#env JWT_SECRET "foyobm-secret-jwt-string"]}
+                 :jwt-secret #or [#env JWT_SECRET "jidash-secret-jwt-string"]}
  :postgres/db {:config #ig/ref :system/config}
  :reitit/routes {:db #ig/ref :postgres/db
                  :config #ig/ref :system/config}

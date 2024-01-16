@@ -4,7 +4,7 @@
    [clojure.tools.build.api :as b]))
 
 
-(def lib 'foyobm)
+(def lib 'jidash)
 (def version (format "0.1.%s" (b/git-count-revs nil)))
 (def src-dirs ["src/clj" "resources"])
 (def class-dir "target/classes")
@@ -26,5 +26,5 @@
   (b/uber {:class-dir class-dir
            :uber-file uber-file
            :basis basis
-           :main 'foyobm.core
+           :main 'jidash.core
            :manifest {"Build-Number" version}}))

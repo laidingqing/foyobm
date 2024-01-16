@@ -26,10 +26,10 @@
         ring/ring {:mvn/version "1.9.5"}}
  :aliases {:dev    {:extra-paths ["dev"]
                     :extra-deps  {integrant/repl {:mvn/version "0.3.2"}}}
-           :server {:main-opts ["-m" "foyobm.core"]}
+           :server {:main-opts ["-m" "jidash.core"]}
            :uberjar {:extra-deps {seancorfield/depstar {:mvn/version "1.1.128"}}
-                     :main-opts ["-m" "hf.depstar.uberjar" "target/foyobm.jar"
-                                 "-C" "-m" "foyobm.core"]}
+                     :main-opts ["-m" "hf.depstar.uberjar" "target/jidash.jar"
+                                 "-C" "-m" "jidash.core"]}
            :jar
            {:extra-paths ["src/clj"]
             :extra-deps
@@ -46,7 +46,7 @@
                           :main-opts ["-m" "cambada.native-image"
                                       "-m" "main"
                                       "--graalvm-opt -report-unsupported-elements-at-runtime"]}
-           :migrate {:main-opts ["-m" "foyobm.migrations.core"]}
+           :migrate {:main-opts ["-m" "jidash.migrations.core"]}
            :frontend {:extra-deps
                       {reagent/reagent {:mvn/version "1.2.0"}
                        thheller/shadow-cljs {:mvn/version "2.20.6"}

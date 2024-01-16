@@ -1,6 +1,6 @@
 (ns user
   (:require [integrant.repl :as ig-repl]
-            [foyobm.services.config :as c]))
+            [jidash.services.config :as c]))
 
 
 (ig-repl/set-prep! (fn []

@@ -1,5 +1,5 @@
 {
-    "name": "foyobm",
+    "name": "jidash",
     "version": "1.0.0",
     "author": "laidingqing",
     "description": "This is a clojure web applications. It is based on: reitit, psql, reagent, shadow-cljs, re-frame",

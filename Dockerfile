@@ -2,7 +2,7 @@ FROM eclipse-temurin:11-alpine
 
 WORKDIR /
 
-COPY target/foyobm* app-standalone.jar
+COPY target/jidash* app-standalone.jar
 EXPOSE 8080
 
 
