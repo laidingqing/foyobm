@@ -186,6 +186,22 @@
   flex-basis:0.25rem;
 }
 
+.basis-3\/4{
+  flex-basis:75%;
+}
+
+.basis-3{
+  flex-basis:0.75rem;
+}
+
+.basis-2\/4{
+  flex-basis:50%;
+}
+
+.basis-2{
+  flex-basis:0.5rem;
+}
+
 .border-collapse{
   border-collapse:collapse;
 }

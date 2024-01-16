@@ -34,8 +34,20 @@
                                                           {:name :bachelors :title "本科"}
                                                           {:name :college :title "专科"}
                                                           {:name :special :title "中专"}
-                                                          {:name :seniorhigh :title "高中"})}]}
-
+                                                          {:name :seniorhigh :title "高中"})}
+                                       {:name :job
+                                        :title "岗位职务"
+                                        :description "不同职务级别享受不同等级的积分"
+                                        :datalog "const"
+                                        :props ()
+                                        :event-rule-keys ({:name :level :title "级别"})}
+                                       {:name :work-age
+                                        :title "工作年龄"
+                                        :description "根据工作年龄设置等级积分"
+                                        :datalog "const"
+                                        :props ()
+                                        :event-rule-keys ({:name :year :title "年限"})}]}
+ 
 
  :postgres/db {:config #ig/ref :system/config}
  :reitit/routes {:db #ig/ref :postgres/db

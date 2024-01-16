@@ -84,6 +84,8 @@
 
 (def text-area (antd-wrapper antd/Input.TextArea))
 (def select (antd-wrapper antd/Select))
+(def check-box (antd-wrapper antd/Checkbox))
+
 ;; option must be called like a function, don't use it as hiccup
 (def option (antd-wrapper antd/Select.Option))
 

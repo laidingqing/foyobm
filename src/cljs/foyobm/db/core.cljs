@@ -25,16 +25,18 @@
 
 (rf/reg-event-fx
  :http
- (fn [_ [_ {:keys [method url data headers on-success on-failure]}]]
+ (fn [_ [_ {:keys [method url data headers on-success on-failure query]}]]
    {:http-xhrio {:method (or method :get)
                  :uri (str base-url url)
                  :params data
+                 :url-params query
                  :headers headers
                  :timeout 5000
                  :format (ajax/json-request-format)
                  :response-format (ajax/json-response-format {:keywords? true})
                  :on-success on-success
                  :on-failure on-failure}}))
+
 
 
 (rf/reg-event-db

@@ -4,7 +4,10 @@
 
 ;;common spec
 (s/def ::id integer?)
-
+(s/def ::limit (s/and int? #(>= % 0)))
+(s/def ::offset (s/and int? #(>= % 0)))
+(s/def ::company_id integer?)
+(s/def ::activated boolean?)
 
 ;;user spec
 (s/def ::email string?)
@@ -25,8 +28,9 @@
 (s/def ::webhook (s/keys :req-un [(s/nilable ::issue) (s/nilable ::worklog)]))
 
 
-;; project
-(s/def ::create-project (s/keys :req-un [::name ::datalog ::description]))
+;; projects
+(s/def ::create-project (s/keys :req-un [::name ::datalog ::company_id ::activated]))
+(s/def ::query-projects (s/keys :req-un [::limit ::offset ::company_id]))
 
 (comment
   (print (s/valid? ::create-company {:name "婵科技股份有限公司" :abbr "婵科技"}))

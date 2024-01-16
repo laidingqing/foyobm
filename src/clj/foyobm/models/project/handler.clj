@@ -2,38 +2,34 @@
   (:require [clojure.spec.alpha :as s]
             [foyobm.models.project.db :as project.db]
             [foyobm.models.spec :as spec]
-            [ring.util.response :as rr]
-            [taoensso.timbre :as log]))
+            [ring.util.response :as rr]))
 
-
-(defn- project-valid? [config name]
-  
-  )
-
-
-(defn handle-list-projects 
-  [{:keys [env _]}]
+(defn handle-list-projects
+  [{:keys [env parameters]}]
   (let [{:keys [db]} env
-        projects (project.db/get-all-projects db)]
+        query-params (get-in parameters [:query])
+        projects (project.db/get-all-projects db query-params)]
     (if projects
       (rr/response projects)
-      (rr/response {:error "project-error"}))
-    )
-  )
+      (rr/response {:error "project-error"}))))
+
 
 (defn handle-list-applications
   [{:keys [env _]}]
   (let [{:keys [_ applications-config]} env]
     (rr/response applications-config)))
 
-(defn handle-create-project
+(defn handle-create-or-update-project
   [{:keys [env parameters]}]
-  (let [{:keys [db project-config]} env
-        data (:body parameters)]
+  (let [{:keys [db]} env
+        data (:body parameters)
+        name (-> data :name)
+        company-id (-> data :company_id)
+        existed? (project.db/find-project-by-name-and-company db name company-id)]
     (if (s/valid? ::spec/create-project data)
-      (let [project (project-valid? project-config (:name data))
-            res (when project (project.db/create-project db data))]
-        (if res
-          (rr/response {:id (:id res)})
-          (rr/response {:error "project-error"})))
+      (let [res (if existed?
+                  (project.db/update-project db data (:id existed?))
+                  (project.db/create-project db data))]
+        (rr/response {:id (:id res)})
+        )
       (rr/response {:error "project-create error."}))))

@@ -16,7 +16,7 @@
  (fn [db [_ type message]]
    (assoc db ::dialog {:open? true
                        :type type
-                       :message message})))
+                       :message (or message "")})))
 
 
 (rf/reg-sub

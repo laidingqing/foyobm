@@ -57,7 +57,8 @@
                      :view project-list-page
                      :controllers
                      [{:start (fn []
-                                (rf/dispatch [::settings/fetch-default-apps]))}]}]]])
+                                (rf/dispatch [::settings/fetch-default-apps])
+                                (rf/dispatch [::settings/fetch-my-apps]))}]}]]])
 
 (def routing
   (reitit/router routes))
