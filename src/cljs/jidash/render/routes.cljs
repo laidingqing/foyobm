@@ -10,9 +10,9 @@
             [jidash.render.pages.dashboard.page :refer [dash-page]]
             [jidash.render.pages.basis.company :refer [company-edit-page]]
             [jidash.render.pages.basis.users :refer [user-list-page]]
-            [jidash.render.pages.basis.new-user :refer [new-user-page]]
             [jidash.render.pages.basis.groups :refer [groups-page]]
-            [jidash.render.pages.settings.project :refer [project-list-page]]))
+            [jidash.render.pages.settings.project :refer [project-list-page]]
+            [jidash.render.pages.settings.rules :refer [rule-list-page]]))
 
 
 (def routes
@@ -43,10 +43,6 @@
                   :controllers
                   [{:start (fn []
                              (rf/dispatch [::basis/fetch-members]))}]}]
-    ["new-user" {:name ::new-user
-                 :view new-user-page
-                 :controllers
-                 []}]
     ["group-list" {:name ::group-list
                    :view groups-page
                    :controllers
@@ -58,7 +54,12 @@
                      :controllers
                      [{:start (fn []
                                 (rf/dispatch [::settings/fetch-default-apps])
-                                (rf/dispatch [::settings/fetch-my-apps]))}]}]]])
+                                (rf/dispatch [::settings/fetch-my-apps]))}]}]
+    ["rule-list" {:name ::rule-list
+                  :view rule-list-page
+                  :controllers
+                  [{:start (fn []
+                             (rf/dispatch [::settings/fetch-my-apps]))}]}]]])
 
 (def routing
   (reitit/router routes))

@@ -6,7 +6,9 @@
 (def initial-state
   {::applications []
    ::application {}
-   ::my-apps []})
+   ::my-apps {:data []
+              :pagination {:current 1
+                           :pageSize 10}}})
 
 
 ;; fx
@@ -65,7 +67,7 @@
  ::fetch-my-apps-success
  (fn [{:keys [db]} [_ data]]
    {:db (-> db
-            (assoc-in [::my-apps] data))}))
+            (assoc-in [::my-apps :data] data))}))
 
 
 
@@ -75,6 +77,13 @@
  (fn [{:keys [db]} [_ data]]
    {:db (assoc-in db [::application] data)
     :fx []}))
+
+
+
+(rf/reg-event-fx
+ ::open-rule-form
+ (fn [{:keys [db]} [_]]
+   {:fx [[:dispatch [::ui/set-dialog :rule-form]]]}))
 
 ;; subs
 
@@ -91,4 +100,10 @@
 (rf/reg-sub
  ::my-apps
  (fn [db _]
-   (get db ::my-apps)))
+   (get-in db [::my-apps :data])))
+
+(rf/reg-sub
+ ::apps-pagination
+ (fn [db _]
+   (get-in db [::my-apps :pagination])))
+

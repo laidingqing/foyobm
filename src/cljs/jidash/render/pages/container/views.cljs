@@ -13,14 +13,15 @@
 
 (defn authenticated-page-container []
   (fn [& children]
-    [dialog]
-    (antd/layout {:class "h-screen"}
-     (antd/layout-header {:class "flex items-center h-[56px] p-0 bg-white" :style {:border-block-end "1px solid rgba(5, 5, 5, 0.06)"}}
-      [page-header])
-     [antd/layout 
-      [page-sider]
-      [antd/layout {:style {:padding "0 24px 24px"}}
-       (render-children children)]])))
+    [:div
+     [dialog]
+     (antd/layout {:class "h-screen"}
+                  (antd/layout-header {:class "flex items-center h-[56px] p-0 bg-white" :style {:border-block-end "1px solid rgba(5, 5, 5, 0.06)"}}
+                                      [page-header])
+                  [antd/layout
+                   [page-sider]
+                   [antd/layout {:style {:padding "0 24px 24px"}}
+                    (render-children children)]])]))
 
 (defn generic-page-container []
   (fn [& children]

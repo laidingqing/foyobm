@@ -13,8 +13,8 @@
 
 
 (defn- user-table-header [] 
-  (antd/space
-   (antd/button {:type "primary" :onClick #(rf/dispatch [::router/push-state :jidash.render.routes/new-user])} "创建用户")))
+  (antd/space {:style {:margin-bottom "16px"}}
+              (antd/button {:type "primary" :style {:marginBottom "20px"} :onClick #(rf/dispatch [::basis/new-user-form])} "创建用户")))
 
 (defn- user-table-filter []
   [:div])
@@ -26,7 +26,9 @@
 
 (def columns [{:title "编号" :key "id" :dataIndex "user_id"}
               {:title "姓名" :key "name" :dataIndex "user_name"}
-              {:title "邮箱" :key "email" :dataIndex "email"}])
+              {:title "邮箱" :key "email" :dataIndex "email"}
+              {:title "管理员" :key "admin" :dataIndex "admin"}
+              {:title "状态" :key "status" :dataIndex "status"}])
 
 (defn- users-table []
   (let [members @(rf/subscribe [::basis/members])

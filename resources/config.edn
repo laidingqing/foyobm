@@ -10,16 +10,17 @@
                                         :title "JIRA任务系统"
                                         :description "使用Jira系统webhook功能获取任务数据"
                                         :datalog "webhook"
-                                        :props ({:uri "/api/webhooks/jira" :defaults "/api/webhooks/jira"})
+                                        :props ({:value "/api/webhooks/jira" :title "接入地址" :name "url" :require false})
                                         :event-rule-keys ({:name :bug :title "产生缺陷"}
                                                           {:name :rework :title "返工次数"}
                                                           {:name :finish :title "完成任务"})}
-
                                        {:name :ding
                                         :title "钉钉考勤系统"
                                         :description "配置定时器获取员工考勤数据"
                                         :datalog "timer"
-                                        :props ({:uri "https://*.dingtalk.com/api/...."})
+                                        :props ({:value "https://*.dingtalk.com/api/...." :title "地址" :name "url" :require true}
+                                                {:value "*" :title "Key" :require true}
+                                                {:value "*" :title "Secret" :require true})
                                         :event-rule-keys  ({:name :later :title "迟到"}
                                                            {:name :leave :title "早退"}
                                                            {:name :absent :title "旷工"}

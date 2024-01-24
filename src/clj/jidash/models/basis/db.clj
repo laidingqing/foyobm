@@ -1,5 +1,6 @@
 (ns jidash.models.basis.db
-  (:require [jidash.utils.query :as q]))
+  (:require [jidash.utils.query :as q]
+            [taoensso.timbre :as log]))
 
 
 
@@ -28,6 +29,18 @@
   (q/db-query-one! db {:insert-into :company_admins
                        :values [admins]}))
 
+
+(defn get-admin-users-by-company
+  [db company-id]
+  (q/db-query! db {:select [:user_id]
+                   :from [:company_admins]
+                   :where [:= :company_id company-id]}))
+
+(defn get-company-by-admin-user
+  [db user-id]
+  (q/db-query-one! db {:select [:company_id]
+                       :from [:company_admins]
+                       :where [:= :user_id user-id]}))
 
 ;; dept_members
 
@@ -68,11 +81,16 @@
                    :from [:departments]
                    :where [:and [:= :company_id company_id] [:= :id parent]]}))
 
+
+(defn find-dept-and-parent [db company_id parent]
+  (q/db-query-one! db {:select [:*]
+                       :from [:departments]
+                       :where [:and [:= :company_id company_id] [:= :parent parent]]}))
+
 (defn count-dept-by-parent [db parent]
   (q/db-query-one! db {:select [[[:raw "count(*)"] :count]]
                        :from :departments
-                       :where [:= :parent parent]})
-  )
+                       :where [:= :parent parent]}))
 
 (defn create-department "create department info"
   [db department]
@@ -143,11 +161,15 @@
 
 
   (def data {:name "dd" :parent 3 :company_id 4})
-  (def parent (find-dept-by-parent db 4 3))
+  (def parent (find-dept-by-parent db 11 0))
   (def count (count-dept-by-parent db (:id parent)))
-
+  (find-dept-by-parent db 11 0)
   (assoc data :company_id 4 :code (str (:position parent) "." (inc (:count  count))) :position (inc (:position parent)))
 
   (get-department-hierarchy db 0)
+
+
+  (get-admin-users-by-company db 11)
+  (get-company-by-admin-user db 1)
   ()
   )

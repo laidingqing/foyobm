@@ -21,7 +21,9 @@
 (s/def ::create-company (s/keys :req-un [::name ::abbr]))
 (s/def ::create-department (s/keys :req-un [::name ::parent ::company_id]))
 
+;; member spec
 
+(s/def ::create-member (s/keys :req-un [::email ::user_name ::password ::admin ::company_id]))
 ;; webhook
 (s/def ::issue map?)
 (s/def ::worklog map?)

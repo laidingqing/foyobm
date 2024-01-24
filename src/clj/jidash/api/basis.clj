@@ -2,7 +2,8 @@
   (:require [jidash.models.basis.handler :refer [handle-create-company 
                                                  handle-query-departments 
                                                  handle-create-departments
-                                                 handle-list-members-with-company]]
+                                                 handle-list-members-with-company
+                                                 handle-create-member-with-company]]
             [jidash.router.middleware :refer [wrap-authorization]]
             [jidash.models.spec :as spec]))
 
@@ -19,7 +20,12 @@
      ["/members" {:get {:summary "query members by company"
                         :middleware [wrap-authorization]
                         :parameters {:path {:id int?}}
-                        :handler handle-list-members-with-company}}]
+                        :handler handle-list-members-with-company}
+                  :post {:summary "create member by company"
+                         :middleware [wrap-authorization]
+                         :parameters {:path {:id int?}
+                                      :body ::spec/create-member}
+                         :handler handle-create-member-with-company}}]
      ["/departments"
       ["" {:post {:summary "create a department info in company"
                   :middleware [wrap-authorization]

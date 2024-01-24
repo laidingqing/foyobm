@@ -72,6 +72,27 @@
    {:db (-> db
             (assoc-in [::groups :data] data))}))
 
+
+
+(rf/reg-event-fx
+ ::new-user-form
+ (fn [{:keys [db]} [_]]
+   {:fx [[:dispatch [::ui/set-dialog :new-user-form]]]}))
+
+
+(rf/reg-event-fx
+ ::create-member-user
+ (fn [{:keys [db]} [_ data]]
+   (let [token (get-in db [::auth/auth :account :token])
+         company-id (get-in db [::auth/company :form :id])]
+     {:fx [[:dispatch [::ui/set-dialog :loading]]
+           [:dispatch [:http {:url (str "/api/basis/companies/" company-id "/members")
+                              :method :post
+                              :data data
+                              :headers {"Authorization" (str "Bearer " token)}
+                              :on-success [::fetch-members]
+                              :on-failure [:http-failure]}]]]})))
+
 ;; subs
 
 (rf/reg-sub
