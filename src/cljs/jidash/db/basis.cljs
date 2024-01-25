@@ -34,7 +34,7 @@
  (fn [{:keys [db]} [_ data]]
    {:db (-> db
             (assoc-in [::members :data] data))
-    :fx [:dispatch [::ui/close-dialog]]}))
+    :fx [[:dispatch [::ui/close-dialog]]]}))
 
 
 

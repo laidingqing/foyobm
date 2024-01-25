@@ -36,12 +36,15 @@
           :user username
           :password password}}))
 
+
 (defn -main
   "run a migrate command with migratus.
    example: clj -M:migrate create create-user"
   [& args]
   (let [command (first args)
-        conf (get-store-config-from-jdbc (:jdbc (:system/config (read-config))))]
+        config (read-config)
+        conf (get-store-config-from-jdbc (:jdbc (:system/config config)))
+        app-confg (:applications-config (:system/config config))]
     ;; (println "luanch migration...")
     ;; (println conf)
     (condp = command
@@ -51,6 +54,7 @@
       "reset" (reset conf)
       "up" (up conf (rest args))
       "down" (down conf (rest args)))))
+
 
 
 (comment

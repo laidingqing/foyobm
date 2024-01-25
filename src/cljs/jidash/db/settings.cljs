@@ -6,6 +6,7 @@
 (def initial-state
   {::applications []
    ::application {}
+   ::project-dicts []
    ::my-apps {:data []
               :pagination {:current 1
                            :pageSize 10}}})
@@ -36,6 +37,17 @@
                               :on-success [::fetch-my-apps-success]
                               :on-failure [:http-failure]}]]]})))
 
+(rf/reg-event-fx
+ ::fetch-project-dicts
+ (fn [{:keys [db]} [_]]
+   (let [token (get-in db [::auth/auth :account :token])
+         query {}]
+     {:fx [[:dispatch [:http {:url "/api/projects/dicts"
+                              :method :get
+                              :query query
+                              :headers {"Authorization" (str "Bearer " token)}
+                              :on-success [::fetch-project-dicts-success]
+                              :on-failure [:http-failure]}]]]})))
 
 (rf/reg-event-fx
  ::create-project
@@ -64,6 +76,13 @@
 
 
 (rf/reg-event-fx
+ ::fetch-project-dicts-success
+ (fn [{:keys [db]} [_ data]]
+   {:db (-> db
+            (assoc-in [::project-dicts] data))}))
+
+
+(rf/reg-event-fx
  ::fetch-my-apps-success
  (fn [{:keys [db]} [_ data]]
    {:db (-> db
@@ -86,6 +105,11 @@
    {:fx [[:dispatch [::ui/set-dialog :rule-form]]]}))
 
 ;; subs
+
+(rf/reg-sub
+ ::project-dicts
+ (fn [db _]
+   (get db ::project-dicts)))
 
 (rf/reg-sub
  ::applications

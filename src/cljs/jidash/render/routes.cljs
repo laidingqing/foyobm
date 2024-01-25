@@ -12,7 +12,8 @@
             [jidash.render.pages.basis.users :refer [user-list-page]]
             [jidash.render.pages.basis.groups :refer [groups-page]]
             [jidash.render.pages.settings.project :refer [project-list-page]]
-            [jidash.render.pages.settings.rules :refer [rule-list-page]]))
+            [jidash.render.pages.settings.rules :refer [rule-list-page]]
+            [jidash.render.pages.settings.dict :refer [dict-list-page]]))
 
 
 (def routes
@@ -49,6 +50,11 @@
                    [{:start (fn []
                               (rf/dispatch [::basis/fetch-groups]))}]}]]
    ["settings/"
+    ["dict-list" {:name ::dict-list
+                  :view dict-list-page
+                  :controllers
+                  [{:start (fn []
+                             (rf/dispatch [::settings/fetch-project-dicts]))}]}]
     ["project-list" {:name ::project-list
                      :view project-list-page
                      :controllers

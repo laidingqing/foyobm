@@ -19,6 +19,21 @@
   (let [{:keys [_ applications-config]} env]
     (rr/response applications-config)))
 
+
+(defn handle-list-project-dicts
+  [{:keys [env parameters]}]
+  (let [{:keys [db]} env
+        query-params (get-in parameters [:query])
+        dicts (project.db/get-all-project-dcits db query-params)]
+    (rr/response dicts)))
+
+(defn handle-create-project-dicts
+  [{:keys [env parameters]}]
+  (let [{:keys [db]} env
+        data (:body parameters)
+        res (project.db/create-project-dict db data)]
+    (rr/response res)))
+
 (defn handle-create-or-update-project
   [{:keys [env parameters]}]
   (let [{:keys [db]} env

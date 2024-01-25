@@ -3,7 +3,8 @@
             [jidash.render.pages.container.views :refer [main-content-wrap-container]]
             [re-frame.core :as rf]
             [jidash.db.basis :as basis]
-            [jidash.render.utils.antd :refer [row-key]]))
+            [jidash.render.utils.antd :refer [row-key]]
+            [jidash.render.utils.formatter :as fmt]))
 
 
 (defn- page-header []
@@ -24,18 +25,11 @@
   (antd/text "当前条件中还没有成员.")
   )
 
-(defn- render-admin-item [record]
-  (if (:admin record)
-    (antd/text "是")
-    (antd/text "-")
-    )
-  )
-
 (def columns [{:title "编号" :key "id" :dataIndex "user_id"}
-              {:title "姓名" :key "name" :dataIndex "user_name"}
               {:title "邮箱" :key "email" :dataIndex "email"}
-              {:title "管理员" :key "admin" :render #(render-admin-item %)}
-              {:title "状态" :key "status" :dataIndex "status"}])
+              {:title "姓名" :key "name" :dataIndex "user_name"}
+              {:title "管理员" :key "admin" :render #(fmt/user-admin-formatter %)}
+              {:title "状态" :key "status" :dataIndex "status" :render #(fmt/user-status-formatter %)}])
 
 
 (defn- users-table []

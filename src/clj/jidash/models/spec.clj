@@ -33,6 +33,7 @@
 ;; projects
 (s/def ::create-project (s/keys :req-un [::name ::datalog ::company_id ::activated]))
 (s/def ::query-projects (s/keys :req-un [::limit ::offset ::company_id]))
+(s/def ::query-dicts (s/keys :req-un [(s/nilable ::classv)]))
 
 (comment
   (print (s/valid? ::create-company {:name "婵科技股份有限公司" :abbr "婵科技"}))

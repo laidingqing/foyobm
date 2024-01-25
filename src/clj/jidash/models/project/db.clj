@@ -3,6 +3,25 @@
             [clojure.string :as str]))
 
 
+
+;; project dictionary
+
+(defn get-all-project-dcits [db query]
+  (let [{:keys [classv]} query
+        sql {:select [:*]
+             :from [:project_dicts]}
+        classv-clause [:= :classv classv]
+        where-clause (cond-> [:and]
+                       classv (conj classv-clause))
+        sql (cond-> sql
+              where-clause (assoc :where where-clause))]
+    (q/db-query! db sql)))
+
+(defn create-project-dict
+  [db dict]
+  (q/db-query-one! db {:insert-into :project_dicts
+                       :values [dict]}))
+
 ;; project
 ;; datalog => (:webhook :timer :regular)
 

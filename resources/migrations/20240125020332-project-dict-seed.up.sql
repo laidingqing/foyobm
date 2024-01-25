@@ -1,0 +1,16 @@
+insert into project_dicts(classv, code, title, description) values 
+    ('jira', 'bug', '产生缺陷', 'JIRA任务系统'),
+    ('jira', 'rework', '返工次数', 'JIRA任务系统'),
+    ('jira', 'finish', '完成任务', 'JIRA任务系统'),
+    ('ding', 'later', '迟到', '钉钉考勤系统'),
+    ('ding', 'leave', '早退', '钉钉考勤系统'),
+    ('ding', 'absent', '旷工', '钉钉考勤系统'),
+    ('ding', 'absence', '事假', '钉钉考勤系统'),
+    ('education', 'doctor', '博士', '学历'),
+    ('education', 'master', '硕士', '学历'),
+    ('education', 'bachelors', '本科', '学历'),
+    ('education', 'college', '专科', '学历'),
+    ('education', 'special', '中专', '学历'),
+    ('education', 'seniorhigh', '高中', '学历'),
+    ('job', 'level', '级别', '岗位职务'),
+    ('work-age', 'year', '司龄', '工作年龄')
