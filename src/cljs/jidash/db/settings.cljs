@@ -1,14 +1,21 @@
 (ns jidash.db.settings
   (:require [re-frame.core :as rf]
             [jidash.db.auth :as auth]
-            [jidash.db.ui :as ui]))
+            [jidash.db.ui :as ui]
+            [jidash.render.utils.conversion :refer [remove-nils]]))
+
+(def initial-dict-form {:classv nil
+                        })
 
 (def initial-state
   {::applications []
    ::application {}
-   ::project-dicts []
+   ::project-dicts {:data []
+                    :pagination {:current 0
+                                 :pageSize 10}
+                    :filters initial-dict-form}
    ::my-apps {:data []
-              :pagination {:current 1
+              :pagination {:current 0
                            :pageSize 10}}})
 
 
@@ -22,13 +29,16 @@
                             :on-success [::fetch-apps-success]
                             :on-failure [:http-failure]}]]]}))
 
+
 (rf/reg-event-fx
  ::fetch-my-apps
  (fn [{:keys [db]} [_]]
-   (let [token (get-in db [::auth/auth :account :token])
+   (let [{:keys [current
+                 pageSize]} (get-in db [::my-apps :pagination])
+         token (get-in db [::auth/auth :account :token])
          company_id (get-in db [::auth/company :form :id])
-         query {:limit 100
-                :offset 0
+         query {:limit pageSize
+                :offset (* pageSize (- current 1))
                 :company_id company_id}]
      {:fx [[:dispatch [:http {:url "/api/projects"
                               :method :get
@@ -40,8 +50,14 @@
 (rf/reg-event-fx
  ::fetch-project-dicts
  (fn [{:keys [db]} [_]]
-   (let [token (get-in db [::auth/auth :account :token])
-         query {}]
+   (let [{:keys [current
+                 pageSize]} (get-in db [::project-dicts :pagination])
+         token (get-in db [::auth/auth :account :token])
+         filters (-> db
+                     (get-in [::project-dicts :filters])
+                     (remove-nils))
+         query (merge {:limit pageSize
+                       :offset (* pageSize (- current 1))} filters)]
      {:fx [[:dispatch [:http {:url "/api/projects/dicts"
                               :method :get
                               :query query
@@ -79,7 +95,7 @@
  ::fetch-project-dicts-success
  (fn [{:keys [db]} [_ data]]
    {:db (-> db
-            (assoc-in [::project-dicts] data))}))
+            (assoc-in [::project-dicts :data] data))}))
 
 
 (rf/reg-event-fx
@@ -104,12 +120,36 @@
  (fn [{:keys [db]} [_]]
    {:fx [[:dispatch [::ui/set-dialog :rule-form]]]}))
 
+
+(rf/reg-event-fx
+ ::new-project-dict-form
+ (fn [{:keys [db]} [_]]
+   {:fx [[:dispatch [::ui/set-dialog :new-project-dict-form]]]}))
+
+(rf/reg-event-fx
+ ::set-dicts-curr-page
+ (fn [{:keys [db]} [_ n]]
+   {:db (-> db
+            (assoc-in [::project-dicts :pagination :current] n))
+    :fx [[:dispatch [::fetch-project-dicts]]]}))
+
+
+(rf/reg-event-db
+ ::set-dict-filter-value
+ (fn [db [_ attr v]]
+   (assoc-in db [::project-dicts :filters attr] v)))
+
 ;; subs
 
 (rf/reg-sub
  ::project-dicts
  (fn [db _]
-   (get db ::project-dicts)))
+   (get-in db [::project-dicts :data])))
+
+(rf/reg-sub
+ ::project-dicts-pagination
+ (fn [db _]
+   (get-in db [::project-dicts :pagination])))
 
 (rf/reg-sub
  ::applications
@@ -130,4 +170,7 @@
  ::apps-pagination
  (fn [db _]
    (get-in db [::my-apps :pagination])))
+
+
+
 

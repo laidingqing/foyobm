@@ -71,3 +71,25 @@
                  (antd/form-item
                   (antd/space
                    [antd/button {:htmlType "submit" :type "primary"} "确定"]))))))
+
+(defn new-project-dict-form []
+  (let [current-company @(rf/subscribe [::auth/current-company])
+       form-state (r/atom {:classv ""
+                           :code ""
+                           :title ""})
+       on-change (fn [k] #(swap! form-state assoc k (-> % .-target .-value)))]
+   (fn []
+     (antd/form {:layout "vertical" :onFinish (fn []
+                                                (rf/dispatch [::settings/create-project-dict @form-state]))}
+                (antd/form-item {:label "项目" :name "classv"}
+                                [antd/input {:value (:classv @form-state)
+                                             :on-change (on-change :classv)}])
+                (antd/form-item {:label "编码" :name "code"}
+                                [antd/input {:value (:code @form-state)
+                                             :on-change (on-change :code)}])
+                (antd/form-item {:label "名称" :name "title"}
+                                [antd/input {:value (:title @form-state)
+                                                      :on-change (on-change :title)}])
+                (antd/form-item
+                 (antd/space
+                  [antd/button {:htmlType "submit" :type "primary"} "确定"]))))))

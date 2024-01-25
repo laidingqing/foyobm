@@ -2,7 +2,7 @@
   (:require [re-frame.core :as rf]
             [jidash.db.ui :as ui]
             [jidash.render.components.antd :as antd]
-            [jidash.render.components.forms :refer [rule-form new-user-form]]))
+            [jidash.render.components.forms :refer [rule-form new-user-form new-project-dict-form]]))
 
 
 (def dialog-types
@@ -18,7 +18,9 @@
    :rule-form {:title "规则配置"
                :description "创建或更新项目规则"}
    :new-user-form {:title "创建/更新用户"
-                   :description "创建或更企业用户"}})
+                   :description "创建或更企业用户"}
+   :new-project-dict-form {:title "创建规则项"
+                           :description "为积分项目添加规则项"}})
 
 
 (defn spin-view []
@@ -36,6 +38,7 @@
                 (case type
                   :rule-form [rule-form]
                   :new-user-form [new-user-form]
+                  :new-project-dict-form [new-project-dict-form]
                   [:p {:class "mt-4"} message]))))
 
 (defn dialog []

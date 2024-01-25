@@ -8,13 +8,17 @@
 
 (defn get-all-project-dcits [db query]
   (let [{:keys [classv]} query
-        sql {:select [:*]
+        {:keys [limit offset]} (merge {:limit 10 :offset 0} (filter some? query))
+        sql {:select [:*
+                      [[:over [[:count :id]]] "total"]]
              :from [:project_dicts]}
         classv-clause [:= :classv classv]
         where-clause (cond-> [:and]
                        classv (conj classv-clause))
         sql (cond-> sql
-              where-clause (assoc :where where-clause))]
+              where-clause (assoc :where where-clause)
+              limit (assoc :limit limit)
+              offset (assoc :offset offset))]
     (q/db-query! db sql)))
 
 (defn create-project-dict
@@ -94,8 +98,9 @@
   (def project-setting-1 {:project_id 1 :datalog "webhook" :name "uri" :value "/api/webhooks/jira"})
   (create-project-setting db project-setting-1)
   (get-settings-by-project db 1)
-
-  (get-project-by-name db "jira"))
+  (get-all-project-dcits db {:limit 10 :offset 0})
+  (get-project-by-name db "jira")
+  )
 
 
 
