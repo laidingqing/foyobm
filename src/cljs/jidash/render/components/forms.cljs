@@ -3,6 +3,7 @@
             [reagent.core :as r]
             [jidash.db.settings :as settings]
             [jidash.db.basis :as basis]
+            [jidash.db.auth :as auth]
             [jidash.render.components.antd :as antd]))
 
 
@@ -46,10 +47,12 @@
 
 
 (defn new-user-form []
-  (let [form-state (r/atom {:email ""
+  (let [current-company @(rf/subscribe [::auth/current-company])
+        form-state (r/atom {:email ""
                             :password ""
                             :user_name ""
-                            :admin false})
+                            :admin false
+                            :company_id (:id current-company)})
         on-change (fn [k] #(swap! form-state assoc k (-> % .-target .-value)))]
     (fn []
       (antd/form {:layout "vertical" :onFinish (fn []

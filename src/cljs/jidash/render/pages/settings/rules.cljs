@@ -3,6 +3,7 @@
             [reagent.core :as r]
             [jidash.db.settings :as settings]
             [jidash.render.components.antd :as antd]
+            [jidash.render.utils.antd :refer [row-key]]
             [jidash.render.pages.container.views :refer [main-content-wrap-container]]))
 
 
@@ -52,7 +53,7 @@
 (def test-data [{:name "迟到" :field "*" :operator "=" :target 2 :score 20}])
 
 (defn- event-rule-list []
-  (antd/table {:columns columns :rowKey #(:name %) :dataSource test-data}))
+  (antd/table {:columns columns :rowKey #(row-key % :id) :dataSource test-data}))
 
 (defn rule-list-page []
   (let [application @(rf/subscribe [::settings/application])]

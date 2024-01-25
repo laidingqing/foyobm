@@ -3,7 +3,7 @@
             [jidash.render.pages.container.views :refer [main-content-wrap-container]]
             [re-frame.core :as rf]
             [jidash.db.basis :as basis]
-            [jidash.db.router :as router]))
+            [jidash.render.utils.antd :refer [row-key]]))
 
 
 (defn- page-header []
@@ -24,18 +24,26 @@
   (antd/text "当前条件中还没有成员.")
   )
 
+(defn- render-admin-item [record]
+  (if (:admin record)
+    (antd/text "是")
+    (antd/text "-")
+    )
+  )
+
 (def columns [{:title "编号" :key "id" :dataIndex "user_id"}
               {:title "姓名" :key "name" :dataIndex "user_name"}
               {:title "邮箱" :key "email" :dataIndex "email"}
-              {:title "管理员" :key "admin" :dataIndex "admin"}
+              {:title "管理员" :key "admin" :render #(render-admin-item %)}
               {:title "状态" :key "status" :dataIndex "status"}])
+
 
 (defn- users-table []
   (let [members @(rf/subscribe [::basis/members])
         pagination @(rf/subscribe [::basis/members-pagination])]
     (if (empty? members)
       [empty-members]
-      (antd/table {:columns columns :rowKey #(:id %) :dataSource members :pagination pagination}))))
+      (antd/table {:columns columns :rowKey #(row-key % :id) :dataSource members :pagination pagination}))))
 
 
 (defn user-list-page []

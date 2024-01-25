@@ -4,6 +4,7 @@
             [re-frame.core :as rf]
             [jidash.db.settings :as settings]
             [reagent.core :as r]
+            [jidash.render.utils.antd :refer [row-key]]
             ["@ant-design/icons" :refer [CheckCircleOutlined CloseCircleOutlined]]))
 
 
@@ -58,4 +59,4 @@
      (antd/bread-crumb {:separator ">" :items [{:title "系统设置"} {:title "积分项目设置"}] :style {:margin "16px 0"}})
      (page-header)
      [main-content-wrap-container
-      (antd/table {:columns columns :rowKey "name" :dataSource apps :pagination pagination :expandedRowRender (fn [record] (r/as-element (render-expand-row record)))})]]))
+      (antd/table {:columns columns :rowKey #(row-key % :name) :dataSource apps :pagination pagination :expandedRowRender (fn [record] (r/as-element (render-expand-row record)))})]]))

@@ -33,7 +33,8 @@
  ::fetch-members-success
  (fn [{:keys [db]} [_ data]]
    {:db (-> db
-            (assoc-in [::members :data] data))}))
+            (assoc-in [::members :data] data))
+    :fx [:dispatch [::ui/close-dialog]]}))
 
 
 

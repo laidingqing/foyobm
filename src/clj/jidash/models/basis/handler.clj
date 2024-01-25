@@ -70,7 +70,7 @@
   [user admins]
   (if (some #(= (:user_id user) (:user_id %)) admins)
     (assoc user :admin true)
-    ()))
+    (assoc user :admin false)))
 
 
 ;; 1. 创建用户
@@ -92,10 +92,10 @@
         (if (not= input_company_id company-id)
           (rr/response {:error "not-access error."})
           (jdbc/with-transaction [tx db]
-            (let [_ (user.db/create-user tx {:email email :password password :user_name user-name})
+            (let [db-user (user.db/create-user tx {:email email :password password :user_name user-name})
                   _ (when admin?
                              (company.db/create-company-admin tx {:company_id company-id :user_id user-id}))
-                  db-member (company.db/create-dept-member db {:company_id company-id :dept_id (:id department) :user_id user-id})]
+                  db-member (company.db/create-dept-member db {:company_id company-id :dept_id (:id department) :user_id (:id db-user)})]
               (if db-member
                 (rr/response db-member)
                 (rr/response {:error "db error."}))))))

@@ -171,5 +171,6 @@
 
   (get-admin-users-by-company db 11)
   (get-company-by-admin-user db 1)
+  (find-member-by-company db 11)
   ()
   )
