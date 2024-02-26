@@ -26,7 +26,6 @@
                                                        :on-change (on-change :password)}])
                  (antd/form-item
                   [antd/button {:htmlType "submit" :size "large" :type "primary" :style {:width "100%"}} "登录"])
-                  ;; [antd/button {:htmlType "button" :onClick #(rf/dispatch [::ui/set-dialog :loading])} "dialog"])
                  (antd/form-item
                   [:p "还没有账号? " (antd/link {:href "#" :onClick #(rf/dispatch [::router/push-state :jidash.render.routes/register])} "去注册一个")]))))
   )

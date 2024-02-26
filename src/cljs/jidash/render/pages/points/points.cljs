@@ -3,6 +3,7 @@
             [jidash.render.pages.container.views :refer [main-content-wrap-container]]
             [re-frame.core :as rf]
             [jidash.db.points :as points]
+            [jidash.db.router :as router]
             [reagent.core :as r]
             [jidash.render.utils.antd :refer [row-key]]
             ["@ant-design/icons" :refer [CheckCircleOutlined CloseCircleOutlined]]))
@@ -20,9 +21,9 @@
               {:title "姓名" :key "name" :dataIndex "user_name"}
               {:title "总积分" :key "points" :dataIndex "points"}
               {:title "最后更新" :key "updated" :dataIndex "updated"}
-              {:title "操作" :key "op" :render (fn []
+              {:title "操作" :key "op" :render (fn [row]
                                                (antd/space
-                                                (antd/link {:href "#"} "积分变动")))}])
+                                                (antd/link {:href "#" :onClick #(rf/dispatch [::router/push-state :jidash.render.routes/activity-list {:id (:user_id row)}])} "积分变动")))}])
 
 
 (defn point-list-page []

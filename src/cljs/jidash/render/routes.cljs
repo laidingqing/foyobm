@@ -8,6 +8,7 @@
             [jidash.render.pages.auth.login :refer [login-page]]
             [jidash.render.pages.auth.register :refer [register-page]]
             [jidash.render.pages.points.points :refer [point-list-page]]
+            [jidash.render.pages.points.activity :refer [activity-list-page]]
             [jidash.render.pages.dashboard.page :refer [dash-page]]
             [jidash.render.pages.common.company :refer [company-edit-page]]
             [jidash.render.pages.common.users :refer [user-list-page]]
@@ -38,6 +39,13 @@
                 [{:start (fn []
                            (rf/dispatch [::common/fetch-members])
                            (rf/dispatch [::points/fetch-user-points]))}]}]
+   ["activity-list/:id" {:name ::activity-list
+                  :view activity-list-page
+                  :controllers
+                  [{:parameters {:path [:id]}
+                    :start (fn [params]
+                             (rf/dispatch [::points/fetch-user-activities (get-in params [:path :id])]))}]}]
+   
    ["settings/"
     ["company-edit" {:name ::company-edit
                      :view company-edit-page

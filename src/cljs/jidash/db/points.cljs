@@ -7,7 +7,7 @@
 (def initial-dict-form {})
 
 (def initial-state
-  {::activities {:data []
+  {::user-activities {:data []
                  :pagination {:current 0
                               :pageSize 10}
                  :filters initial-dict-form}
@@ -16,6 +16,23 @@
                   :pagination {:current 0
                                :pageSize 10}}})
 
+(rf/reg-event-fx
+ ::fetch-user-activities
+ (fn [{:keys [db]} [_ user_id]]
+   (let [token (get-in db [::auth/auth :account :token])
+         query {:user_id user_id}]
+     {:fx [[:dispatch [:http {:url (str "/api/activities")
+                              :method :get
+                              :query query
+                              :headers {"Authorization" (str "Bearer " token)}
+                              :on-success [::fetch-user-activities-success]
+                              :on-failure [:http-failure]}]]]})))
+
+(rf/reg-event-fx
+ ::fetch-user-activities-success
+ (fn [{:keys [db]} [_ data]]
+   {:db (-> db
+            (assoc-in [::user-activities :data] data))}))
 
 (rf/reg-event-fx
  ::fetch-user-points
@@ -74,3 +91,13 @@
  ::user-points-pagination
  (fn [db _]
    (get-in db [::user-points :pagination])))
+
+(rf/reg-sub
+ ::user-activities
+ (fn [db _]
+   (get-in db [::user-activities :data])))
+
+(rf/reg-sub
+ ::user-activities-pagination
+ (fn [db _]
+   (get-in db [::user-activities :pagination])))

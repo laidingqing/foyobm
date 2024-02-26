@@ -38,8 +38,9 @@
     (if (and db-user (= catalog "manual"))
       (jdbc/with-transaction [tx db]
         (let [user_name (:user_name db-user)
-              _ (activity.db/create-activity tx {:user_id user-id :score point :title title :catalog "manual" :name user_name})
               db-user-point (point.db/query-user-point tx user-id)
+              _ (activity.db/create-activity tx {:user_id user-id :pre_score (:points db-user-point) :score point :title title :catalog "manual" :name user_name})
+              
               last-point (+ (:points db-user-point) point)
               db-point (point.db/update-user-point tx user-id {:user_id user-id :company_id company-id :points last-point})]
           (if db-point
