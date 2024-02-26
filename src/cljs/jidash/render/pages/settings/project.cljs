@@ -34,7 +34,7 @@
 (defn- render-iterator-props-item [item]
   (let [{:keys [title name value]} item]
     (antd/form-item {:label title :name name :key name}
-                    (antd/input {:value value}))))
+                    (antd/input {:defaultValue value}))))
 
 (defn- render-expand-row [record]
   (let [record (js->clj record :keywordize-keys true)
@@ -59,4 +59,4 @@
      (antd/bread-crumb {:separator ">" :items [{:title "系统设置"} {:title "积分项目设置"}] :style {:margin "16px 0"}})
      (page-header)
      [main-content-wrap-container
-      (antd/table {:columns columns :rowKey #(row-key % :name) :dataSource apps :pagination pagination :expandedRowRender (fn [record] (r/as-element (render-expand-row record)))})]]))
+      (antd/table {:columns columns :rowKey #(row-key % :name) :dataSource apps :expandedRowRender (fn [record] (r/as-element (render-expand-row record)))})]]))

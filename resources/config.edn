@@ -4,50 +4,8 @@
                                             :test "foyo_bm"}
                         :username #or [#env POSTGRES_USER "foyo_bm"]
                         :password #or [#env POSTGRES_PASSWORD "foyo_bm"]}
-                 :http-port #or [#env PORT 8080]
-                 :jwt-secret #or [#env JWT_SECRET "jidash-secret-jwt-string"]
-                 :applications-config [{:name :jira
-                                        :title "JIRA任务系统"
-                                        :description "使用Jira系统webhook功能获取任务数据"
-                                        :datalog "webhook"
-                                        :props ({:value "/api/webhooks/jira" :title "接入地址" :name "url" :require false})
-                                        :event-rule-keys ({:name :bug :title "产生缺陷"}
-                                                          {:name :rework :title "返工次数"}
-                                                          {:name :finish :title "完成任务"})}
-                                       {:name :ding
-                                        :title "钉钉考勤系统"
-                                        :description "配置定时器获取员工考勤数据"
-                                        :datalog "timer"
-                                        :props ({:value "https://*.dingtalk.com/api/...." :title "地址" :name "url" :require true}
-                                                {:value "*" :title "Key" :require true}
-                                                {:value "*" :title "Secret" :require true})
-                                        :event-rule-keys  ({:name :later :title "迟到"}
-                                                           {:name :leave :title "早退"}
-                                                           {:name :absent :title "旷工"}
-                                                           {:name :absence :title "事假"})}
-                                       {:name :education
-                                        :title "员工学历"
-                                        :description "根据员工学历等级设置初始积分数"
-                                        :datalog "const"
-                                        :props ()
-                                        :event-rule-keys ({:name :doctor :title "博士"}
-                                                          {:name :master :title "硕士"}
-                                                          {:name :bachelors :title "本科"}
-                                                          {:name :college :title "专科"}
-                                                          {:name :special :title "中专"}
-                                                          {:name :seniorhigh :title "高中"})}
-                                       {:name :job
-                                        :title "岗位职务"
-                                        :description "不同职务级别享受不同等级的积分"
-                                        :datalog "const"
-                                        :props ()
-                                        :event-rule-keys ({:name :level :title "级别"})}
-                                       {:name :work-age
-                                        :title "工作年龄"
-                                        :description "根据工作年龄设置等级积分"
-                                        :datalog "const"
-                                        :props ()
-                                        :event-rule-keys ({:name :year :title "年限"})}]}
+                 :http-port #or [#env JIDASH_PORT 8080]
+                 :jwt-secret #or [#env JWT_SECRET "jidash-secret-jwt-string"]}
  
 
  :postgres/db {:config #ig/ref :system/config}

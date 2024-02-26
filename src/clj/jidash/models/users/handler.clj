@@ -2,7 +2,7 @@
   (:require [clojure.spec.alpha :as s]
             [jidash.utils.auth :as auth]
             [jidash.models.users.db :as user.db]
-            [jidash.models.basis.db :as basis.db]
+            [jidash.models.admin.db :as basis.db]
             [jidash.models.spec :as spec]
             [ring.util.response :as rr]
             [taoensso.timbre :as log]))

@@ -52,7 +52,8 @@
                             :password ""
                             :user_name ""
                             :admin false
-                            :company_id (:id current-company)})
+                            :company_id (:id current-company)
+                            :status 0})
         on-change (fn [k] #(swap! form-state assoc k (-> % .-target .-value)))]
     (fn []
       (antd/form {:layout "vertical" :onFinish (fn []
@@ -68,22 +69,27 @@
                                                        :on-change (on-change :password)}])
                  (antd/form-item {:label "" :name "admin"}
                                  (antd/check-box "是否管理员"))
+                 
+                 (antd/form-item {:label "" :name "status"}
+                                 (antd/check-box "是否激活"))
                  (antd/form-item
                   (antd/space
                    [antd/button {:htmlType "submit" :type "primary"} "确定"]))))))
 
 (defn new-project-dict-form []
   (let [current-company @(rf/subscribe [::auth/current-company])
-       form-state (r/atom {:classv ""
-                           :code ""
-                           :title ""})
-       on-change (fn [k] #(swap! form-state assoc k (-> % .-target .-value)))]
+        applications @(rf/subscribe [::settings/applications])
+        opts (map #(convert-to-select-opts %) applications)
+        form-state (r/atom {:classv ""
+                            :code ""
+                            :title ""})
+        on-change (fn [k] #(swap! form-state assoc k (-> % .-target .-value)))]
    (fn []
      (antd/form {:layout "vertical" :onFinish (fn []
                                                 (rf/dispatch [::settings/create-project-dict @form-state]))}
                 (antd/form-item {:label "项目" :name "classv"}
-                                [antd/input {:value (:classv @form-state)
-                                             :on-change (on-change :classv)}])
+                                (antd/select {:style {:width "200px"} :options opts}))
+                
                 (antd/form-item {:label "编码" :name "code"}
                                 [antd/input {:value (:code @form-state)
                                              :on-change (on-change :code)}])

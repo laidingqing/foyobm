@@ -38,8 +38,9 @@
          token (get-in db [::auth/auth :account :token])
          company_id (get-in db [::auth/company :form :id])
          query {:limit pageSize
-                :offset (* pageSize (- current 1))
+                :offset (* pageSize current)
                 :company_id company_id}]
+     
      {:fx [[:dispatch [:http {:url "/api/projects"
                               :method :get
                               :query query
@@ -57,7 +58,7 @@
                      (get-in [::project-dicts :filters])
                      (remove-nils))
          query (merge {:limit pageSize
-                       :offset (* pageSize (- current 1))} filters)]
+                       :offset (* pageSize current)} filters)]
      {:fx [[:dispatch [:http {:url "/api/projects/dicts"
                               :method :get
                               :query query
@@ -130,7 +131,7 @@
  ::set-dicts-curr-page
  (fn [{:keys [db]} [_ n]]
    {:db (-> db
-            (assoc-in [::project-dicts :pagination :current] n))
+            (assoc-in [::project-dicts :pagination :current] (- n 1)))
     :fx [[:dispatch [::fetch-project-dicts]]]}))
 
 

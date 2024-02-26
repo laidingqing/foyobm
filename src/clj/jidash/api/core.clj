@@ -1,8 +1,8 @@
 (ns jidash.api.core
   (:require [jidash.api.users :refer [user-routes]]
-            [jidash.api.basis :refer [basis-route]]
-            [jidash.api.webhook :refer [webhook-routes]]
-            [jidash.api.project :refer [project-route]]))
+            [jidash.api.admin :refer [admin-route]]
+            [jidash.api.points :refer [point-routes]]
+            [jidash.api.activity :refer [activity-routes]]))
 
 
 (def health-route
@@ -15,6 +15,6 @@
   [["/api"
     health-route
     user-routes
-    basis-route
-    project-route
-    webhook-routes]])
+    admin-route
+    point-routes
+    activity-routes]])

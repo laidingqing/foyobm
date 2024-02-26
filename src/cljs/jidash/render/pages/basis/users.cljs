@@ -29,7 +29,12 @@
               {:title "邮箱" :key "email" :dataIndex "email"}
               {:title "姓名" :key "name" :dataIndex "user_name"}
               {:title "管理员" :key "admin" :render #(fmt/user-admin-formatter %)}
-              {:title "状态" :key "status" :dataIndex "status" :render #(fmt/user-status-formatter %)}])
+              {:title "状态" :key "status" :dataIndex "status" :render #(fmt/user-status-formatter %)}
+              {:title "操作" :key "op" :render (fn []
+                                               (antd/space
+                                                (antd/link {:href "#"} "编辑细节")
+                                                (antd/link {:href "#"} "设置密码")
+                                                (antd/link {:href "#"} "禁用")))}])
 
 
 (defn- users-table []

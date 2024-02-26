@@ -22,8 +22,7 @@
      (ring/router
       api/routes
       {:data {:env {:db db
-                    :jwt-secret (:jwt-secret config)
-                    :applications-config (:applications-config config)}
+                    :jwt-secret (:jwt-secret config)}
               :coercion coercion
               :muuntaja m/instance
               :middleware [parameters/parameters-middleware

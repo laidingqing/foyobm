@@ -23,6 +23,7 @@
   (let [project-dicts @(rf/subscribe [::settings/project-dicts])
         pagination @(rf/subscribe [::settings/project-dicts-pagination])
         pagination (assoc pagination :total (or (:total (first project-dicts)) 0) :onChange (fn [page _] (rf/dispatch [::settings/set-dicts-curr-page page])))]
+    ;; 分页有BUG...
     [:div
      (antd/bread-crumb {:separator ">" :items [{:title "系统设置"} {:title "积分项目设置"}] :style {:margin "16px 0"}})
      (page-header)

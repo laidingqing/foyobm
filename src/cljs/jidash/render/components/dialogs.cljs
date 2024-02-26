@@ -35,6 +35,7 @@
         description (-> dialog-types type :description)
         message (or message description)]
     (antd/modal {:open open? :title title :footer nil :onCancel #(rf/dispatch [::ui/close-dialog])}
+                (antd/divider {:style {:margin "14px 0"}})
                 (case type
                   :rule-form [rule-form]
                   :new-user-form [new-user-form]

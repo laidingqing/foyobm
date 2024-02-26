@@ -9,11 +9,11 @@
 ;;    title varchar(100) not null,
 ;;    project_id bigint not null,
 
-(defn get-activity-list
-  [db query params]
+(defn find-activity-list
+  [db query]
   (let [sql {:select [:*]
              :from [:activities]}
-        {:keys [limit offset sort-field sort-dir]} (merge {:limit 10 :offset 0 :sort-dir "desc"} (filter some? params))
+        {:keys [limit offset sort-field sort-dir]} (merge {:limit 10 :offset 0 :sort-dir "desc"} (filter some? query))
         {:keys [project-id user-id]} query
         project-clause [:= :project-id project-id]
         user-clause [:= :user-id user-id]
@@ -50,5 +50,5 @@
   (def activity-1 {:user_id 1 :score 100 :title "提早完成任务[CKMRO-456]" :project_id 1})
   (create-activity db activity-1)
 
-  (get-activity-list db {:project-id 1 :user-id 1} {:sort-field "created" :sort-dir "desc"})
+  (find-activity-list db {:project-id 1 :user-id 1 :sort-field "created" :sort-dir "desc"})
   )
