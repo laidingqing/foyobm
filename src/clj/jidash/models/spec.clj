@@ -7,6 +7,7 @@
 (s/def ::limit (s/and int? #(>= % 0)))
 (s/def ::offset (s/and int? #(>= % 0)))
 (s/def ::company_id integer?)
+(s/def ::c_id string?)
 (s/def ::activated boolean?)
 
 ;;user spec
@@ -35,7 +36,7 @@
 (s/def ::name string?)
 (s/def ::catalog string?)
 (s/def ::score int?)
-(s/def ::create-activity (s/keys :req-un [::user_id ::score ::title ::catalog]))
+(s/def ::create-activity (s/keys :req-un [::user_id ::company_id ::score ::title ::catalog]))
 
 
 (comment

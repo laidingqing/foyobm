@@ -182,16 +182,8 @@
   flex-basis:0.25rem;
 }
 
-.basis-1\/4{
-  flex-basis:25%;
-}
-
 .basis-2{
   flex-basis:0.5rem;
-}
-
-.basis-2\/4{
-  flex-basis:50%;
 }
 
 .basis-3{

@@ -31,18 +31,22 @@
 
 (defn query-point-list
   [db query]
-  (let [sql {:select [:*]
-             :from [:points]}
+  (let [sql {:select [:p.* :c.user_name]
+             :from [[:points :p]]}
         {:keys [limit offset sort-field sort-dir]} (merge {:limit 10 :offset 0 :sort-dir "desc"} (filter some? query))
         {:keys [user-id]} query
+        {:keys [c_id]} query
         user-clause [:= :user-id user-id]
+        company-clause [:= :company_id c_id]
         where-clause (cond-> [:and]
-                       user-id (conj user-clause))
+                       user-id (conj user-clause)
+                       c_id (conj company-clause))
         sql (cond-> sql
               where-clause (assoc :where where-clause)
               limit (assoc :limit limit)
               offset (assoc :offset offset)
-              sort-field (assoc :order-by [[sort-field sort-dir]]))]
+              sort-field (assoc :order-by [[sort-field sort-dir]]))
+        sql (assoc sql :join [[:users :c] [:= :c.id :p.user_id]])]
     
     (q/db-query! db sql)))
 

@@ -2,18 +2,16 @@
   (:require [reagent.dom]
             [re-frame.core :as rf]
             [reitit.frontend :as reitit]
-            [jidash.db.basis :as basis]
-            [jidash.db.settings :as settings]
+            [jidash.db.common :as common]
+            [jidash.db.points :as points]
             [jidash.render.pages.home.page :refer [home-page]]
             [jidash.render.pages.auth.login :refer [login-page]]
             [jidash.render.pages.auth.register :refer [register-page]]
+            [jidash.render.pages.points.points :refer [point-list-page]]
             [jidash.render.pages.dashboard.page :refer [dash-page]]
-            [jidash.render.pages.basis.company :refer [company-edit-page]]
-            [jidash.render.pages.basis.users :refer [user-list-page]]
-            [jidash.render.pages.basis.groups :refer [groups-page]]
-            [jidash.render.pages.settings.project :refer [project-list-page]]
-            [jidash.render.pages.settings.rules :refer [rule-list-page]]
-            [jidash.render.pages.settings.dict :refer [dict-list-page]]))
+            [jidash.render.pages.common.company :refer [company-edit-page]]
+            [jidash.render.pages.common.users :refer [user-list-page]]
+            [jidash.render.pages.common.groups :refer [groups-page]]))
 
 
 (def routes
@@ -34,7 +32,13 @@
                 :view register-page
                 :controllers
                 []}]
-   ["basis/"
+   ["point-list" {:name ::point-list
+                :view point-list-page
+                :controllers  
+                [{:start (fn []
+                           (rf/dispatch [::common/fetch-members])
+                           (rf/dispatch [::points/fetch-user-points]))}]}]
+   ["settings/"
     ["company-edit" {:name ::company-edit
                      :view company-edit-page
                      :controllers
@@ -43,29 +47,12 @@
                   :view user-list-page
                   :controllers
                   [{:start (fn []
-                             (rf/dispatch [::basis/fetch-members]))}]}]
+                             (rf/dispatch [::common/fetch-members]))}]}]
     ["group-list" {:name ::group-list
                    :view groups-page
                    :controllers
                    [{:start (fn []
-                              (rf/dispatch [::basis/fetch-groups]))}]}]]
-   ["settings/"
-    ["dict-list" {:name ::dict-list
-                  :view dict-list-page
-                  :controllers
-                  [{:start (fn []
-                             (rf/dispatch [::settings/fetch-project-dicts]))}]}]
-    ["project-list" {:name ::project-list
-                     :view project-list-page
-                     :controllers
-                     [{:start (fn []
-                                (rf/dispatch [::settings/fetch-default-apps])
-                                (rf/dispatch [::settings/fetch-my-apps]))}]}]
-    ["rule-list" {:name ::rule-list
-                  :view rule-list-page
-                  :controllers
-                  [{:start (fn []
-                             (rf/dispatch [::settings/fetch-my-apps]))}]}]]])
+                              (rf/dispatch [::common/fetch-groups]))}]}]]])
 
 (def routing
   (reitit/router routes))

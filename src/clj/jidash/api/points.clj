@@ -8,4 +8,5 @@
 (def point-routes
   ["/points"
    ["" {:get {:middleware [wrap-authorization]
+              :parameters {:query {:c_id int?}}
               :handler handle-query-points}}]])

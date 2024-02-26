@@ -31,6 +31,7 @@
         title (:title data)
         catalog (:catalog data)
         user-id (:user_id data)
+        company-id (:company_id data)
         point (or (:score data) 0)
         db-user (user.db/find-user-by-id db user-id)]
 
@@ -40,7 +41,7 @@
               _ (activity.db/create-activity tx {:user_id user-id :score point :title title :catalog "manual" :name user_name})
               db-user-point (point.db/query-user-point tx user-id)
               last-point (+ (:points db-user-point) point)
-              db-point (point.db/update-user-point tx user-id {:user_id user-id :points last-point})]
+              db-point (point.db/update-user-point tx user-id {:user_id user-id :company_id company-id :points last-point})]
           (if db-point
             (rr/response {:id (:id db-point)})
             (rr/response {:error "create-activity error"}))))

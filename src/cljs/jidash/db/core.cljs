@@ -2,8 +2,8 @@
   (:require [jidash.db.auth :as auth]
             [jidash.db.ui :as ui]
             [jidash.db.router :as router]
-            [jidash.db.basis :as basis]
-            [jidash.db.settings :as settings]
+            [jidash.db.common :as common]
+            [jidash.db.points :as point]
             [re-frame.core :as rf]
             [ajax.core :as ajax]
             [day8.re-frame.http-fx]))
@@ -15,8 +15,8 @@
          router/initial-state
          ui/initial-state
          auth/initial-state
-         basis/initial-state
-         settings/initial-state))
+         common/initial-state
+         point/initial-state))
 
 (rf/reg-event-db
  ::initialize-db

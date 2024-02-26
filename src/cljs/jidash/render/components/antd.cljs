@@ -81,6 +81,7 @@
 
 (def input (antd-wrapper antd/Input))
 (def input-password (antd-wrapper antd/Input.Password))
+(def input-number (antd-wrapper antd/InputNumber))
 
 (def text-area (antd-wrapper antd/Input.TextArea))
 (def select (antd-wrapper antd/Select))

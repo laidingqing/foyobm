@@ -1,6 +1,6 @@
 (ns jidash.api.core
   (:require [jidash.api.users :refer [user-routes]]
-            [jidash.api.admin :refer [admin-route]]
+            [jidash.api.commons :refer [commons-route]]
             [jidash.api.points :refer [point-routes]]
             [jidash.api.activity :refer [activity-routes]]))
 
@@ -15,6 +15,6 @@
   [["/api"
     health-route
     user-routes
-    admin-route
+    commons-route
     point-routes
     activity-routes]])
