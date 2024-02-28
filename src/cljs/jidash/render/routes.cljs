@@ -6,7 +6,6 @@
             [jidash.db.points :as points]
             [jidash.render.pages.home.page :refer [home-page]]
             [jidash.render.pages.auth.login :refer [login-page]]
-            [jidash.render.pages.auth.register :refer [register-page]]
             [jidash.render.pages.points.points :refer [point-list-page]]
             [jidash.render.pages.points.activity :refer [activity-list-page]]
             [jidash.render.pages.dashboard.page :refer [dash-page]]
@@ -29,10 +28,6 @@
              :view login-page
              :controllers
              []}]
-   ["register" {:name ::register
-                :view register-page
-                :controllers
-                []}]
    ["point-list" {:name ::point-list
                 :view point-list-page
                 :controllers  

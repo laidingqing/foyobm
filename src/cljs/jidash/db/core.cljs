@@ -8,7 +8,8 @@
             [ajax.core :as ajax]
             [day8.re-frame.http-fx]))
 
-(def base-url "http://localhost:8080")
+(def base-url
+  (or js/process.env.BASE_URL "http://localhost:7788"))
 
 (def app-db
   (merge {}

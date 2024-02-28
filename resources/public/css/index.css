@@ -264,6 +264,10 @@
   padding-top:1.25rem;
 }
 
+.font-bold{
+  font-weight:700;
+}
+
 .italic{
   font-style:italic;
 }

@@ -4,7 +4,7 @@
                                             :test "foyo_bm"}
                         :username #or [#env POSTGRES_USER "foyo_bm"]
                         :password #or [#env POSTGRES_PASSWORD "foyo_bm"]}
-                 :http-port #or [#env JIDASH_PORT 8080]
+                 :http-port #or [#env JIDASH_PORT 7788]
                  :jwt-secret #or [#env JWT_SECRET "jidash-secret-jwt-string"]}
  
 

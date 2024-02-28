@@ -12,7 +12,8 @@
             [buddy.auth.middleware :refer [wrap-authentication]]
             [jidash.api.core :as api]
             [jidash.router.middleware :refer [wrap-env]]
-            [jidash.router.exception :as exception]))
+            [jidash.router.exception :as exception]
+            [jidash.router.frontend :refer [create-frontend-handler]]))
 
 (defmethod ig/init-key :reitit/routes
   [_ {:keys [db config]}]
@@ -35,4 +36,5 @@
                            coercion/coerce-request-middleware
                            wrap-env]}})
      (ring/routes
+      (create-frontend-handler)
       (ring/redirect-trailing-slash-handler)))))

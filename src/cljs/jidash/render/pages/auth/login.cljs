@@ -25,17 +25,17 @@
                                                        :value (:password @form-state)
                                                        :on-change (on-change :password)}])
                  (antd/form-item
-                  [antd/button {:htmlType "submit" :size "large" :type "primary" :style {:width "100%"}} "登录"])
-                 (antd/form-item
-                  [:p "还没有账号? " (antd/link {:href "#" :onClick #(rf/dispatch [::router/push-state :jidash.render.routes/register])} "去注册一个")]))))
+                  [antd/button {:htmlType "submit" :size "large" :type "primary" :style {:width "100%"}} "登录"]))))
   )
 
 
 (defn login-page []
-  [:div {:class "h-screen bg-no-repeat bg-[length:100%_100%]" :style {:background-image "url('https://mdn.alipayobjects.com/yuyan_qk0oxh/afts/img/V-_oS6r-i7wAAAAAAAAAAAAAFl94AQBr')"}}
-   [:div {:class "flex items-center justify-center gap-1 flex-col grow"}
-    [:div {:style {:display "block"}}
-     [:p "助力企业管理，快乐工作"]]
-    [:div {:class "w-1/5 min-w-96 max-w-md"} 
-     [login-form]
-     ]]])
+  [:div {:class "h-screen bg-no-repeat bg-[length:100%_100%]" :style {:background-image "url('/images/l_bg.png')"}}
+   [:div {:class "h-screen flex"}
+    [:div {:class "flex items-center justify-center gap-1 flex-col grow"}
+     
+     [:div {:style {:display "block"}}
+      [:p {:class "font-bold"} "研发管理系统: 积分制、OKR"]
+      (antd/divider)]
+     [:div {:class "w-1/5 min-w-96 max-w-md"}
+      [login-form]]]]])
