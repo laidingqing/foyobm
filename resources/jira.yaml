@@ -1,0 +1,41 @@
+name: jira
+description: Jira任务管理系统数据采集及积分规则.
+user:
+  name:
+    - issue
+    - fields
+    - assignee
+    - displayName
+  email:
+    - issue
+    - fields
+    - assignee
+    - emailAddress
+point_rules:
+  finished_task:
+    description: 完成任务积分获取规则配置.
+    title: "[%s]-完成[%s]任务获得积分: %s"
+    field_path: [[issue, fields, status, name], [issue, fields, issuetype, name]]
+    condition: |
+      (fn [v, k] (and (= v "完成") (or (= k "任务") (= k "子任务") (= k "优化")) ))
+    points: 
+      # 按任务复杂度累积不同分数
+      field_path: [issue, fields, customfield_10200, value]
+      point:
+        容易: 8
+        一般: 10
+        较复杂: 15
+        复杂: 20
+  bug_appeared:
+    description: 产生缺陷积分获取规则配置.
+    title: "[%s]-产生[%s]缺陷扣减积分: %s"
+    field_path: [[issue, fields, status, name], [issue, fields, issuetype, name]]
+    condition: |
+      (fn [v, k] (and (= v "完成") (= k "故障")))
+    points: 
+      field_path: [issue, fields, customfield_10300, value]
+      point:
+        细微错误: -1
+        一般错误: -3
+        严重错误: -5
+        致命错误: -7

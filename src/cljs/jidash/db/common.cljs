@@ -87,7 +87,7 @@
    (let [token (get-in db [::auth/auth :account :token])
          company-id (get-in db [::auth/company :form :id])]
      {:fx [[:dispatch [::ui/set-dialog :loading]]
-           [:dispatch [:http {:url (str "/api/basis/companies/" company-id "/members")
+           [:dispatch [:http {:url (str "/api/commons/companies/" company-id "/members")
                               :method :post
                               :data data
                               :headers {"Authorization" (str "Bearer " token)}

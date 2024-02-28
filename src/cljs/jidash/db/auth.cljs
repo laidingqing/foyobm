@@ -31,6 +31,18 @@
 
 ;; fx
 
+
+(rf/reg-event-fx
+ ::check-identity
+ [(rf/inject-cofx :local-storage :account/token)]
+ (fn [cofx]
+   (let [token (:account/token cofx)]
+     {:fx [[:dispatch [:http {:url "/api/users"
+                              :method :get
+                              :headers {"Authorization" (str "Bearer " token)}
+                              :on-success [::auth-success]
+                              :on-failure [::logout]}]]]})))
+
 (rf/reg-event-fx
  ::login
  (fn [_ [_ data]]
@@ -46,7 +58,8 @@
  ::logout
  (fn [{:keys [db]}]
    {:db (assoc-in db [::signin-state] :signed-out)
-    :fx [[:set-local-storage [:account/token (:token nil)]]]}))
+    :fx [[:set-local-storage [:account/token (:token nil)]]
+         [:dispatch [::router/push-state :jidash.render.routes/login]]]}))
 
 (rf/reg-event-fx
  ::register
@@ -63,9 +76,6 @@
          [:set-local-storage [:account/token (:token data)]]
          [:dispatch [::router/push-state :jidash.render.routes/dashboard]]
          [:dispatch [::fetch-current]]]}))
-
-
-
 
 ;; subs
 

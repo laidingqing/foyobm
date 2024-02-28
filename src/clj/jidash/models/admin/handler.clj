@@ -109,6 +109,7 @@
         members (company.db/find-member-by-company db company-id)
         admins (company.db/get-admin-users-by-company db company-id)
         members (map #(append-admin-user-id % admins) members)]
+    
     (if members
       (rr/response members)
       (rr/response {:error "list-members error."}))))

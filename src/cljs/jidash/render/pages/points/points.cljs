@@ -4,7 +4,7 @@
             [re-frame.core :as rf]
             [jidash.db.points :as points]
             [jidash.db.router :as router]
-            [reagent.core :as r]
+            [jidash.render.utils.formatter :refer [datetime-formatter]]
             [jidash.render.utils.antd :refer [row-key]]
             ["@ant-design/icons" :refer [CheckCircleOutlined CloseCircleOutlined]]))
 
@@ -20,7 +20,7 @@
 (def columns [{:title "编号" :key "id" :dataIndex "id"}
               {:title "姓名" :key "name" :dataIndex "user_name"}
               {:title "总积分" :key "points" :dataIndex "points"}
-              {:title "最后更新" :key "updated" :dataIndex "updated"}
+              {:title "最后更新" :key "updated" :dataIndex "updated" :render #(datetime-formatter %)}
               {:title "操作" :key "op" :render (fn [row]
                                                (antd/space
                                                 (antd/link {:href "#" :onClick #(rf/dispatch [::router/push-state :jidash.render.routes/activity-list {:id (:user_id row)}])} "积分变动")))}])

@@ -35,10 +35,15 @@
                                  [antd/input-password {:value (:password @form-state)
                                                        :on-change (on-change :password)}])
                  (antd/form-item {:label "" :name "admin"}
-                                 (antd/check-box "是否管理员"))
-                 
+                                 (antd/check-box {:on-change (fn [k]
+                                                               (let [value (-> k .-target .-checked)]
+                                                                 (swap! form-state assoc :admin value)))} "是否管理员"))
                  (antd/form-item {:label "" :name "status"}
-                                 (antd/check-box "是否激活"))
+                                 (antd/check-box {:on-change (fn [k]
+                                                               (let [value (-> k .-target .-checked)
+                                                                     admin? (if value 0 1)]
+                                                                 (swap! form-state assoc :status admin?)))} "是否激活"))
+
                  (antd/form-item
                   (antd/space
                    [antd/button {:htmlType "submit" :type "primary"} "确定"]))))))

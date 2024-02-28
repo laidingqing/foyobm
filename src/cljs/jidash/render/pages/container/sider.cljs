@@ -2,9 +2,9 @@
   (:require [jidash.render.components.antd :as antd]
             [re-frame.core :as rf]
             [jidash.db.router :as router]
-            ["@ant-design/icons" :refer [HomeOutlined DashboardOutlined AppstoreOutlined SettingOutlined UserOutlined ReadOutlined SafetyOutlined]]
+            [jidash.db.auth :as auth]
+            ["@ant-design/icons" :refer [HomeOutlined LogoutOutlined AppstoreOutlined SettingOutlined UserOutlined ReadOutlined SafetyOutlined]]
             [reagent.core :as r]))
-
 
 
 (defn menu-items []
@@ -13,7 +13,8 @@
    {:key "3" :icon (r/as-element [:> SettingOutlined]) :label "系统设置" :children [{:key "3.1" :label "我的企业" :onClick #(rf/dispatch [::router/push-state :jidash.render.routes/company-edit])}
                                                                                 {:key "3.2" :label "用户信息管理" :onClick #(rf/dispatch [::router/push-state :jidash.render.routes/user-list])}
                                                                                 {:key "3.3" :label "分组管理" :onClick #(rf/dispatch [::router/push-state :jidash.render.routes/group-list])}
-                                                                                {:key "3.4" :label "权限管理"}]}])
+                                                                                {:key "3.4" :label "权限管理"}]}
+   {:key "1" :label "退出登录" :icon (r/as-element [:> LogoutOutlined]) :title "退出登录" :onClick #(rf/dispatch [::auth/logout])}])
 
 
 (defn- side-menu []

@@ -126,6 +126,7 @@
 
 (defn find-member-by-company
   [db company-id]
+  (log/info "c-id" company-id)
   (q/db-query! db {:select [:d.* :c.user_name :c.email :c.status]
                        :from [[:dept_members :d]]
                        :where [:= :company_id company-id]
@@ -172,5 +173,6 @@
   (get-admin-users-by-company db 11)
   (get-company-by-admin-user db 1)
   (find-member-by-company db 11)
+  (create-company-admin db {:company_id 11 :user_id 1})
   ()
   )

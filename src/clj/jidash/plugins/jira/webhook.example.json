@@ -1,0 +1,8 @@
+{"issue": {
+    "fields": {
+        "status": {"name": "完成"},
+        "issuetype": {"name": "故障"},
+        "customfield_10300": {"value": "一般错误"},
+        "customfield_10200": {"value": "一般"}
+    }
+}}

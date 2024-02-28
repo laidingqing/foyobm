@@ -8,6 +8,18 @@
             [taoensso.timbre :as log]))
 
 
+(defn get-account
+  [{:keys [env identity]}]
+  (let [{:keys [email]} identity
+        {:keys [db jwt-secret]} env
+        user (user.db/find-user-by-email db email)
+        res (when user
+              (auth/user->response user jwt-secret))]
+    (if res
+      (rr/response res)
+      (rr/response {:error "Malformed token"}))))
+
+
 (defn get-current-info
   [{:keys [env identity]}]
   (let [{:keys [email]} identity
@@ -49,5 +61,4 @@
         (if user
           (rr/response {:error "user-existed"})
           (rr/response {:id (:id res)})))
-      (rr/response {:error "registe-user error."})))
-  )
+      (rr/response {:error "registe-user error."}))))

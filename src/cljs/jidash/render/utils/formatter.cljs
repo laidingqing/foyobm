@@ -6,7 +6,8 @@
 
 (defn user-status-formatter [status]
   (condp = status
-        0 (antd/text "正常"))
+    0 (antd/text "正常")
+    1 (antd/text "禁用"))
   )
 
 
@@ -18,7 +19,8 @@
 
 (defn activity-catalog-formatter [record]
   (condp = (:catalog record)
-        "manual" (antd/text "手动变更")))
+    "manual" (antd/text "手动变更")
+    "jira" (antd/text "Jira任务系统")))
 
 (defn datetime-formatter [d]
   (dayjs->date-string d))

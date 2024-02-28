@@ -21,7 +21,7 @@
                        :where [:= :email email]}))
 
 (defn find-user-by-name [db name]
-  (q/db-query-one! db {:select [:id]
+  (q/db-query-one! db {:select [:id :user_name]
                        :from [:users]
                        :where [:= :user_name name]}))
 
