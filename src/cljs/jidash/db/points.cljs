@@ -8,19 +8,22 @@
 
 (def initial-state
   {::user-activities {:data []
-                 :pagination {:current 0
+                 :pagination {:current 1
                               :pageSize 10}
                  :filters initial-dict-form}
    
    ::user-points {:data []
-                  :pagination {:current 0
+                  :pagination {:current 1
                                :pageSize 10}}})
 
 (rf/reg-event-fx
  ::fetch-user-activities
  (fn [{:keys [db]} [_ user_id]]
    (let [token (get-in db [::auth/auth :account :token])
-         query {:user_id user_id}]
+         {:keys [current pageSize] } (get-in db [::user-activities :pagination])
+         query {:user_id user_id
+                :limit pageSize
+                :offset (* pageSize (- current 1))}]
      {:fx [[:dispatch [:http {:url (str "/api/activities")
                               :method :get
                               :query query
@@ -38,8 +41,11 @@
  ::fetch-user-points
  (fn [{:keys [db]} [_]]
    (let [token (get-in db [::auth/auth :account :token])
+         {:keys [current pageSize]} (get-in db [::user-activities :pagination])
          company-id (get-in db [::auth/company :form :id])
-         query {:c_id company-id}]
+         query {:c_id company-id
+                :limit pageSize
+                :offset (* pageSize (- current 1))}]
      {:fx [[:dispatch [:http {:url (str "/api/points")
                               :method :get
                               :query query
@@ -80,6 +86,18 @@
    {:fx [[:dispatch [::ui/close-dialog]]
          [:dispatch [::fetch-user-points]]]}))
 
+
+(rf/reg-event-fx
+ ::set-activity-page
+ (fn [{:keys [db]} [_ n]]
+   {:db (assoc-in db [::user-activities :pagination :current] n)
+    :fx [[:dispatch [::fetch-user-activities]]]}))
+
+(rf/reg-event-fx
+ ::set-point-page
+ (fn [{:keys [db]} [_ n]]
+   {:db (assoc-in db [::user-points :pagination :current] n)
+    :fx [[:dispatch [::create-user-point]]]}))
 ;; subs
 
 (rf/reg-sub

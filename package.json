@@ -10,9 +10,9 @@
     "scripts": {
         "watch:cljs": "shadow-cljs watch main renderer",
         "watch:css": "tailwindcss -i ./resources/css/index.css -o ./resources/public/css/index.css --watch",
-        "dev": "BASE_URL=http://localhost:7788 npm-run-all -p watch:cljs watch:css",
+        "dev": "NODE_ENV=development  npm-run-all -p watch:cljs watch:css",
         "start": "npm run dev",
-        "build": "BASE_URL=http://192.168.0.133:7788shadow-cljs release app",
+        "build": "NODE_ENV=production shadow-cljs release app",
         "clean": "rm -rf resources/public/js/* && rm -rf target"
     },
     "keywords": [],

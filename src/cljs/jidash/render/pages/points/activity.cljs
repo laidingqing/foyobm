@@ -26,10 +26,14 @@
 
 (defn activity-list-page []
   (let [user-activities @(rf/subscribe [::points/user-activities])
-        pagination @(rf/subscribe [::points/user-activities-pagination])
+        {:keys [current pageSize]} @(rf/subscribe [::points/user-activities-pagination])
+        pagination {:total (or (:total (first user-activities)) 0)
+                    :current current
+                    :pageSize pageSize
+                    :onChange (fn [k] (rf/dispatch [::points/set-activity-page k]))}
         user-name (:name (first user-activities))]
     [:div
      (antd/bread-crumb {:separator ">" :items [{:title "首页"} {:title "积分管理" :href "#" :onClick #(rf/dispatch [::router/push-state :jidash.render.routes/point-list])} {:title "积分变动"}] :style {:margin "16px 0"}})
      (page-header user-name)
      [main-content-wrap-container
-      (antd/table {:columns columns :rowKey #(row-key % :id) :dataSource user-activities})]]))
+      (antd/table {:columns columns :rowKey #(row-key % :id) :pagination pagination :dataSource user-activities})]]))

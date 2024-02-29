@@ -11,7 +11,8 @@
 
 (defn find-activity-list
   [db query]
-  (let [sql {:select [:*]
+  (let [sql {:select [:*
+                      [[:over [[:count :id]]] "total"]]
              :from [:activities]}
         {:keys [limit offset sort-field sort-dir]} (merge {:limit 10 :offset 0 :sort-dir "desc"} (filter some? query))
         {:keys [project-id user-id]} query

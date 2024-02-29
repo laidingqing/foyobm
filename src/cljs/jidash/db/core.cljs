@@ -6,10 +6,17 @@
             [jidash.db.points :as point]
             [re-frame.core :as rf]
             [ajax.core :as ajax]
-            [day8.re-frame.http-fx]))
+            [day8.re-frame.http-fx]
+            ))
+
+;; 优化从配置项获取.
+(defonce development? true)
 
 (def base-url
-  (or js/process.env.BASE_URL "http://localhost:7788"))
+  (if development?
+    "http://localhost:7788"
+    "http://192.168.0.133:7788"
+    ))
 
 (def app-db
   (merge {}

@@ -28,7 +28,11 @@
 
 (defn point-list-page []
   (let [user-points @(rf/subscribe [::points/user-points])
-        pagination @(rf/subscribe [::points/user-points-pagination])]
+        {:keys [current pageSize]} @(rf/subscribe [::points/user-points-pagination])
+        pagination {:total (or (:total (first user-points)) 0)
+                    :current current
+                    :pageSize pageSize
+                    :onChange (fn [k] (rf/dispatch [::points/set-point-page k]))}]
     [:div
      (antd/bread-crumb {:separator ">" :items [{:title "首页"} {:title "管理积分"} ] :style {:margin "16px 0"}})
      (page-header)

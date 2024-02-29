@@ -14,7 +14,7 @@
                                                                                 {:key "3.2" :label "用户信息管理" :onClick #(rf/dispatch [::router/push-state :jidash.render.routes/user-list])}
                                                                                 {:key "3.3" :label "分组管理" :onClick #(rf/dispatch [::router/push-state :jidash.render.routes/group-list])}
                                                                                 {:key "3.4" :label "权限管理"}]}
-   {:key "1" :label "退出登录" :icon (r/as-element [:> LogoutOutlined]) :title "退出登录" :onClick #(rf/dispatch [::auth/logout])}])
+   {:key "4" :label "退出登录" :icon (r/as-element [:> LogoutOutlined]) :title "退出登录" :onClick #(rf/dispatch [::auth/logout])}])
 
 
 (defn- side-menu []

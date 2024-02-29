@@ -8,10 +8,6 @@
               [jidash.models.points.db :as point.db]
               [jidash.models.users.db :as user.db]))
 
-
-
-
-
 (defn handle-query-activities
   [{:keys [env parameters]}]
   (let [{:keys [db]} env
@@ -21,6 +17,33 @@
       (rr/response activities)
       (rr/response {:error "query activities error."}))))
 
+
+
+(defn- parse-batch-data->event
+  [{:keys [title data catalog]}])
+
+
+(defn- process-user-point
+  [db db-user point title company-id]
+  (jdbc/with-transaction [tx db]
+    (let [user_name (:user_name db-user)
+          user-id (:id db-user)
+          db-user-point (point.db/query-user-point tx user-id)
+          _ (activity.db/create-activity tx {:user_id user-id :pre_score (:points db-user-point) :score point :title title :catalog "manual" :name user_name})
+
+          last-point (+ (:points db-user-point) point)
+          db-point (point.db/update-user-point tx user-id {:user_id user-id :company_id company-id :points last-point})]
+      db-point)))
+
+
+(defn handle-batch-create-activity
+  "批量处理积分"
+  [{:keys [env parameters]}]
+  (let [{:keys [db]} env
+        body (:body parameters)
+        activities (parse-batch-data->event body)])
+  (rr/response {:error "not-allowed "})
+)
 
 
 (defn handle-create-activity
@@ -36,14 +59,9 @@
         db-user (user.db/find-user-by-id db user-id)]
 
     (if (and db-user (= catalog "manual"))
-      (jdbc/with-transaction [tx db]
-        (let [user_name (:user_name db-user)
-              db-user-point (point.db/query-user-point tx user-id)
-              _ (activity.db/create-activity tx {:user_id user-id :pre_score (:points db-user-point) :score point :title title :catalog "manual" :name user_name})
-              
-              last-point (+ (:points db-user-point) point)
-              db-point (point.db/update-user-point tx user-id {:user_id user-id :company_id company-id :points last-point})]
-          (if db-point
-            (rr/response {:id (:id db-point)})
-            (rr/response {:error "create-activity error"}))))
-      (rr/response {:error "not-allowed "}))))
+      (let [db-point (process-user-point db db-user point title company-id)]
+        (if db-point
+          (rr/response {:id (:id db-point)})
+          (rr/response {:error "create-activity error"})))
+      (rr/response {:error "not-allowed "})))
+  )

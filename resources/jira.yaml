@@ -12,7 +12,7 @@ user:
     - assignee
     - emailAddress
 point_rules:
-  finished_task:
+  task_finished:
     description: 完成任务积分获取规则配置.
     title: "[%s]-完成[%s]任务获得积分: %s"
     field_path: [[issue, fields, status, name], [issue, fields, issuetype, name]]
