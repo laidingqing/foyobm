@@ -21,9 +21,13 @@
  ::fetch-members
  (fn [{:keys [db]} [_]]
    (let [token (get-in db [::auth/auth :account :token])
+         {:keys [current pageSize]} (get-in db [::members :pagination])
+         query {:limit pageSize
+                :offset (* pageSize (- current 1))}
          company-id (get-in db [::auth/company :form :id])]
      {:fx [[:dispatch [:http {:url (str "/api/commons/companies/" company-id "/members")
                               :method :get
+                              :query query
                               :headers {"Authorization" (str "Bearer " token)}
                               :on-success [::fetch-members-success]
                               :on-failure [:http-failure]}]]]})))
@@ -93,6 +97,12 @@
                               :headers {"Authorization" (str "Bearer " token)}
                               :on-success [::fetch-members]
                               :on-failure [:http-failure]}]]]})))
+
+(rf/reg-event-fx
+ ::set-member-page
+ (fn [{:keys [db]} [_ n]]
+   {:db (assoc-in db [::members :pagination :current] n)
+    :fx [[:dispatch [::fetch-members]]]}))
 
 ;; subs
 

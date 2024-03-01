@@ -28,10 +28,11 @@
         ring/ring {:mvn/version "1.9.5"}}
  :aliases {:dev    {:extra-paths ["dev"]
                     :extra-deps  {integrant/repl {:mvn/version "0.3.2"}}}
-           :server {:main-opts ["-m" "jidash.core"]}
+           :server {:main-opts ["-m" "jidash.core"]
+                    :jvm-opts ["-Djidash.run.mode=dev"]}
            :uberjar {:extra-deps {seancorfield/depstar {:mvn/version "1.1.128"}}
                      :main-opts ["-m" "hf.depstar.uberjar" "target/jidash.jar"
-                                 "-C" "-m" "jidash.core"]}
+                                 "-C" "-m" "jidash.core" "-p" "prod"]}
            :jar
            {:extra-paths ["src/clj"]
             :extra-deps

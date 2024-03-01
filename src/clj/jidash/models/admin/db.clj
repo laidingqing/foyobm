@@ -125,12 +125,22 @@
 
 
 (defn find-member-by-company
-  [db company-id]
-  (log/info "c-id" company-id)
-  (q/db-query! db {:select [:d.* :c.user_name :c.email :c.status]
-                       :from [[:dept_members :d]]
-                       :where [:= :company_id company-id]
-                       :join [[:users :c] [:= :c.id :d.user_id]]}))
+  [db company-id query]
+  (let [sql {:select [:d.* :c.user_name :c.email :c.status
+                      [[:over [[:count :d.id]]] "total"]]
+             :from [[:dept_members :d]]}
+        join-clause [[:users :c] [:= :c.id :d.user_id]]
+        {:keys [limit offset sort-field sort-dir]} (merge {:limit 10 :offset 0 :sort-dir "desc"} (filter some? query))
+        company-clause [:= :company_id company-id]
+        where-clause (cond-> [:and]
+                       company-id (conj company-clause))
+        sql (cond-> sql
+              where-clause (assoc :where where-clause :join join-clause)
+              limit (assoc :limit limit)
+              offset (assoc :offset offset)
+              sort-field (assoc :order-by [[sort-field sort-dir]]))]
+    (q/db-query! db sql)))
+
 
 (comment
 
@@ -172,7 +182,7 @@
 
   (get-admin-users-by-company db 11)
   (get-company-by-admin-user db 1)
-  (find-member-by-company db 11)
+  (find-member-by-company db 11 nil)
   (create-company-admin db {:company_id 11 :user_id 1})
   ()
   )

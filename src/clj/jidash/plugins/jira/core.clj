@@ -46,7 +46,6 @@
   (log/info point)
   (let [{:keys [user-name title point]} point
         db-user (user.db/find-user-by-name db user-name)]
-    (log/info db-user)
     (when db-user
       (jdbc/with-transaction [tx db]
         (log/info "change user's point by jira")
@@ -71,7 +70,6 @@
         values (map #(eval-jira-rule-value % config data) (keys (get-in config [:point_rules])))
         values (filter #(not (nil? %)) values)
         r (map #(store-jira-point db %) values)]
-    (log/info "jira:" data)
     (dorun r)
     (rr/response values)))
 

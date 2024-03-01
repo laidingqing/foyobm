@@ -19,7 +19,7 @@
     ["/:id"
      ["/members" {:get {:summary "query members by company"
                         :middleware [wrap-authorization]
-                        :parameters {:path {:id int?}}
+                        :parameters {:path {:id int?} :query {:limit int? :offset int?}}
                         :handler handle-list-members-with-company}
                   :post {:summary "create member by company"
                          :middleware [wrap-authorization]

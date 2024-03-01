@@ -17,7 +17,7 @@
   config)
 
 (defn read-config
-  ([] (read-config :prod))
+  ([] (read-config :dev))
   ([profile]
    (log/info "start read config file...")
    (aero/read-config

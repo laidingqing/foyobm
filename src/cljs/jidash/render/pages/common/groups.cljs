@@ -38,8 +38,7 @@
       (antd/form {:layout "vertical" :class "w-1/2" :onFinish (fn []
                                                                 (rf/dispatch [::common/create-group @form-state]))}
                  (antd/form-item {:label "名称" :name "name"}
-                                 [antd/input {:value (:name @form-state)
-                                              :on-change (on-change :name)}])
+                                 [antd/input {:on-change (on-change :name)}])
 
                  (antd/form-item
                   (antd/space

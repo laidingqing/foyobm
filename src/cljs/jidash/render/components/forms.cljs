@@ -67,13 +67,12 @@
                                               :on-change (fn [k] 
                                                            (swap! form-state assoc :user_id (js/parseInt k)))}))
                 
-                (antd/form-item {:label "积分" :name "score"}
+                (antd/form-item {:label "积分数" :name "score"}
                                 [antd/input-number {:value (str (:score @form-state))
                                                     :on-change (fn [k]
                                                                  (swap! form-state assoc :score (js/parseInt k)))}])
-                (antd/form-item {:label "说明" :name "title"}
-                                [antd/input {:value (:title @form-state)
-                                             :on-change (on-change :title)}])
+                (antd/form-item {:label "积分标题" :name "title"}
+                                [antd/input {:on-change (on-change :title)}])
                 (antd/form-item
                  (antd/space
                   [antd/button {:htmlType "submit" :type "primary"} "确定"]))))))

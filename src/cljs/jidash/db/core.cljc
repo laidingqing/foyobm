@@ -9,14 +9,12 @@
             [day8.re-frame.http-fx]
             ))
 
-;; 优化从配置项获取.
-(defonce development? true)
+(def run-mode #?(:cljs (def ^string run_mode? "development")) )
 
-(def base-url
-  (if development?
-    "http://localhost:7788"
-    "http://192.168.0.133:7788"
-    ))
+(def base-url 
+  (condp = run-mode
+    "development" "http://localhost:7788"
+    "production" "http://192.168.0.133:7788"))
 
 (def app-db
   (merge {}

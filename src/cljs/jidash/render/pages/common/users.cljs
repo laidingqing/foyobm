@@ -39,7 +39,11 @@
 
 (defn- users-table []
   (let [members @(rf/subscribe [::common/members])
-        pagination @(rf/subscribe [::common/members-pagination])]
+        {:keys [current pageSize]} @(rf/subscribe [::common/members-pagination])
+        pagination {:total (or (:total (first members)) 0)
+                    :current current
+                    :pageSize pageSize
+                    :onChange (fn [k] (rf/dispatch [::common/set-member-page k]))}]
     (if (empty? members)
       [empty-members]
       (antd/table {:columns columns :rowKey #(row-key % :id) :dataSource members :pagination pagination}))))
