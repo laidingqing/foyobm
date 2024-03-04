@@ -10,6 +10,6 @@
           :app {:target :browser
                 :modules {:main {:init-fn jidash.render.core/init}}
                 :release {:compiler-options {:optimizations :advanced}
-                          :closure-defines {jidash.db.core.run_mode? "development"}}
+                          :closure-defines {jidash.db.core.run_mode? "production"}}
                 :output-dir "resources/public/js/"
                 :asset-path "js"}}}

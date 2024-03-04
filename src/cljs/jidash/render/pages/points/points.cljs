@@ -38,4 +38,4 @@
      (page-header)
      [main-content-wrap-container
       [point-table-header]
-      (antd/table {:columns columns :rowKey #(row-key % :id) :dataSource user-points })]]))
+      (antd/table {:columns columns :rowKey #(row-key % :id) :pagination pagination :dataSource user-points })]]))

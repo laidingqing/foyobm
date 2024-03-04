@@ -41,7 +41,7 @@
  ::fetch-user-points
  (fn [{:keys [db]} [_]]
    (let [token (get-in db [::auth/auth :account :token])
-         {:keys [current pageSize]} (get-in db [::user-activities :pagination])
+         {:keys [current pageSize]} (get-in db [::user-points :pagination])
          company-id (get-in db [::auth/company :form :id])
          query {:c_id company-id
                 :limit pageSize
@@ -97,7 +97,7 @@
  ::set-point-page
  (fn [{:keys [db]} [_ n]]
    {:db (assoc-in db [::user-points :pagination :current] n)
-    :fx [[:dispatch [::create-user-point]]]}))
+    :fx [[:dispatch [::fetch-user-points]]]}))
 ;; subs
 
 (rf/reg-sub
