@@ -54,7 +54,7 @@
                             :score 0
                             :title ""
                             :catalog "manual"})
-        members @(rf/subscribe [::commons/members]) ;;TODO需要初始化
+        members @(rf/subscribe [::commons/users]) ;;TODO需要初始化
         members-opts (map (fn [v] {:value (:user_id v) :label (:user_name v)}) members)
         on-change (fn [k] #(swap! form-state assoc k (-> % .-target .-value)))]
    (fn []

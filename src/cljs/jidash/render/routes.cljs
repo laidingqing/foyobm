@@ -32,7 +32,7 @@
                 :view point-list-page
                 :controllers  
                 [{:start (fn []
-                           (rf/dispatch [::common/fetch-members])
+                           (rf/dispatch [::common/fetch-users])
                            (rf/dispatch [::points/fetch-user-points]))}]}]
    ["activity-list/:id" {:name ::activity-list
                   :view activity-list-page

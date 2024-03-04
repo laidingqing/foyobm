@@ -113,3 +113,15 @@
     (if members
       (rr/response members)
       (rr/response {:error "list-members error."}))))
+
+
+(defn handle-list-users-with-company
+  [{:keys [env parameters]}]
+  (let [{:keys [db]} env
+        query-params (get-in parameters [:query])
+        company-id (get-in parameters [:path :id])
+        query-params (merge query-params {:limit 999 :offset 0})
+        members (company.db/find-member-by-company db company-id query-params)]
+    (if members
+      (rr/response members)
+      (rr/response {:error "list-members error."}))))

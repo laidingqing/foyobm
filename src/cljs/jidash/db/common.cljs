@@ -8,6 +8,7 @@
   {::members {:data []
               :pagination {:current 1
                            :pageSize 10}}
+   ::users {:data []}
    ::groups {:data []
              :pagination {:current 1
                           :pageSize 10}}}
@@ -32,6 +33,18 @@
                               :on-success [::fetch-members-success]
                               :on-failure [:http-failure]}]]]})))
 
+(rf/reg-event-fx
+ ::fetch-users
+ (fn [{:keys [db]} [_]]
+   (let [token (get-in db [::auth/auth :account :token])
+         query {:limit 999 :offset 0}
+         company-id (get-in db [::auth/company :form :id])]
+     {:fx [[:dispatch [:http {:url (str "/api/commons/companies/" company-id "/users")
+                              :method :get
+                              :query query
+                              :headers {"Authorization" (str "Bearer " token)}
+                              :on-success [::fetch-users-success]
+                              :on-failure [:http-failure]}]]]})))
 
 (rf/reg-event-fx
  ::fetch-members-success
@@ -41,6 +54,13 @@
     :fx [[:dispatch [::ui/close-dialog]]]}))
 
 
+
+(rf/reg-event-fx
+ ::fetch-users-success
+ (fn [{:keys [db]} [_ data]]
+   {:db (-> db
+            (assoc-in [::users :data] data))
+    :fx [[:dispatch [::ui/close-dialog]]]}))
 
 (rf/reg-event-fx
  ::fetch-groups
@@ -110,6 +130,12 @@
  ::members
  (fn [db _]
    (get-in db [::members :data])))
+
+
+(rf/reg-sub
+ ::users
+ (fn [db _]
+   (get-in db [::users :data])))
 
 (rf/reg-sub
  ::members-pagination

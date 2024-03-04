@@ -3,7 +3,8 @@
                                                  handle-query-departments 
                                                  handle-create-departments
                                                  handle-list-members-with-company
-                                                 handle-create-member-with-company]]
+                                                 handle-create-member-with-company
+                                                 handle-list-users-with-company]]
             [jidash.router.middleware :refer [wrap-authorization]]
             [jidash.models.spec :as spec]))
 
@@ -26,6 +27,10 @@
                          :parameters {:path {:id int?}
                                       :body ::spec/create-member}
                          :handler handle-create-member-with-company}}]
+     ["/users" {:get {:summary "query members by company"
+                      :middleware [wrap-authorization]
+                      :parameters {:path {:id int?} :query {:limit int? :offset int?}}
+                      :handler handle-list-users-with-company}}]
      ["/departments"
       ["" {:post {:summary "create a department info in company"
                   :middleware [wrap-authorization]
