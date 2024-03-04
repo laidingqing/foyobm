@@ -2,32 +2,22 @@
   (:require [jidash.utils.query :as q]
             [taoensso.timbre :as log]))
 
-
-;; user's score activity
-;;    user_id bigint not null,
-;;    score bigint not null default 0,
-;;    title varchar(100) not null,
-;;    project_id bigint not null,
-
 (defn find-activity-list
   [db query]
   (let [sql {:select [:*
                       [[:over [[:count :id]]] "total"]]
              :from [:activities]}
-        {:keys [limit offset sort-field sort-dir]} (merge {:limit 10 :offset 0 :sort-dir "desc"} (filter some? query))
-        {:keys [project-id user-id]} query
-        project-clause [:= :project-id project-id]
-        user-clause [:= :user-id user-id]
+        {:keys [limit offset sort-field sort-dir]} (merge {:limit 10 :offset 0 :sort-dir "desc" :sort-field :created} (filter some? query))
+        {:keys [user_id]} query
+        user-clause [:= :user_id user_id]
         where-clause (cond-> [:and]
-                       project-id (conj project-clause)
-                       user-id (conj user-clause))
+                       user_id (conj user-clause))
         sql (cond-> sql
               where-clause (assoc :where where-clause)
               limit (assoc :limit limit)
               offset (assoc :offset offset)
               sort-field (assoc :order-by [[sort-field sort-dir]])
               )]
-    
     (q/db-query! db sql)))
 
 (defn create-activity

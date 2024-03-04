@@ -22,10 +22,10 @@ point_rules:
       # 按任务复杂度累积不同分数
       field_path: [issue, fields, customfield_10200, value]
       point:
-        容易: 8
-        一般: 10
-        较复杂: 15
-        复杂: 20
+        容易: 1
+        一般: 2
+        较复杂: 5
+        复杂: 10
   bug_appeared:
     description: 产生缺陷积分获取规则配置.
     title: "[%s]-产生[%s]缺陷扣减积分: %s"
@@ -37,5 +37,5 @@ point_rules:
       point:
         细微错误: -1
         一般错误: -3
-        严重错误: -5
-        致命错误: -7
+        严重错误: -7
+        致命错误: -10

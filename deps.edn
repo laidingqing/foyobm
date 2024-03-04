@@ -29,10 +29,11 @@
  :aliases {:dev    {:extra-paths ["dev"]
                     :extra-deps  {integrant/repl {:mvn/version "0.3.2"}}}
            :server {:main-opts ["-m" "jidash.core"]
-                    :jvm-opts ["-Djidash.run.mode=dev"]}
+                    :jvm-opts ["-Djidash.run.mode=development"]}
            :uberjar {:extra-deps {seancorfield/depstar {:mvn/version "1.1.128"}}
+                     :jvm-opts ["-Djidash.run.mode=production"]
                      :main-opts ["-m" "hf.depstar.uberjar" "target/jidash.jar"
-                                 "-C" "-m" "jidash.core" "-p" "prod"]}
+                                 "-C" "-m" "jidash.core"]}
            :jar
            {:extra-paths ["src/clj"]
             :extra-deps

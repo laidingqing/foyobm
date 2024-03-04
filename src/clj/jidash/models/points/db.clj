@@ -31,7 +31,8 @@
 
 (defn query-point-list
   [db query]
-  (let [sql {:select [:p.* :c.user_name]
+  (let [sql {:select [:p.* :c.user_name
+                      [[:over [[:count :p.id]]] "total"]]
              :from [[:points :p]]}
         {:keys [limit offset sort-field sort-dir]} (merge {:limit 10 :offset 0 :sort-dir "desc"} (filter some? query))
         {:keys [user-id]} query
