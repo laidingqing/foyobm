@@ -38,8 +38,8 @@
 (rf/reg-event-fx
  ::check-identity
  [(rf/inject-cofx :local-store)] 
- (fn [local-store]
-   (let [token (:account/token local-store)]
+ (fn [{:keys [local-store]}]
+   (let [token (:store-token local-store)]
      {:fx [[:dispatch [:http {:url "/api/users"
                               :method :get
                               :headers {"Authorization" (str "Bearer " token)}

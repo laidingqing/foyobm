@@ -28,7 +28,7 @@
                      :current current
                      :pageSize pageSize
                      :onChange (fn [k] (rf/dispatch [::points/set-activity-page k]))}
-         user-name (:name (first user-activities))]
+         user-name (:user_name (first user-activities))]
      [:div {:style {:padding-inline "40px"}}
       (antd/bread-crumb {:separator ">" :items [{:title "首页"} {:title "工作台"}] :style {:marginTop "18px"}})
 
