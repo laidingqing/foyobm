@@ -22,6 +22,9 @@
  (fn [db]
    (get-in db [::auth :account])))
 
+
+
+
 (rf/reg-sub
  ::signin-state
  (fn [db _]
@@ -60,11 +63,6 @@
    {:db (assoc-in db [::signin-state] :signed-out)
     :fx [[:set-local-storage [:account/token (:token nil)]]
          [:dispatch [::router/push-state :jidash.render.routes/login]]]}))
-
-(rf/reg-event-fx
- ::register
- (fn [_ [_ data]]
-   {:fx [[:dispatch [::auth-success data]]]}))
 
 (rf/reg-event-fx
  ::auth-success

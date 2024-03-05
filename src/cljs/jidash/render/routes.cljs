@@ -23,7 +23,11 @@
    ["dashboard" {:name ::dashboard
                  :view dash-page
                  :controllers
-                 []}]
+                 [{:parameters {:path [:id]}
+                   :start (fn []
+                              (rf/dispatch [::points/fetch-user-activities nil])
+                            (rf/dispatch [::points/fetch-user-point]))}]}]
+   
    ["login" {:name ::login
              :view login-page
              :controllers

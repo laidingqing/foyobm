@@ -35,12 +35,12 @@
                       [[:over [[:count :p.id]]] "total"]]
              :from [[:points :p]]}
         {:keys [limit offset sort-field sort-dir]} (merge {:limit 10 :offset 0 :sort-dir "desc"} (filter some? query))
-        {:keys [user-id]} query
+        {:keys [user_id]} query
         {:keys [c_id]} query
-        user-clause [:= :user-id user-id]
+        user-clause [:= :user_id user_id]
         company-clause [:= :company_id c_id]
         where-clause (cond-> [:and]
-                       user-id (conj user-clause)
+                       user_id (conj user-clause)
                        c_id (conj company-clause))
         sql (cond-> sql
               where-clause (assoc :where where-clause)

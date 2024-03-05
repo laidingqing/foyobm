@@ -20,8 +20,9 @@
  ::fetch-user-activities
  (fn [{:keys [db]} [_ user_id]]
    (let [token (get-in db [::auth/auth :account :token])
+         db-user-id (get-in db [::auth/auth :account :id])
          {:keys [current pageSize] } (get-in db [::user-activities :pagination])
-         query {:user_id user_id
+         query {:user_id (or user_id db-user-id)
                 :limit pageSize
                 :offset (* pageSize (- current 1))}]
      {:fx [[:dispatch [:http {:url (str "/api/activities")
@@ -47,6 +48,24 @@
                 :limit pageSize
                 :offset (* pageSize (- current 1))}]
      {:fx [[:dispatch [:http {:url (str "/api/points")
+                              :method :get
+                              :query query
+                              :headers {"Authorization" (str "Bearer " token)}
+                              :on-success [::fetch-user-points-success]
+                              :on-failure [:http-failure]}]]]})))
+
+(rf/reg-event-fx
+ ::fetch-user-point
+ (fn [{:keys [db]} [_]]
+   (let [token (get-in db [::auth/auth :account :token])
+         user-id (get-in db [::auth/auth :account :id])
+         {:keys [current pageSize]} (get-in db [::user-points :pagination])
+         company-id (get-in db [::auth/company :form :id])
+         query {:c_id company-id
+                :user_id user-id
+                :limit pageSize
+                :offset (* pageSize (- current 1))}]
+     {:fx [[:dispatch [:http {:url (str "/api/points/user")
                               :method :get
                               :query query
                               :headers {"Authorization" (str "Bearer " token)}

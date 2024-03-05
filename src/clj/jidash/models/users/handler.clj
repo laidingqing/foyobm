@@ -13,8 +13,14 @@
   (let [{:keys [email]} identity
         {:keys [db jwt-secret]} env
         user (user.db/find-user-by-email db email)
+        user-id (:id user)
+        admin (basis.db/get-company-by-admin-user db user-id)
+        admin? (when admin
+                 (= user-id (:user_id admin)))
         res (when user
-              (auth/user->response user jwt-secret))]
+              (-> user
+                  (merge {:admin admin?})
+                  (auth/user->response jwt-secret)))]
     (if res
       (rr/response res)
       (rr/response {:error "Malformed token"}))))
@@ -40,9 +46,16 @@
         {:keys [email password]} (:body parameters)]
     (if (s/valid? ::spec/login-user {:email email :password password})
       (let [user (user.db/find-user-by-email db email)
+            user-id (:id user)
             user (auth/password-match? user password)
+            admin (basis.db/get-company-by-admin-user db user-id)
+            admin? (when admin
+                     (= user-id (:user_id admin)))
             res (when user
-                  (auth/user->response user jwt-secret))]
+                  (-> user
+                      (merge {:admin admin?})
+                      (auth/user->response jwt-secret))
+                  )]
         (log/info user)
         (if res
           (rr/response res)

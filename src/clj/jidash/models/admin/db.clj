@@ -38,7 +38,7 @@
 
 (defn get-company-by-admin-user
   [db user-id]
-  (q/db-query-one! db {:select [:company_id]
+  (q/db-query-one! db {:select [:company_id :user_id]
                        :from [:company_admins]
                        :where [:= :user_id user-id]}))
 

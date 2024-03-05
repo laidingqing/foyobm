@@ -171,3 +171,6 @@
                          #(medley/update-existing % :footer r/as-element)))
 
 (def alert (antd-wrapper antd/Alert))
+
+(def card (antd-wrapper antd/Card))
+(def card-meta (antd-wrapper antd/Card.Meta))

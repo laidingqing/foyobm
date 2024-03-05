@@ -9,7 +9,7 @@
             [day8.re-frame.http-fx]
             ))
 
-(def run-mode #?(:cljs (def ^string run_mode? "production")) )
+(def run-mode #?(:cljs (def ^string run_mode? "development")) )
 
 
 (def base-url 
