@@ -37,9 +37,9 @@
 
 (rf/reg-event-fx
  ::check-identity
- [(rf/inject-cofx :local-storage :account/token)]
- (fn [cofx]
-   (let [token (:account/token cofx)]
+ [(rf/inject-cofx :local-store)] 
+ (fn [local-store]
+   (let [token (:account/token local-store)]
      {:fx [[:dispatch [:http {:url "/api/users"
                               :method :get
                               :headers {"Authorization" (str "Bearer " token)}
@@ -72,6 +72,7 @@
             (assoc-in [::signin-state] :signed-in))
     :fx [[:dispatch [::ui/close-dialog]]
          [:set-local-storage [:account/token (:token data)]]
+         [:set-local-storage [:account/u_id (:id data)]]
          [:dispatch [::router/push-state :jidash.render.routes/dashboard]]
          [:dispatch [::fetch-current]]]}))
 
@@ -98,4 +99,5 @@
  ::fetch-current-success
  (fn [{:keys [db]} [_ data]]
    {:db (-> db
-            (assoc-in [::company :form] (:company data)))}))
+            (assoc-in [::company :form] (:company data)))
+    :fx [[:set-local-storage [:account/c_id (get-in data [:company :id])]]]}))

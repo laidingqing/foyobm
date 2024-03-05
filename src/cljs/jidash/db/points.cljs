@@ -18,9 +18,10 @@
 
 (rf/reg-event-fx
  ::fetch-user-activities
- (fn [{:keys [db]} [_ user_id]]
-   (let [token (get-in db [::auth/auth :account :token])
-         db-user-id (get-in db [::auth/auth :account :id])
+ [(rf/inject-cofx :local-store)] 
+ (fn [{:keys [local-store db]} [_ user_id]]
+   (let [token (:store-token local-store)
+         db-user-id (:store-uid local-store)
          {:keys [current pageSize] } (get-in db [::user-activities :pagination])
          query {:user_id (or user_id db-user-id)
                 :limit pageSize
@@ -40,10 +41,11 @@
 
 (rf/reg-event-fx
  ::fetch-user-points
- (fn [{:keys [db]} [_]]
-   (let [token (get-in db [::auth/auth :account :token])
+ [(rf/inject-cofx :local-store)] 
+ (fn [{:keys [local-store db]} [_]]
+   (let [token (:store-token local-store)
          {:keys [current pageSize]} (get-in db [::user-points :pagination])
-         company-id (get-in db [::auth/company :form :id])
+         company-id (:store-cid local-store)
          query {:c_id company-id
                 :limit pageSize
                 :offset (* pageSize (- current 1))}]
@@ -56,11 +58,12 @@
 
 (rf/reg-event-fx
  ::fetch-user-point
- (fn [{:keys [db]} [_]]
-   (let [token (get-in db [::auth/auth :account :token])
-         user-id (get-in db [::auth/auth :account :id])
+ [(rf/inject-cofx :local-store)] 
+ (fn [{:keys [local-store db]} [_]]
+   (let [token (:store-token local-store)
+         user-id (:store-uid local-store)
+         company-id (:store-cid local-store)
          {:keys [current pageSize]} (get-in db [::user-points :pagination])
-         company-id (get-in db [::auth/company :form :id])
          query {:c_id company-id
                 :user_id user-id
                 :limit pageSize

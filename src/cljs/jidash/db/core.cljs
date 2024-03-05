@@ -7,13 +7,12 @@
             [re-frame.core :as rf]
             [ajax.core :as ajax]
             [day8.re-frame.http-fx]
-            ))
+            [cljs.reader]))
 
-(def run-mode #?(:cljs (def ^string run_mode? "development")) )
-
+(goog-define run_mode "development")
 
 (def base-url 
-  (condp = run-mode
+  (condp = run_mode
     "development" "http://localhost:7788"
     "production" "http://192.168.0.133:7788"))
 
@@ -59,8 +58,10 @@
  (fn [[k v]]
    (.setItem (.-localStorage js/window) k v)))
 
+
 (rf/reg-cofx
- :local-storage
- (fn [cofx k]
-   (let [v (.getItem (.-localStorage js/window) k)]
-     (assoc cofx k v))))
+ :local-store
+ (fn [cofx _]
+   (assoc cofx :local-store {:store-token (.getItem js/localStorage :account/token)
+                             :store-uid (.getItem js/localStorage :account/u_id)
+                             :store-cid (.getItem js/localStorage :account/c_id)}))) 

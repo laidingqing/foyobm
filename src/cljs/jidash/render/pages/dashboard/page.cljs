@@ -5,6 +5,7 @@
             [re-frame.core :as rf]
             [jidash.db.points :as points]
             [jidash.render.utils.antd :refer [row-key]]
+            [jidash.db.core :refer [run_mode]]
             ["@ant-design/icons" :refer [SettingOutlined EditOutlined EllipsisOutlined]]))
 
 
