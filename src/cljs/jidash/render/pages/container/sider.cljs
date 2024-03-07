@@ -11,13 +11,14 @@
 
   (let [account @(rf/subscribe [::auth/account])
         disabled? (not (-> account :admin))]
-    [{:key "1" :label "首页" :icon (r/as-element [:> HomeOutlined]) :title "首页" :onClick #(rf/dispatch [::router/push-state :jidash.render.routes/dashboard])}
-     {:key "2" :label "管理积分" :disabled disabled? :icon (r/as-element [:> AppstoreOutlined]) :title "管理积分" :onClick #(rf/dispatch [::router/push-state :jidash.render.routes/point-list])}
-     {:key "3" :icon (r/as-element [:> SettingOutlined]) :disabled disabled? :label "系统设置" :children [{:key "3.1" :label "我的企业" :onClick #(rf/dispatch [::router/push-state :jidash.render.routes/company-edit])}
-                                                                                  {:key "3.2" :label "用户信息管理" :onClick #(rf/dispatch [::router/push-state :jidash.render.routes/user-list])}
-                                                                                  {:key "3.3" :label "分组管理" :onClick #(rf/dispatch [::router/push-state :jidash.render.routes/group-list])}
-                                                                                  {:key "3.4" :label "权限管理"}]}
-     {:key "4" :label "退出登录" :icon (r/as-element [:> LogoutOutlined]) :title "退出登录" :onClick #(rf/dispatch [::auth/logout])}]))
+    [{:key "1" :label "我的积分" :icon (r/as-element [:> HomeOutlined]) :title "我的积分" :onClick #(rf/dispatch [::router/push-state :jidash.render.routes/dashboard])}
+     {:key "2" :label "目标管理" :icon (r/as-element [:> ReadOutlined]) :title "OKRs" :onClick #(rf/dispatch [::router/push-state :jidash.render.routes/okrs])}
+     {:key "3" :label "管理积分" :disabled disabled? :icon (r/as-element [:> AppstoreOutlined]) :title "管理积分" :onClick #(rf/dispatch [::router/push-state :jidash.render.routes/point-list])}
+     {:key "4" :icon (r/as-element [:> SettingOutlined]) :disabled disabled? :label "系统设置" :children [{:key "4.1" :label "我的企业" :onClick #(rf/dispatch [::router/push-state :jidash.render.routes/company-edit])}
+                                                                                  {:key "4.2" :label "用户信息管理" :onClick #(rf/dispatch [::router/push-state :jidash.render.routes/user-list])}
+                                                                                  {:key "4.3" :label "分组管理" :onClick #(rf/dispatch [::router/push-state :jidash.render.routes/group-list])}
+                                                                                  {:key "4.4" :label "权限管理"}]}
+     {:key "5" :label "退出登录" :icon (r/as-element [:> LogoutOutlined]) :title "退出登录" :onClick #(rf/dispatch [::auth/logout])}]))
 
 
 (defn- side-menu []

@@ -2,7 +2,8 @@
   (:require [re-frame.core :as rf]
             [jidash.db.ui :as ui]
             [jidash.render.components.antd :as antd]
-            [jidash.render.components.forms :refer [new-user-form new-point-form]]))
+            [jidash.render.components.forms :refer [new-user-form new-point-form]]
+            [jidash.render.components.views :refer [list-members-view]]))
 
 
 (def dialog-types
@@ -18,7 +19,9 @@
    :new-user-form {:title "创建/更新用户"
                    :description "创建或更企业用户"}
    :new-point-form {:title "人员积分变动"
-                   :description "手动变更用户积分"}})
+                   :description "手动变更用户积分"}
+   :list-members-view {:title "查看分组成员"
+                       :discription "查看部门/分组下的成员"}})
 
 
 (defn spin-view []
@@ -37,6 +40,7 @@
                 (case type
                   :new-user-form [new-user-form]
                   :new-point-form [new-point-form]
+                  :list-members-view [list-members-view]
                   [:p {:class "mt-4"} message]))))
 
 (defn dialog []

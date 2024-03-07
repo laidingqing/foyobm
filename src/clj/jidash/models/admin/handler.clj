@@ -50,6 +50,19 @@
       (rr/response {:error "query departments error."}))))
 
 
+(defn handle-query-department-members
+  [{:keys [env parameters]}]
+  (let [{:keys [db]} env
+        c_id (get-in parameters [:path :id])
+        d_id (get-in parameters [:path :did]) 
+        query-params (merge (get-in parameters [:query]) {:c_id c_id :d_id d_id})
+        members (company.db/get-members-by-company-and-dept db query-params)]
+    (if members
+      (rr/response members)
+      (rr/response {:error "query members error."}))))
+
+
+
 (defn handle-create-departments
   "create department info with manager."
   [{:keys [env parameters]}]
@@ -57,7 +70,7 @@
         data (:body parameters)
         ;; id (get-in parameters [:path :id])
         id (:company_id data)
-        parent (company.db/find-dept-by-parent db (:company_id data) (:parent data))
+        parent (company.db/find-dept-and-parent db (:company_id data) (:parent data))
         dept_count (company.db/count-dept-by-parent db (:id parent))
         dept (assoc data :company_id id :code (str (:code parent) "." (inc (:count dept_count))) :position (inc (:position parent)))
         res (company.db/create-department db dept)]

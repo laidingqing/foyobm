@@ -11,7 +11,8 @@
             [jidash.render.pages.dashboard.page :refer [dash-page]]
             [jidash.render.pages.common.company :refer [company-edit-page]]
             [jidash.render.pages.common.users :refer [user-list-page]]
-            [jidash.render.pages.common.groups :refer [groups-page]]))
+            [jidash.render.pages.common.groups :refer [groups-page]]
+            [jidash.render.pages.okr.page :refer [okr-page]]))
 
 
 (def routes
@@ -38,6 +39,11 @@
                 [{:start (fn []
                            (rf/dispatch [::common/fetch-users])
                            (rf/dispatch [::points/fetch-user-points]))}]}]
+   ["okrs" {:name ::okrs
+                     :view okr-page
+                     :controllers
+                     [{:start (fn [])}]}]
+   
    ["activity-list/:id" {:name ::activity-list
                   :view activity-list-page
                   :controllers

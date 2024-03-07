@@ -8,6 +8,9 @@
   {::members {:data []
               :pagination {:current 1
                            :pageSize 10}}
+   ::dept-members {:data []
+                  :pagination {:current 1
+                               :pageSize 10}}
    ::users {:data []}
    ::groups {:data []
              :pagination {:current 1
@@ -33,6 +36,23 @@
                               :on-success [::fetch-members-success]
                               :on-failure [:http-failure]}]]]})))
 
+
+(rf/reg-event-fx
+ ::fetch-dept-members
+ [(rf/inject-cofx :local-store)] 
+ (fn [{:keys [local-store db]} [_ dept-id]]
+   (let [token (:store-token local-store)
+         company-id (:store-cid local-store)
+         {:keys [current pageSize]} (get-in db [::dept-members :pagination])
+         query {:limit pageSize
+                :offset (* pageSize (- current 1))}]
+     {:fx [[:dispatch [:http {:url (str "/api/commons/companies/" company-id "/departments/" dept-id "/members")
+                              :method :get
+                              :query query
+                              :headers {"Authorization" (str "Bearer " token)}
+                              :on-success [::fetch-dept-members-success]
+                              :on-failure [:http-failure]}]]]})))
+
 (rf/reg-event-fx
  ::fetch-users
  (fn [{:keys [db]} [_]]
@@ -53,14 +73,18 @@
             (assoc-in [::members :data] data))
     :fx [[:dispatch [::ui/close-dialog]]]}))
 
+(rf/reg-event-fx
+ ::fetch-dept-members-success
+ (fn [{:keys [db]} [_ data]]
+   {:db (-> db
+            (assoc-in [::dept-members :data] data))}))
 
 
 (rf/reg-event-fx
  ::fetch-users-success
  (fn [{:keys [db]} [_ data]]
    {:db (-> db
-            (assoc-in [::users :data] data))
-    :fx [[:dispatch [::ui/close-dialog]]]}))
+            (assoc-in [::users :data] data))}))
 
 (rf/reg-event-fx
  ::fetch-groups
@@ -124,6 +148,19 @@
    {:db (assoc-in db [::members :pagination :current] n)
     :fx [[:dispatch [::fetch-members]]]}))
 
+(rf/reg-event-fx
+ ::set-dept-member-page
+ (fn [{:keys [db]} [_ n]]
+   {:db (assoc-in db [::dept-members :pagination :current] n)
+    :fx [[:dispatch [::fetch-dept-members]]]}))
+
+(rf/reg-event-fx
+ ::list-members-view
+ (fn [{:keys [db]} [_ dept-id]]
+   {:fx [[:dispatch [::fetch-dept-members dept-id]]
+         [:dispatch [::fetch-users]]
+         [:dispatch [::ui/set-dialog :list-members-view]]]}))
+
 ;; subs
 
 (rf/reg-sub
@@ -131,6 +168,10 @@
  (fn [db _]
    (get-in db [::members :data])))
 
+(rf/reg-sub
+ ::dept-members
+ (fn [db _]
+   (get-in db [::dept-members :data])))
 
 (rf/reg-sub
  ::users
@@ -141,6 +182,11 @@
  ::members-pagination
  (fn [db _]
    (get-in db [::members :pagination])))
+
+(rf/reg-sub
+ ::dept-members-pagination
+ (fn [db _]
+   (get-in db [::dept-members :pagination])))
 
 (rf/reg-sub
  ::groups

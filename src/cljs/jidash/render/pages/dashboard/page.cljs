@@ -5,7 +5,6 @@
             [re-frame.core :as rf]
             [jidash.db.points :as points]
             [jidash.render.utils.antd :refer [row-key]]
-            [jidash.db.core :refer [run_mode]]
             ["@ant-design/icons" :refer [SettingOutlined EditOutlined EllipsisOutlined]]))
 
 
@@ -28,9 +27,9 @@
                      :current current
                      :pageSize pageSize
                      :onChange (fn [k] (rf/dispatch [::points/set-activity-page k]))}
-         user-name (:user_name (first user-activities))]
+         user-name (:user_name current-point)]
      [:div {:style {:padding-inline "40px"}}
-      (antd/bread-crumb {:separator ">" :items [{:title "首页"} {:title "工作台"}] :style {:marginTop "18px"}})
+      (antd/bread-crumb {:separator ">" :items [{:title "首页"} {:title "我的积分"}] :style {:marginTop "18px"}})
 
       (antd/card {:style {:width 300 :margin "16px 0"}
                   :actions [(r/as-element [:> SettingOutlined])

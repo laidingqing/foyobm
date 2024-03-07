@@ -6,13 +6,6 @@
             [jidash.db.auth :as auth]
             [jidash.render.components.antd :as antd]))
 
-
-(defn- convert-to-select-opts [item]
-  (let [{:keys [name title]} item]
-    {:value name
-     :label title}))
-
-
 (defn new-user-form []
   (let [current-company @(rf/subscribe [::auth/current-company])
         form-state (r/atom {:email ""

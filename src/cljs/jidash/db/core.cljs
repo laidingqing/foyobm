@@ -4,6 +4,7 @@
             [jidash.db.router :as router]
             [jidash.db.common :as common]
             [jidash.db.points :as point]
+            [jidash.db.okr :as okr]
             [re-frame.core :as rf]
             [ajax.core :as ajax]
             [day8.re-frame.http-fx]
@@ -22,7 +23,8 @@
          ui/initial-state
          auth/initial-state
          common/initial-state
-         point/initial-state))
+         point/initial-state
+         okr/initial-state))
 
 (rf/reg-event-db
  ::initialize-db

@@ -17,8 +17,16 @@
 (defn- empty-groups []
   (antd/text "当前条件中还没有分组数据"))
 
+
+(defn- render-member-count [row]
+  ;;pop a list-members-view
+  (let [{:keys [count id]} row]
+    (antd/link {:href "#" :onClick #(rf/dispatch [::common/list-members-view id])} count)))
+
+
 (def columns [{:title "编号" :key "id" :dataIndex "id"}
-              {:title "名称" :key "name" :dataIndex "name"}])
+              {:title "名称" :key "name" :dataIndex "name"}
+              {:title "成员" :key "members" :render #(render-member-count %)}]) ;;TODO
 
 
 (defn- group-list []
@@ -28,10 +36,11 @@
         [empty-groups]
         (antd/table {:columns columns :rowKey #(:id %) :dataSource groups :pagination pagination}))))
 
+
 (defn- new-group-form []
   (let [current-company @(rf/subscribe [::auth/current-company])
         form-state (r/atom {:name ""
-                            :parent 19
+                            :parent 0 ;;如果适应多级情况应对应修改，暂以一级实现。
                             :company_id (:id current-company)})
         on-change (fn [k] #(swap! form-state assoc k (-> % .-target .-value)))]
     (fn []

@@ -1,0 +1,1 @@
+ALTER TABLE departments ADD COLUMN count bigint not null default 0;

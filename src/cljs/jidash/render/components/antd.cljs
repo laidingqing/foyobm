@@ -44,7 +44,7 @@
 (def link (antd-wrapper antd/Typography.Link))
 
 ;; Layout
-
+(def flex (antd-wrapper antd/Flex))
 (def row (antd-wrapper antd/Row))
 (def col (antd-wrapper antd/Col))
 
@@ -174,3 +174,8 @@
 
 (def card (antd-wrapper antd/Card))
 (def card-meta (antd-wrapper antd/Card.Meta))
+
+(def segmented (antd-wrapper antd/Segmented))
+(def collapse (antd-wrapper antd/Collapse))
+(def badge (antd-wrapper antd/Badge))
+(def badge-ribbon (antd-wrapper antd/Badge.Ribbon))

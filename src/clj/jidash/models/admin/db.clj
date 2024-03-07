@@ -56,10 +56,26 @@
                    :where [:and [:= :company_id company_id] [:= :user_id user_id]]}))
 
 (defn get-members-by-company-and-dept
-  [db company_id dept_id]
-  (q/db-query! db {:select [:*]
-                   :from [:dept_members]
-                   :where [:and [:= :dept_id dept_id] [:= :company_id company_id]]}))
+  ;; [db company_id dept_id]
+  [db query-params]
+  (let [{:keys [c_id d_id]} query-params
+        {:keys [limit offset sort-field sort-dir]} (merge {:limit 10 :offset 0 :sort-dir "desc"} (filter some? query-params))
+        sql {:select [:d.* :u.user_name
+                      [[:over [[:count :d.id]]] "total"]]
+             :from [[:dept_members :d]]}
+        company-clause [:= :company_id c_id]
+        dept-clause [:= :dept_id d_id]
+        where-clause (cond-> [:and]
+                       c_id (conj company-clause)
+                       d_id (conj dept-clause))
+        join-clause [[:users :u] [:= :u.id :d.user_id]]
+        sql (cond-> sql
+              where-clause (assoc :where where-clause :join join-clause)
+              limit (assoc :limit limit)
+              offset (assoc :offset offset)
+              sort-field (assoc :order-by [[sort-field sort-dir]]))]
+    (q/db-query! db sql))
+  )
 ;; departments
 
 (defn get-department-hierarchy 
@@ -109,7 +125,7 @@
 
 (defn find-dept-list-by-company
   [db query-params]
-  (let [query {:select [:id :name :position :parent :code :manage_id :company_id]
+  (let [query {:select [:*]
                :from [:departments]}
         where-clause (build-where query-params)]
     (q/db-query! db (cond-> query
@@ -166,13 +182,16 @@
   (create-dept-member db dept_m2)
 
   (get-dept-members db 1 1)
-  (get-members-by-company-and-dept db 1 2)
+  (get-members-by-company-and-dept db {:c_id 11 :d_id 20})
   (find-company-by-name db "婵科技股份有限公司")
   (find-dept-list-by-company db {:parent 0 :company_id 1})
 
 
   (def data {:name "dd" :parent 3 :company_id 4})
-  (def parent (find-dept-by-parent db 11 0))
+
+  (def parent (find-dept-and-parent db 11 0))
+  (println parent)
+
   (def count (count-dept-by-parent db (:id parent)))
   (find-dept-by-parent db 11 0)
   (assoc data :company_id 4 :code (str (:position parent) "." (inc (:count  count))) :position (inc (:position parent)))
