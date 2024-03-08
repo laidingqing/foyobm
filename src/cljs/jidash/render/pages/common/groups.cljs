@@ -40,6 +40,7 @@
 (defn- new-group-form []
   (let [current-company @(rf/subscribe [::auth/current-company])
         form-state (r/atom {:name ""
+                            :manager 0
                             :parent 0 ;;如果适应多级情况应对应修改，暂以一级实现。
                             :company_id (:id current-company)})
         on-change (fn [k] #(swap! form-state assoc k (-> % .-target .-value)))]
@@ -48,7 +49,8 @@
                                                                 (rf/dispatch [::common/create-group @form-state]))}
                  (antd/form-item {:label "名称" :name "name"}
                                  [antd/input {:on-change (on-change :name)}])
-
+                 (antd/form-item {:label "主管" :name "manager"}
+                                 [antd/input {:on-change (on-change :manager)}])
                  (antd/form-item
                   (antd/space
                    [antd/button {:htmlType "submit" :type "primary"} "添加组"]))))))

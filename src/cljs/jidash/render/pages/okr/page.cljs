@@ -39,23 +39,17 @@
                     {:key 2 :label "丰富部门管理制度" :description "完善激励管理办法，有效促进协作与开发"  :items [{:id "2.1" :title "单元测试覆盖率达到60%"}, {:id "2.2" :title "功能测试案例数达到40个"}, {:id "2.3" :title "每个Sprint进行至少2次回归测试"}]}])
 
 
-
-(defn- wrap-key-result-item [item]
-  (let [{:keys [id title]} item]
-    [:li {:key id}
-     [:p title]]))
-
 (defn- okr-list [data]
   (antd/flex {:gap "small" :wrap "wrap" :style {:marginTop "16px"}}
    (map (fn [okr]
-          (let [{:keys [description label items]} okr]
-            [:div {:style {:marginRight "5px"}}
+          (let [{:keys [description label key]} okr]
+            [:div {:style {:marginRight "5px"} :key key}
              (antd/badge
-              (antd/badge-ribbon {:text "进行中" :color "green"}
-                                 (antd/card {:style {:width 350} :actions [(r/as-element [:span "级别高"]),
-                                                                           (r/as-element [:span "剩10天"]),
-                                                                           (r/as-element [:span "40%"])
-                                                                           (r/as-element [:> EditOutlined])]}
+              (antd/badge-ribbon {:text "进行中" :color "green" :key key}
+                                 (antd/card {:style {:width 350} :actions [(r/as-element (antd/text {:key 1} "级别高")),
+                                                                                    (r/as-element (antd/text {:key 2} "剩10天")),
+                                                                                    (r/as-element (antd/text {:key 3} "40%"))
+                                                                                    (r/as-element (antd/link {:key 4 :onClick #(rf/dispatch [::okr/new-okr-form])} [:> EditOutlined]))]}
                                             (antd/card-meta {:title label :description description}))))]
             )) data)))
 

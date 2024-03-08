@@ -2,7 +2,7 @@
   (:require [re-frame.core :as rf]
             [jidash.db.ui :as ui]
             [jidash.render.components.antd :as antd]
-            [jidash.render.components.forms :refer [new-user-form new-point-form]]
+            [jidash.render.components.forms :refer [new-user-form new-point-form new-okr-form]]
             [jidash.render.components.views :refer [list-members-view]]))
 
 
@@ -17,9 +17,11 @@
    :logout {:title "退出?"
             :description "你想要退出应用，确定吗?"}
    :new-user-form {:title "创建/更新用户"
-                   :description "创建或更企业用户"}
+                   :description "创建或更新企业用户"}
    :new-point-form {:title "人员积分变动"
                    :description "手动变更用户积分"}
+   :new-okr-form {:title "输入有挑战性的目标"
+                  :description "创建/更新目标管理项."}
    :list-members-view {:title "查看分组成员"
                        :discription "查看部门/分组下的成员"}})
 
@@ -40,6 +42,7 @@
                 (case type
                   :new-user-form [new-user-form]
                   :new-point-form [new-point-form]
+                  :new-okr-form [new-okr-form]
                   :list-members-view [list-members-view]
                   [:p {:class "mt-4"} message]))))
 

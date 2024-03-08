@@ -43,6 +43,8 @@
 
 (def link (antd-wrapper antd/Typography.Link))
 
+(def paragraph (antd-wrapper antd/Typography.Paragraph))
+
 ;; Layout
 (def flex (antd-wrapper antd/Flex))
 (def row (antd-wrapper antd/Row))
@@ -147,6 +149,8 @@
                             {:cursor "default"})}]
            children)]))
 
+
+
 (def avatar (antd-wrapper antd/Avatar))
 
 (def tooltip (antd-wrapper antd/Tooltip))
@@ -179,3 +183,5 @@
 (def collapse (antd-wrapper antd/Collapse))
 (def badge (antd-wrapper antd/Badge))
 (def badge-ribbon (antd-wrapper antd/Badge.Ribbon))
+(def tag (antd-wrapper antd/Tag))
+(def dropdown-button (antd-wrapper antd/Dropdown.Button))

@@ -12,7 +12,8 @@
             [jidash.render.pages.common.company :refer [company-edit-page]]
             [jidash.render.pages.common.users :refer [user-list-page]]
             [jidash.render.pages.common.groups :refer [groups-page]]
-            [jidash.render.pages.okr.page :refer [okr-page]]))
+            [jidash.render.pages.okr.page :refer [okr-page]]
+            [jidash.render.pages.okr.forms :refer [okr-detail-page]]))
 
 
 (def routes
@@ -26,31 +27,37 @@
                  :controllers
                  [{:parameters {:path [:id]}
                    :start (fn []
-                              (rf/dispatch [::points/fetch-user-activities nil])
+                            (rf/dispatch [::points/fetch-user-activities nil])
                             (rf/dispatch [::points/fetch-user-point]))}]}]
-   
+
    ["login" {:name ::login
              :view login-page
              :controllers
              []}]
    ["point-list" {:name ::point-list
-                :view point-list-page
-                :controllers  
-                [{:start (fn []
-                           (rf/dispatch [::common/fetch-users])
-                           (rf/dispatch [::points/fetch-user-points]))}]}]
-   ["okrs" {:name ::okrs
-                     :view okr-page
-                     :controllers
-                     [{:start (fn [])}]}]
-   
-   ["activity-list/:id" {:name ::activity-list
-                  :view activity-list-page
+                  :view point-list-page
                   :controllers
-                  [{:parameters {:path [:id]}
-                    :start (fn [params]
-                             (rf/dispatch [::points/fetch-user-activities (get-in params [:path :id])]))}]}]
-   
+                  [{:start (fn []
+                             (rf/dispatch [::common/fetch-users])
+                             (rf/dispatch [::points/fetch-user-points]))}]}]
+   ["okrs"
+    ["/" {:name ::okrs
+          :view okr-page
+          :controllers
+          [{:start (fn [])}]}]
+    ["/:id" {:name ::okr-detail
+             :view okr-detail-page
+             :controllers
+             [{:parameters {:path [:id]}
+               :start (fn [params])}]}]]
+
+   ["activity-list/:id" {:name ::activity-list
+                         :view activity-list-page
+                         :controllers
+                         [{:parameters {:path [:id]}
+                           :start (fn [params]
+                                    (rf/dispatch [::points/fetch-user-activities (get-in params [:path :id])]))}]}]
+
    ["settings/"
     ["company-edit" {:name ::company-edit
                      :view company-edit-page

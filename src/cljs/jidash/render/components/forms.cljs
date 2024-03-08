@@ -4,6 +4,7 @@
             [jidash.db.points :as points]
             [jidash.db.common :as commons]
             [jidash.db.auth :as auth]
+            [jidash.db.okr :as okr]
             [jidash.render.components.antd :as antd]))
 
 (defn new-user-form []
@@ -69,3 +70,19 @@
                 (antd/form-item
                  (antd/space
                   [antd/button {:htmlType "submit" :type "primary"} "确定"]))))))
+
+
+
+(defn new-okr-form
+  "New OKRs"
+  [data]
+  (let [{:keys [id]} data
+        form-state (r/atom {:title ""
+                            :user_id 0})]
+    (fn []
+      (antd/form {:layout "vertical" :onFinish (fn []
+                                                 (rf/dispatch [::okr/create-okr @form-state]))}
+                 (antd/form-item
+                  [antd/input {:defaultValue (:title @form-state) :placeholder "例: 提升产品设计工作及专业知识"}])
+                 (antd/form-item
+                  (antd/button {:htmlType "submit" :type "primary"} "创建目标"))))))
