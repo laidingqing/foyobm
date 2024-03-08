@@ -65,5 +65,5 @@
  :local-store
  (fn [cofx _]
    (assoc cofx :local-store {:store-token (.getItem js/localStorage :account/token)
-                             :store-uid (.getItem js/localStorage :account/u_id)
-                             :store-cid (.getItem js/localStorage :account/c_id)}))) 
+                             :store-uid (js/parseInt (.getItem js/localStorage :account/u_id))
+                             :store-cid (js/parseInt (.getItem js/localStorage :account/c_id))}))) 

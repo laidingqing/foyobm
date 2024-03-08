@@ -4,17 +4,12 @@
             [reagent.core :as r]
             [jidash.db.okr :as okr]
             [re-frame.core :as rf]
-            ["@ant-design/icons" :refer [EditOutlined]]))
+            ["@ant-design/icons" :refer [MoreOutlined AimOutlined CheckCircleTwoTone ClockCircleOutlined CalendarOutlined EditOutlined]]))
 
 
 (defn- page-header []
   [:div {:style {:margin "16px 0"}}
-   (antd/title {:level 5} "OKRs-目标管理")])
-
-(defn- main-header []
-  (antd/space {:style {:margin-bottom "16px"}}
-              (antd/button {:type "primary" :style {:marginBottom "20px"} :onClick #(rf/dispatch [::okr/new-okr-form])} "制定目标与关键结果")))
-
+   (antd/title {:level 5} "我的OKRs")])
 
 (defn- load-segment-opts-by-d [v]
   (condp = v
@@ -35,32 +30,83 @@
                                               (swap! scope-selected assoc :scope k))})
                  (antd/segmented {:options (load-segment-opts-by-d (:scope @scope-selected))})))))
 
-(def okr-demo-data [{:key 1 :label "提升产品质量" :description "提出优化需求点跟进交付" :items [{:id "1.1" :title "单元测试覆盖率达到60%"}, {:id "1.2" :title "功能测试案例数达到40个"}, {:id "1.3"  :title "每个Sprint进行至少2次回归测试"} ]},
-                    {:key 2 :label "丰富部门管理制度" :description "完善激励管理办法，有效促进协作与开发"  :items [{:id "2.1" :title "单元测试覆盖率达到60%"}, {:id "2.2" :title "功能测试案例数达到40个"}, {:id "2.3" :title "每个Sprint进行至少2次回归测试"}]}])
 
 
-(defn- okr-list [data]
-  (antd/flex {:gap "small" :wrap "wrap" :style {:marginTop "16px"}}
-   (map (fn [okr]
-          (let [{:keys [description label key]} okr]
-            [:div {:style {:marginRight "5px"} :key key}
-             (antd/badge
-              (antd/badge-ribbon {:text "进行中" :color "green" :key key}
-                                 (antd/card {:style {:width 350} :actions [(r/as-element (antd/text {:key 1} "级别高")),
-                                                                                    (r/as-element (antd/text {:key 2} "剩10天")),
-                                                                                    (r/as-element (antd/text {:key 3} "40%"))
-                                                                                    (r/as-element (antd/link {:key 4 :onClick #(rf/dispatch [::okr/new-okr-form])} [:> EditOutlined]))]}
-                                            (antd/card-meta {:title label :description description}))))]
-            )) data)))
+(defn render-okr-title [okr]
+  (let [{:keys [id title]} okr]
+    [:div {:class " flex items-center bg-[#f4f5f7] h-[44px]" :key id}
+     [:div {:class "p-4 relative"}
+      
+      (antd/tag {:color "gold" :class "ml-2" :icon (r/as-element [:> CalendarOutlined])} "2024/03/31")
+      (antd/text {:strong true :class ""} title)]
+     [:div {:class "float-right right-0 absolute text-lg font-bold text-gray-500 font-medium"}
+      (r/as-element [:> MoreOutlined])]]))
+
+(defn- key-result-form []
+  (antd/flex {:horizontal "true" :gap "middle" :style {:marginTop "10px"}}
+             (antd/input {:placeholder "例: 测试案例数提升10%, 至少50个 [[2024/03/20]]"})
+             (antd/button "添加关键结果")))
+
+
+(defn- render-wrap-key-result [item]
+
+  (let [{:keys [title tv unit cv]} item]
+    [:div {:class " flex items-center flex-col mt-0.5 px-4 py-2 bg-[#f4f5f7]"}
+
+     [:div {:class "w-full rounded-md px-2 bg-[#fff] " :style {}}
+      [:div {:class "flex items-center relative w-full h-[44px]"}
+       (antd/flex {:gap "middle"}
+                  (r/as-element [:> CheckCircleTwoTone])
+                  (antd/text {:class "text-gray-500"} "KR")
+                  (antd/flex {:gap "middle"}
+                             (antd/text title)
+                             (antd/link {:href "#"} (r/as-element [:> EditOutlined]))))]
+      [:div {:class "bg-gray pb-0.5 relative"}
+       (antd/flex {:gap "middle"}
+                  [:div]
+                  [:div]
+                  [:div
+                   (antd/tag (str "目标数: " tv "个"))
+                   (antd/tag (str "当前数: " cv "个"))])]]]))
+
+
+(defn new-okr-form
+  "New OKRs"
+  [data]
+  (let [{:keys [id]} data
+        form-state (r/atom {:title ""})
+        on-change (fn [k] #(swap! form-state assoc k (-> % .-target .-value)))]
+    (fn []
+      (antd/form {:layout "inline" :onFinish (fn []
+                                               (rf/dispatch [::okr/create-okr @form-state]))}
+                 (antd/flex {:gap "middle" :style {:width "100%" :marginTop "5px"}}
+                            [antd/input {:defaultValue (:title @form-state)
+                                         :placeholder "创建目标，例: 提升产品设计工作及专业知识"
+                                         :on-change (on-change :title)}]
+                            (antd/button {:htmlType "submit" :type "primary"} "创建目标"))))))
+
+
+
+
+(defn- render-okr-list [data]
+  (map (fn [objective]
+         (let [{:keys [id]} objective]
+           [:div {:key id :class "mt-4"}
+            (render-okr-title objective)
+            (map #(render-wrap-key-result %) (:key_results objective))
+            [:div {:class "w-full"}
+             (key-result-form)]])) data))
 
 (defn okr-page []
-  (let [okr-list-items okr-demo-data]
+  (let [okr-list @(rf/subscribe [::okr/objectives])]
     [:div {:style {:padding-inline "40px"}}
-     (antd/bread-crumb {:separator ">" :items [{:title "首页"} {:title "我的积分"}] :style {:marginTop "18px"}})
+     (antd/bread-crumb {:separator ">" :items [{:title "首页"} {:title "目标管理"}] :style {:marginTop "18px"}})
      (page-header)
      [main-content-wrap-container
-      (main-header)
-      [filter-header]
-      (okr-list okr-list-items)]])
+      (antd/row
+       (antd/col {:xl 16 :md 20}
+                 [filter-header]
+                 [new-okr-form]
+                 (render-okr-list okr-list)))]])
  
 )

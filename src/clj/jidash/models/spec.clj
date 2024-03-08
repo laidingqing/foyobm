@@ -44,6 +44,14 @@
 (s/def ::query-activities (s/keys :req-un [::user_id ::limit  ::offset]))
 
 
+;; OKRs
+(s/def ::tv double?)
+(s/def ::unit string?)
+(s/def ::create-objective (s/keys :req-un [::user_id ::company_id ::title]))
+(s/def ::create-key-result (s/keys :req-un [::o_id ::user_id ::company_id ::title ::tv ::unit]))
+
+
+
 (comment
   (print (s/valid? ::create-company {:name "婵科技股份有限公司" :abbr "婵科技"}))
   )

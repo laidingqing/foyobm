@@ -4,6 +4,7 @@
             [reitit.frontend :as reitit]
             [jidash.db.common :as common]
             [jidash.db.points :as points]
+            [jidash.db.okr :as okr]
             [jidash.render.pages.home.page :refer [home-page]]
             [jidash.render.pages.auth.login :refer [login-page]]
             [jidash.render.pages.points.points :refer [point-list-page]]
@@ -12,8 +13,7 @@
             [jidash.render.pages.common.company :refer [company-edit-page]]
             [jidash.render.pages.common.users :refer [user-list-page]]
             [jidash.render.pages.common.groups :refer [groups-page]]
-            [jidash.render.pages.okr.page :refer [okr-page]]
-            [jidash.render.pages.okr.forms :refer [okr-detail-page]]))
+            [jidash.render.pages.okr.page :refer [okr-page]]))
 
 
 (def routes
@@ -44,12 +44,8 @@
     ["/" {:name ::okrs
           :view okr-page
           :controllers
-          [{:start (fn [])}]}]
-    ["/:id" {:name ::okr-detail
-             :view okr-detail-page
-             :controllers
-             [{:parameters {:path [:id]}
-               :start (fn [params])}]}]]
+          [{:start (fn []
+                     (rf/dispatch [::okr/list-cycle-okr]))}]}]]
 
    ["activity-list/:id" {:name ::activity-list
                          :view activity-list-page

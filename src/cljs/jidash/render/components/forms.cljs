@@ -66,23 +66,7 @@
                                                     :on-change (fn [k]
                                                                  (swap! form-state assoc :score (js/parseInt k)))}])
                 (antd/form-item {:label "积分标题" :name "title"}
-                                [antd/input {:on-change (on-change :title)}])
+                                [antd/input {:required true :on-change (on-change :title)}])
                 (antd/form-item
                  (antd/space
                   [antd/button {:htmlType "submit" :type "primary"} "确定"]))))))
-
-
-
-(defn new-okr-form
-  "New OKRs"
-  [data]
-  (let [{:keys [id]} data
-        form-state (r/atom {:title ""
-                            :user_id 0})]
-    (fn []
-      (antd/form {:layout "vertical" :onFinish (fn []
-                                                 (rf/dispatch [::okr/create-okr @form-state]))}
-                 (antd/form-item
-                  [antd/input {:defaultValue (:title @form-state) :placeholder "例: 提升产品设计工作及专业知识"}])
-                 (antd/form-item
-                  (antd/button {:htmlType "submit" :type "primary"} "创建目标"))))))
