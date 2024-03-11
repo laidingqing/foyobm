@@ -22,9 +22,10 @@
  [(rf/inject-cofx :local-store)] 
  (fn [{:keys [local-store db]} [_]]
    (let [token (:store-token local-store)
-         {:keys [user_id]} (get-in db [::user-activities :user_id])
+         db-user-id (:store-uid local-store)
+         {:keys [user_id]} (get-in db [::user-activities])
          {:keys [current pageSize] } (get-in db [::user-activities :pagination])
-         query {:user_id (or user_id token)
+         query {:user_id (or user_id db-user-id)
                 :limit pageSize
                 :offset (* pageSize (- current 1))}]
      {:fx [[:dispatch [:http {:url (str "/api/activities")
@@ -121,7 +122,10 @@
 (rf/reg-event-fx
  ::set-activity-user-id
  (fn [{:keys [db]} [_ n]]
-   {:db (assoc-in db [::user-activities :user_id] n)}))
+   {:db (-> db
+            (assoc-in [::user-activities :pagination :current] 1)
+            (assoc-in [::user-activities :user_id] n))
+    :fx [[:dispatch [::fetch-user-activities]]]}))
 
 (rf/reg-event-fx
  ::set-point-page

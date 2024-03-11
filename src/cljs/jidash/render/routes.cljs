@@ -52,8 +52,7 @@
                          :controllers
                          [{:parameters {:path [:id]}
                            :start (fn [params]
-                                    (rf/dispatch [::points/set-activity-user-id (get-in params [:path :id])])
-                                    (rf/dispatch [::points/fetch-user-activities]))}]}]
+                                    (rf/dispatch [::points/set-activity-user-id (get-in params [:path :id])]))}]}]
 
    ["settings/"
     ["company-edit" {:name ::company-edit
