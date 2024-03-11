@@ -185,3 +185,4 @@
 (def badge-ribbon (antd-wrapper antd/Badge.Ribbon))
 (def tag (antd-wrapper antd/Tag))
 (def dropdown-button (antd-wrapper antd/Dropdown.Button))
+(def carousel (antd-wrapper antd/Carousel))

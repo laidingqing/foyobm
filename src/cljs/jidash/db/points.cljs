@@ -7,10 +7,11 @@
 (def initial-dict-form {})
 
 (def initial-state
-  {::user-activities {:data []
-                 :pagination {:current 1
-                              :pageSize 10}
-                 :filters initial-dict-form}
+  {::user-activities {:user_id nil
+                      :data []
+                      :pagination {:current 1
+                                   :pageSize 10}
+                      :filters initial-dict-form}
    
    ::user-points {:data []
                   :pagination {:current 1
@@ -19,11 +20,11 @@
 (rf/reg-event-fx
  ::fetch-user-activities
  [(rf/inject-cofx :local-store)] 
- (fn [{:keys [local-store db]} [_ user_id]]
+ (fn [{:keys [local-store db]} [_]]
    (let [token (:store-token local-store)
-         db-user-id (:store-uid local-store)
+         {:keys [user_id]} (get-in db [::user-activities :user_id])
          {:keys [current pageSize] } (get-in db [::user-activities :pagination])
-         query {:user_id (or user_id db-user-id)
+         query {:user_id (or user_id token)
                 :limit pageSize
                 :offset (* pageSize (- current 1))}]
      {:fx [[:dispatch [:http {:url (str "/api/activities")
@@ -32,6 +33,8 @@
                               :headers {"Authorization" (str "Bearer " token)}
                               :on-success [::fetch-user-activities-success]
                               :on-failure [:http-failure]}]]]})))
+
+
 
 (rf/reg-event-fx
  ::fetch-user-activities-success
@@ -116,6 +119,11 @@
     :fx [[:dispatch [::fetch-user-activities]]]}))
 
 (rf/reg-event-fx
+ ::set-activity-user-id
+ (fn [{:keys [db]} [_ n]]
+   {:db (assoc-in db [::user-activities :user_id] n)}))
+
+(rf/reg-event-fx
  ::set-point-page
  (fn [{:keys [db]} [_ n]]
    {:db (assoc-in db [::user-points :pagination :current] n)
@@ -141,3 +149,9 @@
  ::user-activities-pagination
  (fn [db _]
    (get-in db [::user-activities :pagination])))
+
+
+(rf/reg-sub
+ ::user-activities-user-id
+ (fn [db _]
+   (get-in db [::user-activities :user_id])))

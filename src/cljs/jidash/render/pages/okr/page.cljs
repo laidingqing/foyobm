@@ -34,13 +34,9 @@
 
 (defn render-okr-title [okr]
   (let [{:keys [id title]} okr]
-    [:div {:class " flex items-center bg-[#f4f5f7] h-[44px]" :key id}
+    [:div {:class " flex items-center h-[44px]" :key id}
      [:div {:class "p-4 relative"}
-      
-      (antd/tag {:color "gold" :class "ml-2" :icon (r/as-element [:> CalendarOutlined])} "2024/03/31")
-      (antd/text {:strong true :class ""} title)]
-     [:div {:class "float-right right-0 absolute text-lg font-bold text-gray-500 font-medium"}
-      (r/as-element [:> MoreOutlined])]]))
+      (antd/text {:strong true :class ""} title)]]))
 
 (defn- key-result-form []
   (antd/flex {:horizontal "true" :gap "middle" :style {:marginTop "10px"}}
@@ -50,24 +46,19 @@
 
 (defn- render-wrap-key-result [item]
 
-  (let [{:keys [title tv unit cv]} item]
-    [:div {:class " flex items-center flex-col mt-0.5 px-4 py-2 bg-[#f4f5f7]"}
-
-     [:div {:class "w-full rounded-md px-2 bg-[#fff] " :style {}}
+  (let [{:keys [title tv unit cv]} item] 
+     [:div {:class "w-full rounded-md px-1 mt-1 bg-[#f8fafc] " :style {}}
       [:div {:class "flex items-center relative w-full h-[44px]"}
        (antd/flex {:gap "middle"}
                   (r/as-element [:> CheckCircleTwoTone])
                   (antd/text {:class "text-gray-500"} "KR")
                   (antd/flex {:gap "middle"}
                              (antd/text title)
-                             (antd/link {:href "#"} (r/as-element [:> EditOutlined]))))]
-      [:div {:class "bg-gray pb-0.5 relative"}
-       (antd/flex {:gap "middle"}
-                  [:div]
-                  [:div]
-                  [:div
-                   (antd/tag (str "目标数: " tv "个"))
-                   (antd/tag (str "当前数: " cv "个"))])]]]))
+                             (antd/link {:href "#"} (r/as-element [:> EditOutlined])))
+                  [:div {:class "absolute right-0"}
+                   (antd/flex {:gap "small"}
+                              (antd/badge {:count tv :color "#52c41a"})
+                              (antd/badge {:showZero true :count (or cv 0) :color "#faad14"}))])]]))
 
 
 (defn new-okr-form
@@ -86,16 +77,16 @@
                             (antd/button {:htmlType "submit" :type "primary"} "创建目标"))))))
 
 
-
-
-(defn- render-okr-list [data]
-  (map (fn [objective]
-         (let [{:keys [id]} objective]
-           [:div {:key id :class "mt-4"}
-            (render-okr-title objective)
-            (map #(render-wrap-key-result %) (:key_results objective))
-            [:div {:class "w-full"}
-             (key-result-form)]])) data))
+(defn- render-okr-list-item [objective]
+  (let [{:keys [title]} objective]
+    (antd/list-item
+     (antd/card {:size "small"
+                 :title (r/as-element (render-okr-title objective))
+                 :extra (r/as-element [:> MoreOutlined])}
+                [:div {:class " flex items-center flex-col"}
+                 (map #(render-wrap-key-result %) (:key_results objective))
+                 [:div {:class "w-full"}
+                  (key-result-form)]]))))
 
 (defn okr-page []
   (let [okr-list @(rf/subscribe [::okr/objectives])]
@@ -104,9 +95,10 @@
      (page-header)
      [main-content-wrap-container
       (antd/row
-       (antd/col {:xl 16 :md 20}
+       (antd/col 
                  [filter-header]
                  [new-okr-form]
-                 (render-okr-list okr-list)))]])
- 
-)
+                 (antd/list {:dataSource okr-list
+                             :grid {:gutter 16 :xs 1 :sm 2 :md 2 :lg 3 :xl 3 :xxl 3} 
+                             :renderItem #(render-okr-list-item %)
+                             :style {:marginTop "10px"}})))]]))

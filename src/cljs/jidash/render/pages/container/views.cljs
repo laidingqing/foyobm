@@ -20,7 +20,7 @@
                                       [page-header])
                   [antd/layout
                    [page-sider]
-                   [antd/layout {:style {:padding "0 24px 24px"}}
+                   [antd/layout {:style {:padding "0 24px 24px"} :overflow "initial"}
                     (render-children children)]])]))
 
 (defn generic-page-container []

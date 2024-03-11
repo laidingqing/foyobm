@@ -4,3 +4,9 @@ html, body{
     margin:0;
     padding:0;
 }
+
+
+#okr-carousel .slick-dots li button {
+    background: none;
+    color: #000;
+}

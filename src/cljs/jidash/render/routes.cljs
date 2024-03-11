@@ -27,7 +27,7 @@
                  :controllers
                  [{:parameters {:path [:id]}
                    :start (fn []
-                            (rf/dispatch [::points/fetch-user-activities nil])
+                            (rf/dispatch [::points/fetch-user-activities])
                             (rf/dispatch [::points/fetch-user-point]))}]}]
 
    ["login" {:name ::login
@@ -52,7 +52,8 @@
                          :controllers
                          [{:parameters {:path [:id]}
                            :start (fn [params]
-                                    (rf/dispatch [::points/fetch-user-activities (get-in params [:path :id])]))}]}]
+                                    (rf/dispatch [::points/set-activity-user-id (get-in params [:path :id])])
+                                    (rf/dispatch [::points/fetch-user-activities]))}]}]
 
    ["settings/"
     ["company-edit" {:name ::company-edit
