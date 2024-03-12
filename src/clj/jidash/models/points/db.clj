@@ -5,6 +5,9 @@
             [honey.sql.helpers :as h] ))
 
 
+;; 
+;; ADD 
+
 
 (defn create-point
   "创建积分数据"
@@ -13,10 +16,10 @@
                        :values [point]}))
 
 (defn query-user-point
-  [db user-id]
+  [db user-id point_type]
   (let [sql {:select [:*]
              :from [:points]
-             :where [:= :user_id user-id]}
+             :where [:and [:= :user_id user-id] [:= :point_type point_type]]}
         user-point (q/db-query-one! db sql)]
     (if user-point
       user-point
@@ -36,14 +39,15 @@
   (let [sql {:select [:p.* :c.user_name
                       [[:over [[:count :p.id]]] "total"]]
              :from [[:points :p]]}
-        {:keys [limit offset sort-field sort-dir]} (merge {:limit 10 :offset 0 :sort-dir "desc"} (filter some? query))
-        {:keys [user_id]} query
-        {:keys [c_id]} query
+        {:keys [limit offset sort-field sort-dir]} (merge {:limit 10 :offset 0 :sort-field "updated" :sort-dir "asc"} (filter some? query))
+        {:keys [user_id c_id point-type]} query
         user-clause [:= :user_id user_id]
         company-clause [:= :company_id c_id]
+        point-type-clause [:= :point_type point-type]
         where-clause (cond-> [:and]
                        user_id (conj user-clause)
-                       c_id (conj company-clause))
+                       c_id (conj company-clause)
+                       point-type (conj point-type-clause))
         sql (cond-> sql
               where-clause (assoc :where where-clause)
               limit (assoc :limit limit)
@@ -55,6 +59,7 @@
 
 
 
+;; 以下销毁，用points表中的point_type代替存储。
 (defn summary-user-point-by-year [db user-id year]
   (let [sql (-> (h/select [[:raw "extract(year from created) as year, sum(score)"]])
                 (h/from [:activities])

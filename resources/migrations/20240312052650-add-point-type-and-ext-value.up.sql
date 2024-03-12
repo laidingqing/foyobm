@@ -1,0 +1,1 @@
+ALTER TABLE points ADD COLUMN point_type bigint not null default 0, ADD COLUMN ext_value varchar(20);

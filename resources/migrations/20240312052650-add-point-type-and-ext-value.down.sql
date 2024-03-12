@@ -1,0 +1,1 @@
+ALTER TABLE points DROP COLUMN point_type, DROP COLUMN ext_value;
