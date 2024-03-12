@@ -39,10 +39,13 @@
 (s/def ::score int?)
 (s/def ::data string?)
 
-(s/def ::create-activity (s/keys :req-un [::user_id ::company_id ::score ::title ::catalog]))
-(s/def ::create-batch-activity (s/keys :req-un [::catalog ::title ::data])) ;; title为变更标题模版，可加%s data字符格式: 人名 分数
-(s/def ::query-activities (s/keys :req-un [::user_id ::limit  ::offset]))
+(s/def ::year int?)
+(s/def ::month int?)
+(s/def ::day int?)
 
+(s/def ::create-activity (s/keys :req-un [::user_id ::company_id ::score ::title ::catalog]))
+(s/def ::query-activities (s/keys :req-un [::user_id ::limit  ::offset]))
+(s/def ::query-summary (s/keys :req-un [::user_id ::year ::month (s/nilable ::day)]))
 
 ;; OKRs
 (s/def ::tv double?)

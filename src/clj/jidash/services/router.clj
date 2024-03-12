@@ -7,6 +7,7 @@
             [ring.middleware.cors :refer [wrap-cors]]
             [reitit.ring.middleware.parameters :as parameters]
             [reitit.ring.middleware.muuntaja :as muuntaja]
+            [reitit.ring.middleware.multipart :as multipart]
             [reitit.coercion.spec :refer [coercion]]
             [jidash.utils.auth :as auth]
             [buddy.auth.middleware :refer [wrap-authentication]]
@@ -34,6 +35,7 @@
                            [wrap-authentication (auth/jwt-backend jwt-secret)]
                            coercion/coerce-response-middleware
                            coercion/coerce-request-middleware
+                           multipart/multipart-middleware
                            wrap-env]}})
      (ring/routes
       (create-frontend-handler)

@@ -40,7 +40,7 @@
 
 (defn- key-result-form []
   (antd/flex {:horizontal "true" :gap "middle" :style {:marginTop "10px"}}
-             (antd/input {:placeholder "例: 测试案例数提升10%, 至少50个 [[2024/03/20]]"})
+             (antd/input {:placeholder "例: 测试案例数提升10%, 至少50个"})
              (antd/button "添加关键结果")))
 
 
@@ -72,7 +72,7 @@
                                                (rf/dispatch [::okr/create-okr @form-state]))}
                  (antd/flex {:gap "middle" :style {:width "100%" :marginTop "5px"}}
                             [antd/input {:defaultValue (:title @form-state)
-                                         :placeholder "创建目标，例: 提升产品设计工作及专业知识"
+                                         :placeholder "创建目标，例: 提升产品设计工作及专业知识 [[2024/03/20]]"
                                          :on-change (on-change :title)}]
                             (antd/button {:htmlType "submit" :type "primary"} "创建目标"))))))
 

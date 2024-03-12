@@ -15,7 +15,11 @@
    
    ::user-points {:data []
                   :pagination {:current 1
-                               :pageSize 10}}})
+                               :pageSize 10}}
+   ::point-summary {:data []
+                    :year (.getFullYear (js/Date.))
+                    :month (inc (.getMonth (js/Date.)))
+                    :day (.getDate (js/Date.))}})
 
 (rf/reg-event-fx
  ::fetch-user-activities
@@ -80,6 +84,31 @@
                               :on-failure [:http-failure]}]]]})))
 
 (rf/reg-event-fx
+ ::fetch-user-point-summary
+ [(rf/inject-cofx :local-store)]
+ (fn [{:keys [local-store db]} [_]]
+   (let [token (:store-token local-store)
+         user-id (:store-uid local-store)
+         {:keys [year month day]} (get-in db [::point-summary])
+         query {:user_id user-id
+                :year year
+                :month month
+                :day day}]
+     {:fx [[:dispatch [:http {:url (str "/api/points/summary")
+                              :method :get
+                              :query query
+                              :headers {"Authorization" (str "Bearer " token)}
+                              :on-success [::fetch-user-point-summary-success]
+                              :on-failure [:http-failure]}]]]})))
+
+;;point-summary
+(rf/reg-event-fx
+ ::fetch-user-point-summary-success
+ (fn [{:keys [db]} [_ data]]
+   {:db (-> db
+            (assoc-in [::point-summary :data] data))}))
+
+(rf/reg-event-fx
  ::fetch-user-points-success
  (fn [{:keys [db]} [_ data]]
    {:db (-> db
@@ -106,6 +135,9 @@
                               :on-success [::create-user-point-success]
                               :on-failure [:http-failure]}]]]})))
 
+
+
+
 (rf/reg-event-fx
  ::create-user-point-success
  (fn [{:keys [db]} [_ data]]
@@ -121,11 +153,15 @@
 
 (rf/reg-event-fx
  ::set-activity-user-id
- (fn [{:keys [db]} [_ n]]
-   {:db (-> db
-            (assoc-in [::user-activities :pagination :current] 1)
-            (assoc-in [::user-activities :user_id] n))
-    :fx [[:dispatch [::fetch-user-activities]]]}))
+ [(rf/inject-cofx :local-store)] 
+ (fn [{:keys [local-store db]} [_ n]]
+   (let [user-id (:store-uid local-store)]
+     {:db (-> db
+              (assoc-in [::user-activities :pagination :current] 1)
+              (assoc-in [::user-activities :user_id] (or n user-id)))
+      :fx [[:dispatch [::fetch-user-activities]]]}
+     )
+   ))
 
 (rf/reg-event-fx
  ::set-point-page
@@ -154,8 +190,7 @@
  (fn [db _]
    (get-in db [::user-activities :pagination])))
 
-
 (rf/reg-sub
- ::user-activities-user-id
+ ::point-summary
  (fn [db _]
-   (get-in db [::user-activities :user_id])))
+   (get-in db [::point-summary :data])))

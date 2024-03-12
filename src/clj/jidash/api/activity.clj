@@ -1,7 +1,8 @@
 (ns jidash.api.activity
   (:require [jidash.models.activity.handler :refer [handle-query-activities handle-create-activity handle-batch-create-activity]]
             [jidash.router.middleware :refer [wrap-authorization]]
-            [jidash.models.spec :as spec]))
+            [jidash.models.spec :as spec]
+            [reitit.ring.middleware.multipart :as multipart]))
 
 
 
@@ -13,6 +14,6 @@
         :post {:middleware [wrap-authorization]
                :parameters {:body ::spec/create-activity}
                :handler handle-create-activity}}]
-   ["/import" {:post {:middleware [wrap-authorization]
-               :parameters {:body ::spec/create-batch-activity}
+   ["/upload" {:post {:middleware [wrap-authorization]
+               :parameters {:multipart {:file multipart/temp-file-part}}
                :handler handle-batch-create-activity}}]])

@@ -6,7 +6,8 @@
             [jidash.db.router :as router]
             [jidash.render.utils.formatter :refer [activity-catalog-formatter datetime-formatter]]
             [jidash.render.utils.antd :refer [row-key]]
-            ["@ant-design/icons" :refer [CheckCircleOutlined CloseCircleOutlined]]))
+            ["@ant-design/icons" :refer [CheckCircleOutlined CloseCircleOutlined]]
+            [reagent.core :as r]))
 
 
 (defn- page-header [user-name]
@@ -24,6 +25,29 @@
               {:title "变动时间" :key "created" :dataIndex "created" :render #(datetime-formatter %)}])
 
 
+
+(defn- filter-header [] 
+  
+  [:div
+
+   (antd/flex {:gap "middle" :align "center"}
+              (antd/text "时间范围:")
+              (antd/range-picker)
+              (antd/text "积分类型:")
+              (antd/select {:style {:width 100} :options [{:label "手动" :value "manual"}, {:label "JIRA" :value "jira"}]})
+              (antd/button "查询")
+              )
+
+   (antd/divider)]
+  
+  )
+
+(defn- render-summary [data]
+  (r/as-element
+     (antd/table-summary-row
+      (antd/table-summary-cell {:index 0} "汇总积分数")
+      (antd/table-summary-cell {:index 1 :colSpan 5} "****"))))
+
 (defn activity-list-page []
   (let [user-activities @(rf/subscribe [::points/user-activities])
         {:keys [current pageSize]} @(rf/subscribe [::points/user-activities-pagination])
@@ -36,4 +60,9 @@
      (antd/bread-crumb {:separator ">" :items [{:title "首页"} {:title "积分管理" :href "#" :onClick #(rf/dispatch [::router/push-state :jidash.render.routes/point-list])} {:title "积分变动"}] :style {:margin "16px 0"}})
      (page-header user-name)
      [main-content-wrap-container
-      (antd/table {:columns columns :rowKey #(row-key % :id) :pagination pagination :dataSource user-activities})]]))
+      (filter-header)
+      (antd/table {:columns columns 
+                   :rowKey #(row-key % :id) 
+                   :pagination pagination 
+                   :dataSource user-activities
+                   :summary #(render-summary %)})]]))

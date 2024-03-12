@@ -6,7 +6,10 @@
               [taoensso.timbre :as log]
               [jidash.models.activity.db :as activity.db]
               [jidash.models.points.db :as point.db]
-              [jidash.models.users.db :as user.db]))
+              [jidash.models.users.db :as user.db]
+              [clojure.data.csv :as csv]
+              [clojure.java.io :as io]
+              [clj-bom.core :as bom]))
 
 (defn handle-query-activities
   [{:keys [env parameters]}]
@@ -40,9 +43,12 @@
   "批量处理积分"
   [{:keys [env parameters]}]
   (let [{:keys [db]} env
-        body (:body parameters)
-        activities (parse-batch-data->event body)])
-  (rr/response {:error "not-allowed "})
+        {{:keys [file]} :multipart} parameters]
+    (let [rows (csv/read-csv file)]
+      (println rows))
+
+    (rr/response {:msg "Ok."}))
+  
 )
 
 

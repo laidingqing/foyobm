@@ -1,6 +1,8 @@
 (ns jidash.models.points.db
   (:require [jidash.utils.query :as q]
-            [taoensso.timbre :as log]))
+            [taoensso.timbre :as log]
+            [honey.sql :as sql]
+            [honey.sql.helpers :as h] ))
 
 
 
@@ -52,20 +54,45 @@
     (q/db-query! db sql)))
 
 
+
+(defn summary-user-point-by-year [db user-id year]
+  (let [sql (-> (h/select [[:raw "extract(year from created) as year, sum(score)"]])
+                (h/from [:activities])
+                (h/where [:and [:= :user_id user-id] [:raw (str "extract(year from created) = " year)]])
+                (h/group-by [:raw "extract(year from created)"]))]
+    (q/db-query-one! db sql)
+    ))
+
+(defn summary-user-point-by-month [db user-id month]
+  (let [sql (-> (h/select [[:raw "extract(month from created) as month, sum(score)"]])
+                (h/from [:activities])
+                (h/where [:and [:= :user_id user-id] [:raw (str "extract(month from created) = " month)]])
+                (h/group-by [:raw "extract(month from created)"]))]
+    (q/db-query-one! db sql)))
+
+(defn summary-user-point-by-day [db user-id day]
+  (let [sql (-> (h/select [[:raw "extract(day from created) as day, sum(score)"]])
+                (h/from [:activities])
+                (h/where [:and [:= :user_id user-id] [:raw (str "extract(day from created) = " day)]])
+                (h/group-by [:raw "extract(day from created)"]))]
+    (q/db-query-one! db sql)))
+
 (comment
-  
+
   (require '[jidash.services.config :refer [read-config]]
            '[integrant.core :as ig]
            '[jidash.services.db])
-  
+
   (def db (:postgres/db (ig/init (dissoc (read-config) :reitit/routes :http/server))))
-  
-  
+
+
   (def point-1 {:user_id 1 :points 100})
   (create-point db point-1)
 
 
   (query-point-list db {:user-id 1 :limit 20})
 
+  (summary-user-point-by-year db 1 2024)
+  (summary-user-point-by-month db 1 2)
 
   )

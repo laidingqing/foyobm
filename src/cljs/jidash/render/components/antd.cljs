@@ -133,6 +133,11 @@
 (def table (antd-wrapper antd/Table
                          #(update % :columns update-table-columns)))
 
+(def table-summary (antd-wrapper antd/Table.Summary))
+(def table-summary-row (antd-wrapper antd/Table.Summary.Row))
+(def table-summary-cell (antd-wrapper antd/Table.Summary.Cell))
+
+
 (def page-header (antd-wrapper antd/PageHeader
                                #(medley/update-existing %
                                                         :extra
@@ -186,3 +191,5 @@
 (def tag (antd-wrapper antd/Tag))
 (def dropdown-button (antd-wrapper antd/Dropdown.Button))
 (def carousel (antd-wrapper antd/Carousel))
+(def range-picker (antd-wrapper antd/DatePicker.RangePicker))
+(def statistic (antd-wrapper antd/Statistic))

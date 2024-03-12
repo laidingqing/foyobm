@@ -25,8 +25,9 @@
    ["dashboard" {:name ::dashboard
                  :view dash-page
                  :controllers
-                 [{:parameters {:path [:id]}
-                   :start (fn []
+                 [{:start (fn []
+                            (rf/dispatch [::points/fetch-user-point-summary])
+                            (rf/dispatch [::points/set-activity-user-id nil])
                             (rf/dispatch [::points/fetch-user-activities])
                             (rf/dispatch [::points/fetch-user-point]))}]}]
 
@@ -34,6 +35,7 @@
              :view login-page
              :controllers
              []}]
+   
    ["point-list" {:name ::point-list
                   :view point-list-page
                   :controllers
