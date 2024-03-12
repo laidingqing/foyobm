@@ -37,11 +37,6 @@
       (rr/response (filter #(not (nil? %)) points))
       (rr/response {:error "query points error."}))))
 
-(defn parse-batch-csv-point []
-  
-  )
-
-
 
 (comment
   (:require  '[clojure.java.io :as io])

@@ -77,6 +77,8 @@ CREATE TABLE IF NOT EXISTS points(
     user_id bigint,
     company_id bigint,
     points bigint not null default 0,
+    point_type bigint not null default 0, -- 哪种积分：总积分(0), 可用(1)，月度(2)，年度(3)
+    ext_value varchar(20), -- 对应point_type的2/3类型值：月数，或年份
     created timestamp without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated timestamp without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
